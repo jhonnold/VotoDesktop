@@ -5,11 +5,11 @@ import java.net.DatagramSocket;
 import java.io.*;
 import java.net.*;
 
-public class udp-server2 {
+public class udp_server2 {
     
     public static void main(String args[]) {
         try {
-            String host = "141.219.236.182";
+            String host = "localhost";
             int port = 5555;
             
             byte[] message = "UDP is da best".getBytes();
