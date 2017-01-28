@@ -1,51 +1,43 @@
 import java.io.*;
 import java.net.*;
  
-public class udp_server
-{
-    public static void main(String args[])
-    {
-        DatagramSocket sock = null;
-         
-        try
-        {
-            //1. creating a server socket, parameter is local port number
-            sock = new DatagramSocket(5555);
-             
-            //buffer to receive incoming data
-            byte[] buffer = new byte[65536];
-            DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
-             
-            //2. Wait for an incoming data
-            echo("Server socket created. Waiting for incoming data...");
-             
-            //communication loop
-            while(true)
-            {
-                sock.receive(incoming);
-                echo("Recieved");
-                byte[] data = incoming.getData();
-                String s = new String(data, 0, incoming.getLength());
-                 
-                //echo the details of incoming data - client ip : client port - client message
-                echo(incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
-                 
-                s = "OK : " + s;
-                DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , incoming.getPort());
+public class udp_server extends Thread {	
+	
+	private int PORT;
+	
+	private DatagramSocket sock = null;
+	
+	public udp_server(int p) {
+		PORT = p;
+	}
+	
+	public void run() {
+		
+		try {
+			sock = new DatagramSocket(PORT);
+			
+			byte[] buffer = new byte[65536];
+			DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
+			
+			echo("Server socket created. Waiting for incoming data...");
+		
+			while (true) {
+				sock.receive(incoming);
+				byte[] data = incoming.getData();
+				String s = new String(data, 0, incoming.getLength());
+			
+				echo(incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
+				
+				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , PORT);
                 sock.send(dp);
                 
-            }
-        }
-         
-        catch(IOException e)
-        {
-            System.err.println("IOException " + e);
-        }
-    }
-     
-    //simple function to echo data to terminal
-    public static void echo(String msg)
-    {
+			}
+		} catch (Exception e) {
+			echo(e.toString());
+		}
+	}
+	
+    public static void echo(String msg) {
         System.out.println(msg);
     }
 }
