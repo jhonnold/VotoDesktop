@@ -36,6 +36,8 @@ public class udp_client extends Thread {
 			
 				echo(incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
+				sleep(500);
+				
 				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , PORT);
                 sock.send(dp);
                 sock.close();
