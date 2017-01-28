@@ -1,1 +1,1 @@
-# VotoDesktop
+# voto-desktop
