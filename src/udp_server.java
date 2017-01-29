@@ -26,11 +26,11 @@ public class udp_server extends Thread {
 				byte[] data = incoming.getData();
 				String s = new String(data, 0, incoming.getLength());
 			
-				echo(incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
+				echo("Server: " + incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
 				sleep(500);
 				
-				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , PORT);
+				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , incoming.getPort());
                 sock.send(dp);
                 
 			}

@@ -27,20 +27,18 @@ public class udp_client extends Thread {
             
             byte[] buffer = new byte[65536];
             DatagramPacket incoming = new DatagramPacket(buffer, buffer.length);
+            
             while (true) {
-            	sock = new DatagramSocket();
-            	
 				sock.receive(incoming);
 				byte[] data = incoming.getData();
 				String s = new String(data, 0, incoming.getLength());
 			
-				echo(incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
+				echo("Client: " + incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
 				sleep(500);
 				
 				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , PORT);
                 sock.send(dp);
-                sock.close();
             }
         } catch (Exception e) {
         	echo(e.toString());
