@@ -28,8 +28,6 @@ public class udp_server implements Runnable {
 			
 				echo("Server: " + incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
-				Thread.sleep(500);
-				
 				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , incoming.getPort());
                 sock.send(dp);
                 
