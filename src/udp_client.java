@@ -4,18 +4,24 @@ import java.net.*;
 public class udp_client implements Runnable {
 	
 	private DatagramSocket sock = null;
+	private int in, out;
+	
+	public udp_client(int out, int in) {
+		this.in = in;
+		this.out = out;
+	}
 	
 	@Override
 	public void run() {
 		
 		try {
-            sock = new DatagramSocket();
+            sock = new DatagramSocket(in);
 			
             String host = "localhost";
             InetAddress address = InetAddress.getByName(host);
             
             byte[] message = "UDP is da best".getBytes();
-            DatagramPacket packet = new DatagramPacket(message, message.length, address, 5555);
+            DatagramPacket packet = new DatagramPacket(message, message.length, address, out);
             
             sock.send(packet);
             
@@ -31,7 +37,7 @@ public class udp_client implements Runnable {
 				
 				Thread.sleep(500);
 				
-				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , 5555);
+				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , out);
                 sock.send(dp);
             }
         } catch (Exception e) {
