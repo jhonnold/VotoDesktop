@@ -2,9 +2,9 @@ public class main {
 	
 	public static void main(String[] args) {
 		
-		udp_server s1 = new udp_server(5555);
+		Thread s1 = new Thread(new udp_server(5555));
 		
-		udp_client s2 = new udp_client(5555);
+		Thread s2 = new Thread(new udp_client());
 		
 		s1.start();
 		s2.start();

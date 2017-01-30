@@ -1,15 +1,9 @@
 import java.io.*;
 import java.net.*;
 
-public class udp_client extends Thread {
-	
-	private int PORT;
+public class udp_client implements Runnable {
 	
 	private DatagramSocket sock = null;
-	
-	public udp_client(int p) {
-		PORT = p;
-	}
 	
 	@Override
 	public void run() {
@@ -21,7 +15,7 @@ public class udp_client extends Thread {
             InetAddress address = InetAddress.getByName(host);
             
             byte[] message = "UDP is da best".getBytes();
-            DatagramPacket packet = new DatagramPacket(message, message.length, address, PORT);
+            DatagramPacket packet = new DatagramPacket(message, message.length, address, 5555);
             
             sock.send(packet);
             
@@ -35,9 +29,9 @@ public class udp_client extends Thread {
 			
 				echo("Client: " + incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
-				sleep(500);
+				Thread.sleep(500);
 				
-				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , PORT);
+				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , 5555);
                 sock.send(dp);
             }
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 import java.io.*;
 import java.net.*;
  
-public class udp_server extends Thread {	
+public class udp_server implements Runnable {	
 	
 	private int PORT;
 	
@@ -28,7 +28,7 @@ public class udp_server extends Thread {
 			
 				echo("Server: " + incoming.getAddress().getHostAddress() + " : " + incoming.getPort() + " - " + s);
 				
-				sleep(500);
+				Thread.sleep(500);
 				
 				DatagramPacket dp = new DatagramPacket(s.getBytes() , s.getBytes().length , incoming.getAddress() , incoming.getPort());
                 sock.send(dp);
