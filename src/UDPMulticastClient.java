@@ -1,21 +1,22 @@
 import java.net.*;
 
-
-public class UDPClient implements Runnable {
+public class UDPMulticastClient implements Runnable {
 	
-	DatagramSocket socket;
+	MulticastSocket socket;
 	
 	private final int PORT;
+	private final String group;
 	
-	public UDPClient(int p) {
+	public UDPMulticastClient(int p, String g) {
 		PORT = p;
+		group = g;
 	}
 	
 	@Override
 	public void run() {
 		try {
-			socket = new DatagramSocket();
-			socket.setBroadcast(true);
+			socket = new MulticastSocket();
+			socket.joinGroup(InetAddress.getByName(group));
 			
 			byte[] send = "DISCOVER_VOTO_REQUEST".getBytes();
 			
@@ -37,7 +38,9 @@ public class UDPClient implements Runnable {
 			System.out.println(getClass().getName() + ">>> Got a reply from: " + rp.getAddress().getHostAddress());
 			System.out.println(getClass().getName() + ">>> Received: " + new String(rp.getData()).trim());
 			
+			socket.leaveGroup(InetAddress.getByName(group));
 			socket.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
