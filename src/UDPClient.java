@@ -4,26 +4,33 @@ import java.net.*;
 public class UDPClient implements Runnable {
 	
 	DatagramSocket socket;
+	private InetAddress GROUP = null;
 	
 	private final int PORT;
 	
+	
 	public UDPClient(int p) {
 		PORT = p;
+		try {
+			GROUP = InetAddress.getByName("224.0.0.3");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@Override
 	public void run() {
 		try {
 			socket = new DatagramSocket();
-			socket.setBroadcast(true);
 			
-			byte[] send = "DISCOVER_VOTO_REQUEST".getBytes();
+			byte[] send = "VOTO_HANDSHAKE_REQUEST".getBytes();
 			
 			try {
-				DatagramPacket dp = new DatagramPacket(send, send.length, InetAddress.getByName("255.255.255.255"), PORT);
+				DatagramPacket dp = new DatagramPacket(send, send.length, GROUP, PORT);
 				socket.send(dp);
 				
-				System.out.println(getClass().getName() + ">>> Request packet sent to 255.255.255.255");
+				System.out.println(getClass().getName() + ">>> Request packet sent to " + GROUP.getHostAddress());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
