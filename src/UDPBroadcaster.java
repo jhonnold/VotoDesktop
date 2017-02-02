@@ -6,7 +6,7 @@ import java.net.MulticastSocket;
 public class UDPBroadcaster {
 
 private static final int PORT = 9876;
-private static final String MCAST_ADDR = "FF7E:230::1234";
+private static final String MCAST_ADDR = "224.0.0.3";
 
 private static InetAddress GROUP;
 
