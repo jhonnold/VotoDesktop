@@ -2,10 +2,11 @@
 
 Currently the method for discovery and connecting a server to client:
 
-Servers are running, connected to the Multicast IP: 224.0.0.3 (Send a datagram packet to this IP to get a response)
+Here's how it works so far:
+-- Run the Server.java, it'll start by connecting to a mutlicast IP (224.0.0.3) and wait for "VOTO_HANDSHAKE_REQUEST"
+       -The Client.java will connect to this and send the expected packet
 
-Upon receiving the handshake request, "VOTO_HANDSHAKE_REQUEST", the server will reply VOTO_HANDSHAKE_RESPONSE_[id]
+-- Once it receives this, it will send back a packet and it will start a TCPServer on the same port. 
 
-The client can then choose which to link to and reply again with VOTO_HANDSHAKE_CONNECT_[passcode]
+-- I wrote a quick TCPClient code to test to connect to it, just change the ip in there too w/e the IP of the server is.
 
-If it checks out, the client will be added to the voting poll for the server.
