@@ -1,4 +1,5 @@
 import java.net.*;
+import java.io.*;
 
 public class TCPClient {
 	
@@ -6,7 +7,16 @@ public class TCPClient {
 		
 		try {
 			
-			Socket s = new Socket("192.168.1.51", 9876);
+			Socket s = new Socket("localhost", 9876);
+			
+			DataOutputStream outToServer = new DataOutputStream(s.getOutputStream());
+			
+			BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+			String msg = inFromUser.readLine();
+			
+			outToServer.writeBytes(msg);
+			s.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

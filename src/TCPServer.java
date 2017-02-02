@@ -1,4 +1,5 @@
 import java.net.*;
+import java.io.*;
 
 public class TCPServer implements Runnable {
 	
@@ -21,7 +22,12 @@ public class TCPServer implements Runnable {
 			Socket connectionSocket = welcomeSocket.accept();
 			System.out.println(getClass().getName() + " >>> I have connected to a client!");
 			System.out.println(getClass().getName() + " >>> " + connectionSocket.getInetAddress().getHostAddress() + " : " + connectionSocket.getPort());
-		
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+			String input = br.readLine();
+			
+			System.out.println(getClass().getName() + " >>> Client says: " + input);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

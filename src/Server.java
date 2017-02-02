@@ -5,9 +5,9 @@ public class Server implements NetworkListener {
 	
 	public static void main(String[] args) {
 		
-		Thread server = new Thread(new UDPDiscoveryServer(9876, new Server()));		
-		server.start();
-		
+		//Thread server = new Thread(new UDPDiscoveryServer(9876, new Server()));		
+		//server.start();
+		new Server().startTCP();
 	}
 	
 	public boolean tcpOpen() {
