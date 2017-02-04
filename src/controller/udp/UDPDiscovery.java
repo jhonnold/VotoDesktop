@@ -12,14 +12,16 @@ public class UDPDiscovery implements Runnable {
 	UDPListener controller;
 	
 	private final int PORT = 9876;
+	private final String ID;
 	private InetAddress GROUP; 
 	
-	public UDPDiscovery(UDPListener controller) {
+	public UDPDiscovery(UDPListener controller, String id) {
 		
 		LOGGER.setLevel(Level.INFO);
 		LOGGER.info("Creating UDPDiscovery on port 9876");
 		
 		this.controller = controller;
+		this.ID = id;
 		
 		try {
 			GROUP = InetAddress.getByName("224.0.0.3");
@@ -55,7 +57,7 @@ public class UDPDiscovery implements Runnable {
 					LOGGER.info("Packet was a handshake request!");
 					LOGGER.info("Replying...");
 					
-					byte[] send = "VOTO_HANDSHAKE_RESPONSE".getBytes();
+					byte[] send = ("VOTO_HANDSHAKE_RESPONSE_" + ID).getBytes();
 					
 					DatagramPacket outToClient = new DatagramPacket(send, send.length, inFromClient.getAddress(), inFromClient.getPort());
 					discoverySocket.send(outToClient);
