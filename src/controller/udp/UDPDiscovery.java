@@ -24,9 +24,9 @@ public class UDPDiscovery implements Runnable {
 		this.ID = id;
 		
 		try {
-			GROUP = InetAddress.getByName("224.0.0.3");
+			GROUP = InetAddress.getByName("224.0.1.35");
 		} catch (UnknownHostException e) {
-			LOGGER.severe("The multicast group: 224.0.0.3 is invalid on this router");
+			LOGGER.severe("The multicast group: 224.0.1.35 is invalid on this router");
 			e.printStackTrace();
 		}
 		
@@ -40,7 +40,7 @@ public class UDPDiscovery implements Runnable {
 			discoverySocket = new MulticastSocket(PORT);
 			discoverySocket.joinGroup(GROUP);
 			
-			LOGGER.info("Opened socket 9876 and joined group 224.0.0.3");
+			LOGGER.info("Opened socket 9876 and joined group 224.0.1.35");
 			
 			while (true) {
 				LOGGER.info("Waiting for handshake request");

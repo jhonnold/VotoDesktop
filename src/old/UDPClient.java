@@ -13,7 +13,7 @@ public class UDPClient implements Runnable {
 	public UDPClient(int p) {
 		PORT = p;
 		try {
-			GROUP = InetAddress.getByName("224.0.0.3");
+			GROUP = InetAddress.getByName("224.0.1.35");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
