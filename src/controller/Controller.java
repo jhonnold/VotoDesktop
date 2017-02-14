@@ -6,8 +6,7 @@ import java.io.*;
 import controller.tcp.*;
 import controller.udp.*;
 
-public class Controller implements TCPListener, UDPListener {
-	
+public class Controller implements UDPListener {
 	private final static Logger LOGGER = Logger.getLogger(Controller.class.getName());
 	
 	public static void main(String[] args) {
@@ -36,6 +35,5 @@ public class Controller implements TCPListener, UDPListener {
 		LOGGER.info("Starting UDP Discovery Thread");
 		discoveryThread.start();
 	}
-	
-	
+		
 }
