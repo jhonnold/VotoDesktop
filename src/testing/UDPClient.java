@@ -25,7 +25,7 @@ public class UDPClient implements Runnable {
 		try {
 			socket = new DatagramSocket();
 			
-			byte[] send = "handshakeRequest".getBytes();
+			byte[] send = "vote_a".getBytes();
 			
 			try {
 				DatagramPacket dp = new DatagramPacket(send, send.length, GROUP, PORT);

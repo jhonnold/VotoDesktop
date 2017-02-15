@@ -11,7 +11,13 @@ public class UDPHandler {
 	}
 	
 	public void handshakeRequest(DatagramPacket dp, String[] kwargs) {
+		System.out.println("Got a handshake request");
 		socket.send(dp);
+	}
+	
+	public void vote(DatagramPacket dp, String[] kwargs) {
+		System.out.println("Got a vote!");
+		System.out.println(kwargs[1]);
 	}
 	
 }
