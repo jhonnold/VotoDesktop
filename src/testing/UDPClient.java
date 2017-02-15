@@ -1,4 +1,4 @@
-package old;
+package testing;
 
 import java.net.*;
 
@@ -13,7 +13,7 @@ public class UDPClient implements Runnable {
 	public UDPClient(int p) {
 		PORT = p;
 		try {
-			GROUP = InetAddress.getByName("224.0.1.35");
+			GROUP = InetAddress.getByName("localhost");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,12 +40,13 @@ public class UDPClient implements Runnable {
 			
 			byte[] buffer = new byte[1024];
 			DatagramPacket rp = new DatagramPacket(buffer, buffer.length);
+			while (true) {
 			socket.receive(rp);
 			
 			System.out.println(getClass().getName() + ">>> Got a reply from: " + rp.getAddress().getHostAddress());
 			System.out.println(getClass().getName() + ">>> Received: " + new String(rp.getData()).trim());
-			
-			socket.close();
+			}
+			//socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

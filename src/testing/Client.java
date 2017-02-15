@@ -1,5 +1,5 @@
 
-package old;
+package testing;
 
 public class Client {
 	
