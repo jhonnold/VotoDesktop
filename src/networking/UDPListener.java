@@ -1,32 +1,38 @@
 package networking;
 
 import java.net.DatagramPacket;
+import java.lang.reflect.Method;
 
-public class UDPListener {
+public class UDPListener implements Runnable {
 	
-	UDPSocket socket;
+	private UDPSocket socket;
+	private Method method;
+	private UDPHandler handler;
 	
 	public UDPListener() {
-		
-	}
-	
-	public void startUDPSocket() {
-		socket = new UDPSocket(this);
-		
-		Thread listening = new Thread(socket, "UDPSocket");
-		listening.start();
+		this.socket = new UDPSocket(this);
+		this.handler = new UDPHandler(socket);
 	}
 	
 	public void onPacketReceived(DatagramPacket inFromClient) {
 		
-		socket.close();
+		System.out.println("Got something");
 		
+		String data = new String(inFromClient.getData()).trim();
+		
+		String[] kwargs = data.split("_");
+		
+		try {
+			method = handler.getClass().getMethod(kwargs[0], DatagramPacket.class, String[].class);
+			method.invoke(handler, inFromClient, kwargs);
+		} catch (Exception e) {
+		}
 	}
 	
-	public static void main(String[] args) {
+	@Override
+	public void run() {
 		
-		UDPListener udp = new UDPListener();
-		udp.startUDPSocket();
-	
+		Thread listening = new Thread(socket, "UDPSocket");
+		listening.start();
 	}
 }

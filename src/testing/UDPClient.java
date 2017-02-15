@@ -25,7 +25,7 @@ public class UDPClient implements Runnable {
 		try {
 			socket = new DatagramSocket();
 			
-			byte[] send = "VOTO_HANDSHAKE_REQUEST".getBytes();
+			byte[] send = "handshakeRequest".getBytes();
 			
 			try {
 				DatagramPacket dp = new DatagramPacket(send, send.length, GROUP, PORT);
@@ -40,13 +40,12 @@ public class UDPClient implements Runnable {
 			
 			byte[] buffer = new byte[1024];
 			DatagramPacket rp = new DatagramPacket(buffer, buffer.length);
-			while (true) {
 			socket.receive(rp);
 			
 			System.out.println(getClass().getName() + ">>> Got a reply from: " + rp.getAddress().getHostAddress());
 			System.out.println(getClass().getName() + ">>> Received: " + new String(rp.getData()).trim());
-			}
-			//socket.close();
+			
+			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
