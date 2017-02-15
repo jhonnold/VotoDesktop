@@ -1,6 +1,7 @@
 package networking;
 
 import java.net.DatagramPacket;
+import java.net.SocketException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -11,8 +12,12 @@ public class UDPListener implements Runnable {
 	
 	private final String ID;
 	
-	public UDPListener(String ID) {
-		this.socket = new UDPSocket(this);
+	public UDPListener(String ID) throws SocketException {
+		try {
+			this.socket = new UDPSocket(this);
+		} catch (SocketException e) {
+			throw new SocketException(e.getMessage());
+		}
 		this.ID = ID;
 	}
 	
@@ -24,9 +29,16 @@ public class UDPListener implements Runnable {
 		try {
 			method = this.getClass().getMethod(kwargs[0], DatagramPacket.class, String[].class);
 			method.invoke(this, inFromClient, kwargs);
+		} catch (SecurityException e) {
+			returnError(inFromClient, e.getMessage());
 		} catch (InvocationTargetException e) {
 			returnError(inFromClient, e.getCause().getMessage());
-		} catch (Exception e) {
+		} catch (IllegalAccessException e) {
+			returnError(inFromClient, e.getMessage());
+		} catch (IllegalArgumentException e) {
+			returnError(inFromClient, e.getMessage());
+		} catch (NoSuchMethodException e) {
+			returnError(inFromClient, "No method by that name!");
 		}
 	}
 	

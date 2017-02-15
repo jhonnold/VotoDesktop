@@ -27,14 +27,14 @@ public class UDPSocket implements Runnable, Closeable {
 	 * Create a new datagram socket, catch the error of
 	 * something else using the port.
 	 */
-	public UDPSocket(UDPListener listner) {
+	public UDPSocket(UDPListener listner) throws SocketException {
 		
 		this.listener = listner;
 		
 		try {
 			socket = new DatagramSocket(PORT);
 		} catch (SocketException e) {
-			System.out.println("Something else is using port 9876!");
+			throw new SocketException("Could not create socket on 9876.\nIs something else using it?");
 		}
 		
 	}
