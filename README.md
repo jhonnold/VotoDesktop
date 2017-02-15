@@ -1,12 +1,10 @@
-# voto-desktop
+# VOTO-DESKTOP
 
-Currently the method for discovery and connecting a server to client:
+# Running
+Run the Server in testing to see basic usage
 
-Here's how it works so far:
--- Run the Server.java, it'll start by connecting to a mutlicast IP (224.0.0.3) and wait for "VOTO_HANDSHAKE_REQUEST"
-       -The Client.java will connect to this and send the expected packet
-
--- Once it receives this, it will send back a packet and it will start a TCPServer on the same port. 
-
--- I wrote a quick TCPClient code to test to connect to it, just change the ip in there too w/e the IP of the server is.
+# Networking
+Has all the networking necessary files (UDPLister and UDPSocket)
+# Testing
+Has all the basic testing files
 
