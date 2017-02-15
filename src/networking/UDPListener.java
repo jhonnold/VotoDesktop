@@ -7,11 +7,9 @@ public class UDPListener implements Runnable {
 	
 	private UDPSocket socket;
 	private Method method;
-	private UDPHandler handler;
 	
 	public UDPListener() {
 		this.socket = new UDPSocket(this);
-		this.handler = new UDPHandler(socket);
 	}
 	
 	public void onPacketReceived(DatagramPacket inFromClient) {
@@ -23,10 +21,20 @@ public class UDPListener implements Runnable {
 		String[] kwargs = data.split("_");
 		
 		try {
-			method = handler.getClass().getMethod(kwargs[0], DatagramPacket.class, String[].class);
-			method.invoke(handler, inFromClient, kwargs);
+			method = this.getClass().getMethod(kwargs[0], DatagramPacket.class, String[].class);
+			method.invoke(this, inFromClient, kwargs);
 		} catch (Exception e) {
 		}
+	}
+	
+	public void handshakeRequest(DatagramPacket dp, String[] kwargs) {
+		System.out.println("Got a handshake request");
+		socket.send(dp);
+	}
+	
+	public void vote(DatagramPacket dp, String[] kwargs) {
+		System.out.println("Got a vote!");
+		System.out.println(kwargs[1]);
 	}
 	
 	@Override
