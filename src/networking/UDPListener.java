@@ -2,6 +2,9 @@ package networking;
 
 import java.net.DatagramPacket;
 import java.net.SocketException;
+
+import session.Session;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -9,6 +12,7 @@ public class UDPListener implements Runnable {
 	
 	private UDPSocket socket;
 	private Method method;
+	private Session currentSession;
 	
 	private final String ID;
 	
@@ -19,6 +23,10 @@ public class UDPListener implements Runnable {
 			throw new SocketException(e.getMessage());
 		}
 		this.ID = ID;
+	}
+	
+	public void setCurrentSession(Session s) {
+		currentSession = s;
 	}
 	
 	public void onPacketReceived(DatagramPacket inFromClient) {
@@ -56,14 +64,13 @@ public class UDPListener implements Runnable {
 		if (kwargs.length == 1) {
 			throw new IllegalArgumentException("No vote attached to vote command!");
 		}
-		
-		System.out.print("Received a vote: ");
-		System.out.println(kwargs[1]);
-		
+
 		byte[] buffer = ("voteAccepted_" + ID).getBytes();
 		DatagramPacket out = new DatagramPacket(buffer, buffer.length, in.getAddress(), in.getPort());
 		
 		socket.send(out);
+		
+		currentSession.addAnswer(in.getAddress().getHostAddress(), kwargs[1]);
 	}
 	
 	public void returnError(DatagramPacket in, String message) {
