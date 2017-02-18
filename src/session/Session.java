@@ -6,6 +6,8 @@ import testing.Server;
 
 public class Session {
 	
+	public int ID;
+	
 	private HashMap<String, HashMap<String, String>> questions = new HashMap<>();
 	private String currentQuestion;
 	
