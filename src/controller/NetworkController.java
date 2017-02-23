@@ -36,6 +36,10 @@ public class NetworkController implements Runnable, Closeable {
 		}
 	}
 	
+	public void addSessionController(SessionController sc) {
+		this.sessionController = sc;
+	}
+	
 	/**
 	 * Parses the DatagramPacket into a set of keyword arguments, passes them
 	 * onto a command parser

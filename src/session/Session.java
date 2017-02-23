@@ -1,31 +1,18 @@
 package session;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import testing.Server;
 
 public class Session {
 	
-	public int ID;
+	public int ID = (int)(Math.random() * 100);
 	
-	private HashMap<String, HashMap<String, String>> questions = new HashMap<>();
-	private String currentQuestion;
+	private ArrayList<String> clientList = new ArrayList<String>();
 	
-	public void askQuestion(String q) {
-		currentQuestion = q;
-		questions.put(q, new HashMap<String, String>());
-	}
-	
-	public void addAnswer(String ID, String ans) {
-		HashMap<String, String> temp = questions.get(currentQuestion);
-		System.out.println("Got an answer for the question: " + currentQuestion);
-		
-		if (temp.keySet().contains(ID)) {
-			temp.replace(ID, ans);
-			System.out.println(ID + " has changed their answer to: " + ans);
-		} else {
-			temp.put(ID, ans);
-			System.out.println(ID + " has submitted their answer of: "+ ans);
+	public void addClient(String client) {
+		if (!clientList.contains(client)) {
+			clientList.add(client);
 		}
 	}
 }
