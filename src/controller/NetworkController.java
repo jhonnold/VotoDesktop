@@ -48,6 +48,8 @@ public class NetworkController implements Runnable, Closeable {
 	public void onPacketReceived(DatagramPacket inFromClient) {
 		String data = new String(inFromClient.getData()).trim();
 		
+		System.out.println("I have received a packet containing: " + data);
+		
 		//split the incoming message into arguments based on _
 		//this will need to change in the future
 		ArrayList<String> kwargs = new ArrayList<String>(Arrays.asList(data.split("_")));
@@ -55,7 +57,12 @@ public class NetworkController implements Runnable, Closeable {
 		//put the port and ip address into the keyword arguments (index 1 and 2)
 		kwargs.add(1, ""  + inFromClient.getPort());
 		kwargs.add(1, inFromClient.getAddress().getHostAddress());
-		CommandParser.parseCommand(sessionController, kwargs);		
+		try {	
+			CommandParser.parseCommand(sessionController, kwargs);		
+		} catch (NoSuchMethodException e) {
+			replyError(kwargs, e.getMessage());
+		}
+		
 	}
 	
 	/**
@@ -70,11 +77,28 @@ public class NetworkController implements Runnable, Closeable {
 			InetAddress address = InetAddress.getByName(kwargs.get(1));
 			int port = Integer.parseInt(kwargs.get(2));
 			DatagramPacket out = new DatagramPacket(buffer, buffer.length, address, port);
+			socket.send(out);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("Replied with: " + (new String(buffer)));
+		
+	}
+	
+	public void replyError(ArrayList<String> kwargs, String errormsg) {
+		byte[] buffer = errormsg.getBytes();
+		
+		try {
+			InetAddress address = InetAddress.getByName(kwargs.get(1));
+			int port = Integer.parseInt(kwargs.get(2));
+			DatagramPacket out = new DatagramPacket(buffer, buffer.length, address, port);
 			socket.send(out);
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}
 		
+		System.out.println("Replied with: " + (new String(buffer)));
 	}
 	
 	/**
@@ -82,8 +106,11 @@ public class NetworkController implements Runnable, Closeable {
 	 */
 	@Override
 	public void run() {
+		System.out.println("Starting up socket...");
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
+		
+		System.out.println("Started listening for clients on port 9876!");
 	}
 	
 	/**

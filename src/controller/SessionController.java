@@ -18,9 +18,11 @@ public class SessionController {
 	 * @param kwargs - [1-ip 2-port 3-clientid]
 	 */
 	public void handshakeRequest(ArrayList<String> kwargs) {
+		System.out.println("Parsed as a handshake");
+		
 		if (kwargs.size() <= 3) {
-			kwargs.set(0, "ERROR");
-			networkController.reply(kwargs);
+			System.out.println("Not formatted properly, replying with error");
+			networkController.replyError(kwargs, "ERROR handshakeRequest_[id]");
 		} else {
 			session.addClient(kwargs.get(3));
 			kwargs.set(3, "" + session.ID);

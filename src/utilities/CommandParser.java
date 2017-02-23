@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class CommandParser {
 	
-	public static void parseCommand(Object obj, ArrayList<String> kwargs) {
+	public static void parseCommand(Object obj, ArrayList<String> kwargs) throws NoSuchMethodException {
 		
 		try {
 			Method method = obj.getClass().getMethod(kwargs.get(0), ArrayList.class); 
@@ -17,7 +17,7 @@ public class CommandParser {
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			throw new NoSuchMethodException("Gibberish");
 		}
 		
 	}

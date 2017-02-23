@@ -26,7 +26,5 @@ public class Server {
 		
 		Thread t1 = new Thread(nc);
 		t1.start();
-		
-		System.out.println("Started");
 	}	
 }
