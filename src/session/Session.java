@@ -2,8 +2,6 @@ package session;
 
 import java.util.ArrayList;
 
-import testing.Server;
-
 public class Session {
 	
 	public int ID = (int)(Math.random() * 100);
