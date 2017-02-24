@@ -25,13 +25,13 @@ public class NetworkController implements Runnable, Closeable {
 	
 	private UDPSocket socket;
 	private SessionController sessionController;
-	private JTextPane output = null;
 	
 	/**
 	 * Create the controller
 	 * @throws SocketException - If something is already using port 9876
 	 */
 	public NetworkController() throws SocketException {
+		
 		try {
 			this.socket = new UDPSocket(this);
 		} catch (SocketException e) {
@@ -43,10 +43,6 @@ public class NetworkController implements Runnable, Closeable {
 		this.sessionController = sc;
 	}
 	
-	public void addOutput(JTextPane text) {
-		output = text;
-	}
-	
 	/**
 	 * Parses the DatagramPacket into a set of keyword arguments, passes them
 	 * onto a command parser
@@ -55,11 +51,7 @@ public class NetworkController implements Runnable, Closeable {
 	public void onPacketReceived(DatagramPacket inFromClient) {
 		String data = new String(inFromClient.getData()).trim();
 		
-		if (output == null) {
-			System.out.println("I have received a packet containing: " + data);
-		} else {
-			
-		}
+		System.out.println("I have received a packet containing: " + data);
 		//split the incoming message into arguments based on _
 		//this will need to change in the future
 		ArrayList<String> kwargs = new ArrayList<String>(Arrays.asList(data.split("_")));
@@ -116,7 +108,6 @@ public class NetworkController implements Runnable, Closeable {
 	 */
 	@Override
 	public void run() {	
-		System.out.println("Starting up socket...");
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
 		

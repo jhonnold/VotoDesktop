@@ -1,13 +1,47 @@
 package gui;
 
-import java.awt.Dimension;
+import java.io.IOException;
+import java.io.OutputStream;
 
+import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 
-public class ConsoleOutput extends JTextPane {
+public class ConsoleOutput extends OutputStream {
 	
-	public ConsoleOutput() {
-		setPreferredSize(new Dimension(960, 288));
+	private final JTextArea output;
+	private final StringBuilder sb = new StringBuilder();
+	private String title;
+	
+	public ConsoleOutput(final JTextArea out, String title) {
+		this.output = out;
+		this.title = title;
+		sb.append(title + "> ");
 	}
 	
+	@Override
+	public void flush() {}
+	
+	@Override
+	public void close() {}
+	
+	public void write(int b) throws IOException {
+		/*if (b == '\r') {
+			return;
+		}*/
+		
+		if (b == '\n') {
+			final String text = sb.toString() + "\n";
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					output.append(text);
+				}
+			});
+			sb.setLength(0);
+			sb.append(title + "> ");
+			return;
+		}
+		
+		sb.append((char) b);
+	}
 }

@@ -1,14 +1,17 @@
 package gui;
 
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.PrintStream;
 import java.net.SocketException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
 
 import controller.NetworkController;
@@ -18,7 +21,8 @@ public class VotoDesktop implements Runnable, ActionListener {
 	
 	private JFrame f;
 	private Timer t = new Timer(100, this);
-	private ConsoleOutput out = new ConsoleOutput();
+	private JTextArea console = new JTextArea(24, 80);
+	private ConsoleOutput output = new ConsoleOutput(console, "Voto-Desktop");
 	
 	NetworkController nc = null;
 	SessionController sc;
@@ -26,13 +30,14 @@ public class VotoDesktop implements Runnable, ActionListener {
 	public VotoDesktop() {
 		
 		f = new JFrame();
+		f.setLayout(new FlowLayout());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		//pane.setPreferredSize(new Dimension(800, 600));
+		console.setEditable(false);
+		f.add(new JScrollPane(console));
+		System.setOut(new PrintStream(output));
 		
-		f.add(out);
 		f.pack();
-		
 		f.setVisible(true);
 		t.start();
 	}
@@ -55,11 +60,7 @@ public class VotoDesktop implements Runnable, ActionListener {
 		sc = new SessionController();
 		
 		nc.addSessionController(sc);
-		sc.addNetworkController(nc);
-		
-		nc.addOutput(out);
-		//sc.addOutput(out);
-		
+		sc.addNetworkController(nc);	
 		nc.run();		
 	}
 	

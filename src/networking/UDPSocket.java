@@ -30,7 +30,7 @@ public class UDPSocket implements Runnable, Closeable {
 	 * something else using the port.
 	 */
 	public UDPSocket(NetworkController controller) throws SocketException {
-		
+		System.out.println("Creating listening socket...");
 		this.controller = controller;
 		
 		try {
@@ -38,7 +38,6 @@ public class UDPSocket implements Runnable, Closeable {
 		} catch (SocketException e) {
 			throw new SocketException("Could not create socket on 9876.\nIs something else using it?");
 		}
-		
 	}
 	
 	/**
