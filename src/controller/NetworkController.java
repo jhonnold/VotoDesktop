@@ -7,6 +7,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import javax.swing.JTextPane;
+
 import networking.UDPSocket;
 import utilities.CommandParser;
 
@@ -23,6 +25,7 @@ public class NetworkController implements Runnable, Closeable {
 	
 	private UDPSocket socket;
 	private SessionController sessionController;
+	private JTextPane output = null;
 	
 	/**
 	 * Create the controller
@@ -40,6 +43,10 @@ public class NetworkController implements Runnable, Closeable {
 		this.sessionController = sc;
 	}
 	
+	public void addOutput(JTextPane text) {
+		output = text;
+	}
+	
 	/**
 	 * Parses the DatagramPacket into a set of keyword arguments, passes them
 	 * onto a command parser
@@ -48,8 +55,11 @@ public class NetworkController implements Runnable, Closeable {
 	public void onPacketReceived(DatagramPacket inFromClient) {
 		String data = new String(inFromClient.getData()).trim();
 		
-		System.out.println("I have received a packet containing: " + data);
-		
+		if (output == null) {
+			System.out.println("I have received a packet containing: " + data);
+		} else {
+			
+		}
 		//split the incoming message into arguments based on _
 		//this will need to change in the future
 		ArrayList<String> kwargs = new ArrayList<String>(Arrays.asList(data.split("_")));
@@ -105,7 +115,7 @@ public class NetworkController implements Runnable, Closeable {
 	 * Start the socket
 	 */
 	@Override
-	public void run() {
+	public void run() {	
 		System.out.println("Starting up socket...");
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
