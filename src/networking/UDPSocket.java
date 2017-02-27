@@ -7,8 +7,6 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
-import controller.NetworkController;
-
 /**
  * 
  * @author zomby
@@ -21,7 +19,7 @@ public class UDPSocket implements Runnable, Closeable {
 	
 	private final int PORT = 9876;
 	
-	private NetworkController controller;
+	private NetworkHandler listener;
 	private DatagramSocket socket;
 	private volatile boolean isListening = false;
 	
@@ -29,9 +27,9 @@ public class UDPSocket implements Runnable, Closeable {
 	 * Create a new datagram socket, catch the error of
 	 * something else using the port.
 	 */
-	public UDPSocket(NetworkController controller) throws SocketException {
-		System.out.println("Creating listening socket...");
-		this.controller = controller;
+	public UDPSocket(NetworkHandler l) throws SocketException {
+		
+		this.listener = l;
 		
 		try {
 			socket = new DatagramSocket(PORT);
@@ -68,7 +66,7 @@ public class UDPSocket implements Runnable, Closeable {
 				System.out.println("Socket probably closed while blocking with receive");
 			}
 			
-			controller.onPacketReceived(inFromClient);
+			listener.onPacketReceived(inFromClient);
 		}
 	}
 	

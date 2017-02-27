@@ -1,4 +1,4 @@
-package controller;
+package networking;
 
 import java.io.Closeable;
 import java.net.DatagramPacket;
@@ -7,8 +7,7 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import networking.UDPSocket;
-import utilities.CommandParser;
+import controller.Controller;
 
 /**
  * 
@@ -19,26 +18,22 @@ import utilities.CommandParser;
  * the proper command
  */
 
-public class NetworkController implements Runnable, Closeable {
+public class NetworkHandler implements Runnable, Closeable {
 	
 	private UDPSocket socket;
-	private SessionController sessionController;
+	private Controller control;
 	
 	/**
 	 * Create the controller
 	 * @throws SocketException - If something is already using port 9876
 	 */
-	public NetworkController() throws SocketException {
-		
+	public NetworkHandler(Controller control) throws SocketException {
 		try {
 			this.socket = new UDPSocket(this);
 		} catch (SocketException e) {
 			throw new SocketException(e.getMessage());
 		}
-	}
-	
-	public void addSessionController(SessionController sc) {
-		this.sessionController = sc;
+		this.control = control;
 	}
 	
 	/**
@@ -58,7 +53,7 @@ public class NetworkController implements Runnable, Closeable {
 		kwargs.add(1, ""  + inFromClient.getPort());
 		kwargs.add(1, inFromClient.getAddress().getHostAddress());
 		try {	
-			CommandParser.parseCommand(sessionController, kwargs);		
+			control.parseNetworkCommand(kwargs);		
 		} catch (NoSuchMethodException e) {
 			replyError(kwargs, e.getMessage());
 		}

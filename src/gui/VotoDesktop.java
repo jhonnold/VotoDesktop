@@ -12,8 +12,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.Timer;
 
-import controller.NetworkController;
-import controller.SessionController;
+import controller.Controller;
 
 public class VotoDesktop implements Runnable, ActionListener {
 	
@@ -22,8 +21,7 @@ public class VotoDesktop implements Runnable, ActionListener {
 	private JTextArea console = new JTextArea(24, 80);
 	private ConsoleOutput output = new ConsoleOutput(console, "Voto-Desktop");
 	
-	NetworkController nc = null;
-	SessionController sc;
+	private Controller c  = null;
 	
 	public VotoDesktop() {
 		
@@ -50,16 +48,13 @@ public class VotoDesktop implements Runnable, ActionListener {
 	public void run() {
 		
 		try {
-			nc = new NetworkController();
+			c = new Controller();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		sc = new SessionController();
-		
-		nc.addSessionController(sc);
-		sc.addNetworkController(nc);	
-		nc.run();		
+			
+		c.run();		
 	}
 	
 	public static void main(String[] args) {
