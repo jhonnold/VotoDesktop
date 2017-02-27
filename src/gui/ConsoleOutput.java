@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 
 public class ConsoleOutput extends OutputStream {
