@@ -58,12 +58,12 @@ public class Controller {
 	/**
 	 * Loads an image into an arraylist of bytearray of 64KB each
 	 * @param filename - The filename of the image to be loaded
-	 * @return - An arraylist of 64KB byte arrays
+	 * @return - An arraylist of 60KB byte arrays
 	 * @throws IOException - if the filename is invalid
 	 */
 	public ArrayList<byte[]> loadImage(String filename) throws IOException {
 		
-		int packetsize = 65536; // 64 KB
+		int packetsize = 61440; // 60 KB
 		
 		ArrayList<byte[]> packetBytes = new ArrayList<byte[]>();
 		byte[] bytearray;
@@ -81,7 +81,7 @@ public class Controller {
 		// Grab the byte array
 		bytearray = baos.toByteArray();
 		
-		// cut the full array into 64 KB by using copyOfRange
+		// cut the full array into 60 KB by using copyOfRange
 		for (int i = 0; i < bytearray.length; i += packetsize) {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
