@@ -97,8 +97,10 @@ public class Controller {
 	}
 	
 	/**
+	 * RESERVED FOR NETWORK PACKETS
 	 * Handshake request received 
 	 * @param kwargs - [1-CLIENTIP 2-CLIENTPORT 3-CLIENTID]
+	 * @replies - handshakeRequest_[sessionID]
 	 */
 	public void handshakeRequest(ArrayList<String> kwargs) {
 		System.out.println("Parsed as a handshake");
@@ -118,8 +120,10 @@ public class Controller {
 	}
 	
 	/**
+	 * RESERVED FOR NETWORK PACKETS
 	 * Vote was received
 	 * @param kwargs - [1-CLIENTIP 2-CLIENTPORT 3-CLIENTID 4-VOTE]
+	 * @replies - vote_[sessionID]_[voteString]
 	 */
 	public void vote(ArrayList<String> kwargs) {
 		
@@ -127,6 +131,30 @@ public class Controller {
 		
 		kwargs.set(3, "" + session.ID);
 		network.reply(kwargs);
+	}
+	
+	/**
+	 * RESERVED FOR NETWORK PACKETS
+	 * client is requesting information on current media
+	 * @param kwargs - [1-CLIENTIP 2-CLIENTPORT]
+	 * @replies - mediaPing_[imageID]_[packetCount]
+	 */
+	public void mediaPing(ArrayList<String> kwargs) {
+		
+		if (kwargs.size() > 3) {
+			network.replyError(kwargs, "ERROR mediaPing should have nothing following it");
+		}
+		
+		if (!session.isConnectedClient(kwargs.get(1))) {
+			network.replyError(kwargs, "ERROR handshakeRequest before any other commands!");
+		}
+		
+		int imageID = session.getCurrentImageID();
+		int packetCount = session.getCurrentImagePacketCount();
+		
+		kwargs.add("" + imageID);
+		kwargs.add("" + packetCount);
+		
 	}
 	
 	/**
