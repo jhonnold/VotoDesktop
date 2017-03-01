@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -121,8 +122,7 @@ public class Controller {
 		String ID = getDynamicData(inFromClient, cursor);
 		cursor += ID.length();
 		
-		int voteNumber = inFromClient[cursor];
-		cursor++;
+		int voteNumber = inFromClient[cursor++];
 		
 		String vote = getDynamicData(inFromClient, cursor);
 		
@@ -141,7 +141,31 @@ public class Controller {
 		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID(), (byte) session.getCurrentImagePacketCount()};
 		return returnPacket;
 	}
-
+	
+	/**
+	 * CLIENT COMMAND - mediaRequest
+	 * @param inFromClient {'M' (1), 'R' (1), imageID (1), packet# (1)}
+	 * @return - the byte array to be returned
+	 */
+	protected byte[] mediaRequest(byte[] inFromClient) {
+		int cursor = 2;
+		int imageID = inFromClient[cursor++];
+		int packetNumber = inFromClient[cursor++];
+		
+		byte[] payload = session.getImagePacket(imageID, packetNumber);
+		
+		byte[] returnPacket = {'M', 'R', (byte) imageID, (byte) packetNumber};
+		
+		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(payload.length).array());
+		return append(returnPacket, payload);
+	}
+	
+	/**
+	 * CLIENT COMMAND CONTROL POINT - handles all incoming client commands
+	 * @param data the byte array containing the command params
+	 * @return - the byte array to be returned based on the initial command
+	 * @throws IllegalArgumentException - if the command given is invalid
+	 */
 	public byte[] parseNetworkCommand(byte[] data) throws IllegalArgumentException {
 
 		byte[] returnPacket = null;
@@ -168,6 +192,11 @@ public class Controller {
 		return returnPacket;
 	}
 	
+	/**
+	 * @param data - first byte array
+	 * @param addition - string to be added
+	 * @return - a single byte array connected
+	 */
 	private byte[] append(byte[] data, String addition) {
 		
 		byte[] temp = new byte[data.length + addition.length()];
@@ -184,6 +213,32 @@ public class Controller {
 		return temp;
 	}
 	
+	/**
+	 * @param data - first byte array
+	 * @param addition - second byte array
+	 * @return - a single byte array connected
+	 */
+	private byte[] append(byte[] data, byte[] addition) {
+		byte[] temp = new byte[data.length + addition.length];
+		
+		for (int i = 0; i < data.length; i++) {
+			temp[i] = data[i];
+		}
+		
+		for (int i = 0; i < addition.length; i++) {
+			temp[i + data.length] = addition[i];
+		}
+		
+		return temp;
+	}
+	
+	/**
+	 * Retrieves a given data from byte array where the start index is the size of the string
+	 * to be received
+	 * @param data - the byte[] array containing the information
+	 * @param start - the index with the allocated size, start + 1 is where the string begins
+	 * @return - the retrieved data
+	 */
 	private String getDynamicData(byte[] data, int start) {
 		int length = data[start];
 		return new String(Arrays.copyOfRange(data, start + 1, length));
