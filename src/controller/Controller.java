@@ -242,8 +242,8 @@ public class Controller {
 	 * @return - the retrieved data
 	 */
 	private String getDynamicData(byte[] data, int start) {
-		int length = data[start];
-		return new String(Arrays.copyOfRange(data, start + 1, length));
+		int length = data[start++];
+		return new String(Arrays.copyOfRange(data, start, start + length));
 	}
 	
 }
