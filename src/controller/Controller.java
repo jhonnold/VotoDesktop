@@ -184,6 +184,8 @@ public class Controller {
 			case 'M':
 				if (data[1] == 'P') {
 					returnPacket = mediaPing(data);
+				} else if (data[1] == 'R') {
+					returnPacket = mediaRequest(data);
 				} else {
 					throw new IllegalArgumentException("This is not a recognized packet!");
 				}
