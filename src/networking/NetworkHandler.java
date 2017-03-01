@@ -41,8 +41,8 @@ public class NetworkHandler implements Runnable, Closeable {
 	public void onPacketReceived(DatagramPacket inFromClient) {
 		byte[] data = inFromClient.getData();
 		
+
 		System.out.println("I have received a packet containing: " + new String(data));
-		
 		try {	
 			reply(control.parseNetworkCommand(data), inFromClient);		
 		} catch (IllegalArgumentException e) {
@@ -63,8 +63,7 @@ public class NetworkHandler implements Runnable, Closeable {
 	 * Start the socket
 	 */
 	@Override
-	public void run() {
-		System.out.println("Starting up socket...");
+	public void run() {	
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
 		
