@@ -12,14 +12,10 @@ public class Server {
 		
 		try {
 			control.start();
-			Thread.sleep(10000);
-			control.stop();
-		} catch (Exception e) {
+		} catch (SocketException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
-		
 		
 	}	
 }
