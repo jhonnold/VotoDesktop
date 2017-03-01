@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Session {
 	
-	public int ID = (int)(Math.random() * 100);
+	public String ID = "test server";
 	
 	private ArrayList<String> clientList = new ArrayList<String>();
 	
