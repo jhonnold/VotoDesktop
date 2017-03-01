@@ -8,14 +8,18 @@ public class Server {
 	
 	public static void main(String[] args) {
 		
-		Controller control = null;
+		Controller control = new Controller();
 		
 		try {
-			control = new Controller();
+			control.start();
+			Thread.sleep(10000);
+			control.stop();
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(1);
 		}
 		
-		new Thread(control).start();
+		
+		
 	}	
 }

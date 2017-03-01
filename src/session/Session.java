@@ -16,4 +16,19 @@ public class Session {
 			System.out.println("Client already exists, not adding");
 		}
 	}
+
+	public int getCurrentImageID() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getCurrentImagePacketCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public boolean isConnectedClient(String string) {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

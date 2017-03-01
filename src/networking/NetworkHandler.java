@@ -66,7 +66,14 @@ public class NetworkHandler implements Runnable, Closeable {
 	 * 				 - originalcommand will become error if error
 	 */
 	public void reply(ArrayList<String> kwargs) {
-		byte[] buffer = (kwargs.get(0) + "_" + kwargs.get(3)).getBytes();
+		
+		String msg = kwargs.get(0);
+		
+		for (int i = 3; i < kwargs.size(); i++) {
+			msg += "_" + kwargs.get(i); 
+		}
+		
+		byte[] buffer = msg.getBytes();
 		
 		try {
 			InetAddress address = InetAddress.getByName(kwargs.get(1));
