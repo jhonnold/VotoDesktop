@@ -51,7 +51,7 @@ public class Controller {
 
 		network.close();
 	}
-
+	
 	/**
 	 * Loads an image into an arraylist of bytearray of 64KB each
 	 * 
@@ -127,7 +127,7 @@ public class Controller {
 		String vote = getDynamicData(inFromClient, cursor);
 		
 		//do something with the vote
-		byte[] returnPacket = {'V'};
+		byte[] returnPacket = {'V', 'R', (byte) voteNumber};
 		return returnPacket;
 	}
 
