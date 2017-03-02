@@ -36,12 +36,11 @@ public class UDPSocket implements Runnable, Closeable {
 		} catch (SocketException e) {
 			throw new SocketException("Could not create socket on 9876.\nIs something else using it?");
 		}
-		
 	}
 	
 	/**
-	 * Start listening and in an infite loop constantly receive
-	 * packets, sending them up to the listner.
+	 * Start listening and in an infinite loop constantly receive
+	 * packets, sending them up to the listener.
 	 */
 	@Override
 	public void run() {

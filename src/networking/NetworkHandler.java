@@ -2,10 +2,7 @@ package networking;
 
 import java.io.Closeable;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import controller.Controller;
 
@@ -42,67 +39,31 @@ public class NetworkHandler implements Runnable, Closeable {
 	 * @param inFromClient - The datagram packet received from client
 	 */
 	public void onPacketReceived(DatagramPacket inFromClient) {
-		String data = new String(inFromClient.getData()).trim();
+		byte[] data = inFromClient.getData();
 		
-		System.out.println("I have received a packet containing: " + data);
-		
-		//split the incoming message into arguments based on _
-		//this will need to change in the future
-		ArrayList<String> kwargs = new ArrayList<String>(Arrays.asList(data.split("_")));
-		
-		//put the port and ip address into the keyword arguments (index 1 and 2)
-		kwargs.add(1, ""  + inFromClient.getPort());
-		kwargs.add(1, inFromClient.getAddress().getHostAddress());
+
+		System.out.println("I have received a packet containing: " + new String(data));
 		try {	
-			control.parseNetworkCommand(kwargs);		
-		} catch (NoSuchMethodException e) {
-			replyError(kwargs, e.getMessage());
+			reply(control.parseNetworkCommand(data), inFromClient);		
+		} catch (IllegalArgumentException e) {
+			//replyError(kwargs, e.getMessage());
 		}
 		
 	}
 	
 	/**
 	 * Replies back to whoever sent the packet
-	 * @param kwargs - [0-originalcommand 1-ip 2-port 3-message]
-	 * 				 - originalcommand will become error if error
 	 */
-	public void reply(ArrayList<String> kwargs) {
-		byte[] buffer = (kwargs.get(0) + "_" + kwargs.get(3)).getBytes();
-		
-		try {
-			InetAddress address = InetAddress.getByName(kwargs.get(1));
-			int port = Integer.parseInt(kwargs.get(2));
-			DatagramPacket out = new DatagramPacket(buffer, buffer.length, address, port);
-			socket.send(out);	
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("Replied with: " + (new String(buffer)));
-		
-	}
-	
-	public void replyError(ArrayList<String> kwargs, String errormsg) {
-		byte[] buffer = errormsg.getBytes();
-		
-		try {
-			InetAddress address = InetAddress.getByName(kwargs.get(1));
-			int port = Integer.parseInt(kwargs.get(2));
-			DatagramPacket out = new DatagramPacket(buffer, buffer.length, address, port);
-			socket.send(out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		System.out.println("Replied with: " + (new String(buffer)));
+	public void reply(byte[] data, DatagramPacket in) {
+		DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
+		socket.send(outToClient);
 	}
 	
 	/**
 	 * Start the socket
 	 */
 	@Override
-	public void run() {
-		System.out.println("Starting up socket...");
+	public void run() {	
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
 		
