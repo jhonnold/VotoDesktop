@@ -2,6 +2,7 @@ package session;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 
 public class Question {
@@ -11,12 +12,20 @@ public class Question {
 	private int answer = (int)'A';
 	private int imageID;
 	
-	private HashMap<Integer, ArrayList<Client>> answerSet = new HashMap<>();
+	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
+	private HashMap<String, Vote> choices = new HashMap<>();
+	
 	
 	public Question(Session s, ArrayList<byte[]> img, int imageID) {
 		image = img;
 		currentSession = s;
 		this.imageID = imageID;
+		
+		choices.put("A", new Vote(1));
+		choices.put("B", new Vote(2));
+		choices.put("C", new Vote(3));
+		choices.put("D", new Vote(4));
+		choices.put("E", new Vote(5));
 	}
 	
 	public void setAnswer(int ans) { answer = ans; }
@@ -25,14 +34,16 @@ public class Question {
 	
 	public void addVote(String clientID, String clientVote) {
 		Client c = currentSession.getClient(clientID);
-		Integer lastVote = c.getLastVote();
+		Vote lastVote = c.getLastVote();
 		
-		answerSet.get(lastVote).remove(c);
+		if (lastVote != null) {
+			answerSet.get(lastVote).remove(c);
+		}
 		
-		Integer i = new Integer((int) (clientVote.toCharArray()[0]));
+		Vote v = choices.get(clientVote);
 		
-		answerSet.get(i).add(c);
-		c.setLastVote(i);
+		answerSet.get(v).add(c);
+		c.setLastVote(v, lastVote);
 	}
 	
 	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {

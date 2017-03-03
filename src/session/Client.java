@@ -6,17 +6,24 @@ public class Client {
 
 	private String ID = null;
 	
-	private ArrayList<Integer> voteList = new ArrayList<>();
+	private ArrayList<Vote> voteList = new ArrayList<>();
 	
 	public Client(String clientID) {
 		ID = clientID;
 	}
 
-	public Integer getLastVote() {
-		return voteList.get(voteList.size() - 1);
+	public Vote getLastVote() {
+		if (voteList.size() > 0) {
+			return voteList.get(voteList.size() - 1);
+		} else {
+			return null;
+		}
 	}
 	
-	public void setLastVote(Integer lastVote) {
+	public void setLastVote(Vote lastVote, Vote oldVote) {
+		if (voteList.contains(oldVote)) {
+			voteList.remove(oldVote);
+		}
 		voteList.add(lastVote);
 	}
 	
