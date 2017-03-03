@@ -8,21 +8,22 @@ public class Question {
 	
 	private ArrayList<byte[]> image;
 	private Session currentSession;
-	private int answer;
+	private int answer = (int)'A';
+	private int imageID;
+	
 	private HashMap<Integer, ArrayList<Client>> answerSet = new HashMap<>();
 	
-	public Question(ArrayList<byte[]> img, Session s) {
+	public Question(Session s, ArrayList<byte[]> img, int imageID) {
 		image = img;
 		currentSession = s;
+		this.imageID = imageID;
 	}
 	
+	public void setAnswer(int ans) { answer = ans; }
+	public int imageID() { return imageID; }
+	public int imageSize() { return image.size(); }
 	
-	public void setAnswer(int ans) {
-		answer = ans;
-	}
-	
-	public int addVote(String clientID, String clientVote) {
-		
+	public void addVote(String clientID, String clientVote) {
 		Client c = currentSession.getClient(clientID);
 		Integer lastVote = c.getLastVote();
 		
@@ -31,9 +32,16 @@ public class Question {
 		Integer i = new Integer((int) (clientVote.toCharArray()[0]));
 		
 		answerSet.get(i).add(c);
+		c.setLastVote(i);
+	}
+	
+	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
+		if (packetNum < 0 || packetNum >= image.size()) {
+			throw new IllegalArgumentException("Packet number is invalid for this image");
+		}
 		
-		return 0;
+		return image.get(packetNum);
 	}
 	
 }

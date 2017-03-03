@@ -15,9 +15,10 @@ import controller.Controller;
 public class Session {
 	
 	public String ID = "test server";
-	private ArrayList<String> clientList = new ArrayList<String>();
+	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
+	private Question currentQuestion;
 	
 	public void start() throws SocketException {
 		try {
@@ -35,33 +36,24 @@ public class Session {
 		}
 	}
 	
-	public void addClient(String client) {
-		if (!clientList.contains(client)) {
-			System.out.println("New client, added as: " + client);
-			clientList.add(client);
-		} else {
-			System.out.println("Client already exists, not adding");
-		}
+	public void addClient(String ID) {
+		clientList.add(new Client(ID));
 	}
 	
 	public int getCurrentImageID() {
-		// TODO Auto-generated method stub
-		return 0;
+		return currentQuestion.imageID();
 	}
 
 	public int getCurrentImagePacketCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return currentQuestion.imageSize();
 	}
 
-	public boolean isConnectedClient(String string) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	public byte[] getImagePacket(int imageID, int packetNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public byte[] getImagePacket(int imageID, int packetNumber) throws IllegalArgumentException {
+		if (imageID != currentQuestion.imageID()) {
+			throw new IllegalArgumentException("Cannot request this image at this time");
+		}
+		
+		return currentQuestion.getImagePacket(packetNumber);
 	}
 	
 	/**
@@ -109,7 +101,11 @@ public class Session {
 	}
 
 	public Client getClient(String clientID) {
-		// TODO Auto-generated method stub
+		for (Client c : clientList) {
+			if (c.equals(clientID)) {
+				return c;
+			}
+		}
 		return null;
 	}
 }

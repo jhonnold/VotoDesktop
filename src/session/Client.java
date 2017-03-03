@@ -4,21 +4,23 @@ import java.util.ArrayList;
 
 public class Client {
 
-	private String IP;
-	private String ID;
+	private String ID = null;
 	
-	public Client(String clientIP, String clientID) {
-		IP = clientIP;
+	private ArrayList<Integer> voteList = new ArrayList<>();
+	
+	public Client(String clientID) {
 		ID = clientID;
-		
-	}
-	
-	public Client(String clientIP) {
-		IP = clientIP;
 	}
 
 	public Integer getLastVote() {
-		// TODO Auto-generated method stub
-		return null;
+		return voteList.get(voteList.size() - 1);
+	}
+	
+	public void setLastVote(Integer lastVote) {
+		voteList.add(lastVote);
+	}
+	
+	public boolean equals(String ID) {
+		return this.ID.equals(ID);
 	}
 }
