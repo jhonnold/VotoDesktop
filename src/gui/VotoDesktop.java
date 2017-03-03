@@ -15,11 +15,12 @@ import controller.Controller;
 public class VotoDesktop implements Runnable, ActionListener {
 	
 	private JFrame f;
-	private JButton hostButton, joinButton;
+	private JButton hostButton, joinButton, openButton, connectButton;
 	private JPanel startPanel, hostPanel;
 	private Timer t;
 	private JFileChooser fileChooser;
 	private JLabel ipLabel;
+	private JTextField ipField;
 	//private JTextArea console = new JTextArea(24, 80);
 	//private ConsoleOutput output = new ConsoleOutput(console, "Voto-Desktop");
 	
@@ -62,7 +63,7 @@ public class VotoDesktop implements Runnable, ActionListener {
 	private void hostGUI(){
 		f.setVisible(false);
 		f.remove(startPanel);
-				
+						
 		hostPanel = new JPanel(new BorderLayout());
 		try {
 			ipLabel = new JLabel(InetAddress.getLocalHost().getHostAddress());
@@ -70,9 +71,35 @@ public class VotoDesktop implements Runnable, ActionListener {
 		catch (UnknownHostException ue) {
 			System.exit(1);
 		}
+		
+		openButton = new JButton("Open");
+		openButton.addActionListener(this);
+		
 		hostPanel.add(ipLabel, BorderLayout.NORTH);
+		hostPanel.add(openButton, BorderLayout.SOUTH);
+		
 		f.add(hostPanel);
 		f.setTitle("Host Session");
+		f.setSize(600, 400);
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+		f.repaint();
+	}
+	
+	private void joinGUI() {
+		f.setVisible(false);
+		f.remove(startPanel);
+		
+		connectButton = new JButton("Connect");
+		connectButton.addActionListener(this);
+		
+		ipField = new JTextField("Enter IP");
+		ipField.setPreferredSize(new Dimension(175, 25));
+		
+		f.add(ipField);
+		f.add(connectButton);
+		
+		f.setTitle("Join Session");
 		f.setSize(600, 400);
 		f.setLocationRelativeTo(null);
 		f.setVisible(true);
@@ -101,9 +128,17 @@ public class VotoDesktop implements Runnable, ActionListener {
 		
 		//JoinButton (FileChooser)
 		if (e.getSource() == joinButton) {
+			joinGUI();
+		}
+		
+		if (e.getSource() == openButton) {
 			fileChooser = new JFileChooser();
 			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));// + System.getProperty("file.separator")+ "Pictures"));
 			int result = fileChooser.showOpenDialog(startPanel);
+		}
+		
+		if (e.getSource() == connectButton) {
+			
 		}
 	}
 	
