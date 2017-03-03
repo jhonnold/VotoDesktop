@@ -39,8 +39,8 @@ public class UDPSocket implements Runnable, Closeable {
 	}
 	
 	/**
-	 * Start listening and in an infite loop constantly receive
-	 * packets, sending them up to the listner.
+	 * Start listening and in an infinite loop constantly receive
+	 * packets, sending them up to the listener.
 	 */
 	@Override
 	public void run() {

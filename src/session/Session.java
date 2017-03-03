@@ -31,4 +31,9 @@ public class Session {
 		// TODO Auto-generated method stub
 		return true;
 	}
+
+	public byte[] getImagePacket(int imageID, int packetNumber) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
