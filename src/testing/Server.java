@@ -3,15 +3,16 @@ package testing;
 import java.net.SocketException;
 
 import controller.Controller;
+import session.Session;
 
 public class Server {
 	
 	public static void main(String[] args) {
 		
-		Controller control = new Controller();
+		Session s = new Session();
 		
 		try {
-			control.start();
+			s.start();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			System.exit(1);

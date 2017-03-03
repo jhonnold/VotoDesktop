@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import controller.Controller;
+import session.Session;
 
 public class VotoDesktop implements Runnable, ActionListener {
 	
@@ -25,6 +26,7 @@ public class VotoDesktop implements Runnable, ActionListener {
 	//private ConsoleOutput output = new ConsoleOutput(console, "Voto-Desktop");
 	
 	private Controller c;
+	private Session s;
 	
 	public VotoDesktop() {
 		
@@ -119,7 +121,8 @@ public class VotoDesktop implements Runnable, ActionListener {
 			
 			//System.setOut(new PrintStream(output));
 			try {
-				c.start();
+				//c.start();
+				s.start();
 			} 
 			catch (SocketException se) {
 				se.printStackTrace();
@@ -145,9 +148,7 @@ public class VotoDesktop implements Runnable, ActionListener {
 	@Override
 	public void run() {
 		
-		c = new Controller();
-			
-		//c.run();		
+		s = new Session();		
 	}
 	
 	public static void main(String[] args) {
