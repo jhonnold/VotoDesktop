@@ -107,4 +107,9 @@ public class Session {
 		 * File(dirName, "snap.jpg"));
 		 */
 	}
+
+	public Client getClient(String clientID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
