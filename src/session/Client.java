@@ -4,21 +4,30 @@ import java.util.ArrayList;
 
 public class Client {
 
-	private String IP;
-	private String ID;
+	private String ID = null;
 	
-	public Client(String clientIP, String clientID) {
-		IP = clientIP;
+	private ArrayList<Vote> voteList = new ArrayList<>();
+	
+	public Client(String clientID) {
 		ID = clientID;
-		
-	}
-	
-	public Client(String clientIP) {
-		IP = clientIP;
 	}
 
-	public Integer getLastVote() {
-		// TODO Auto-generated method stub
-		return null;
+	public Vote getLastVote() {
+		if (voteList.size() > 0) {
+			return voteList.get(voteList.size() - 1);
+		} else {
+			return null;
+		}
+	}
+	
+	public void setLastVote(Vote lastVote, Vote oldVote) {
+		if (voteList.contains(oldVote)) {
+			voteList.remove(oldVote);
+		}
+		voteList.add(lastVote);
+	}
+	
+	public boolean equals(String ID) {
+		return this.ID.equals(ID);
 	}
 }

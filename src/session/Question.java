@@ -2,56 +2,57 @@ package session;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Hashtable;
 
 
 public class Question {
 	
 	private ArrayList<byte[]> image;
 	private Session currentSession;
-	private int answer;
-	private HashMap<Integer, ArrayList<Client>> answerSet = new HashMap<>();
+	private int answer = (int)'A';
+	private int imageID;
+	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
+	private HashMap<String, Vote> choices = new HashMap<>();
 	
-	/**
-	 * Constructor for building question
-	 * 
-	 * @param img - an image (byte array) associated with a given question
-	 * @param s - the current session the question is contained in
-	 */
-	public Question(ArrayList<byte[]> img, Session s) {
+	
+	public Question(Session s, ArrayList<byte[]> img, int imageID) {
+
 		image = img;
 		currentSession = s;
+		this.imageID = imageID;
+		choices.put("A", new Vote(1));
+		choices.put("B", new Vote(2));
+		choices.put("C", new Vote(3));
+		choices.put("D", new Vote(4));
+		choices.put("E", new Vote(5));
 	}
-	
-	/**
-	 * Sets the answer for the given question
-	 * 
-	 * @param ans - answer for the given question
-	 */
-	public void setAnswer(int ans) {
-		answer = ans;
-	}
-	
-	/**
-	 * Adds a client vote to the current question; keeps track of individual 
-	 * client votes for updating when required
-	 * 
-	 * @param clientID
-	 * @param clientVote
-	 * @return
-	 */
-	public int addVote(String clientID, String clientVote) {
 		
+	public void setAnswer(int ans) { answer = ans; }
+	public int imageID() { return imageID; }
+	public int imageSize() { return image.size(); }
+	
+	public void addVote(String clientID, String clientVote) {
+
 		Client c = currentSession.getClient(clientID);
-		Integer lastVote = c.getLastVote();
+		Vote lastVote = c.getLastVote();
 		
-		answerSet.get(lastVote).remove(c);
+		if (lastVote != null) {
+			answerSet.get(lastVote).remove(c);
+		}
 		
-		Integer i = new Integer((int) (clientVote.toCharArray()[0]));
+		Vote v = choices.get(clientVote);
 		
-		answerSet.get(i).add(c);
+		answerSet.get(v).add(c);
+		c.setLastVote(v, lastVote);
+	}
+	
+	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
+		if (packetNum < 0 || packetNum >= image.size()) {
+			throw new IllegalArgumentException("Packet number is invalid for this image");
+		}
 		
-		return 0;
+		return image.get(packetNum);
 	}
 	
 }
