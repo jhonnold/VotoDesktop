@@ -46,6 +46,19 @@ public class Question {
 		c.setLastVote(v, lastVote);
 	}
 	
+	public void endQuestion() {
+		
+		for (Vote v : answerSet.keySet()) {
+			
+			for (Client c : answerSet.get(v)) {
+				
+				c.setLastVote(v, null);
+			}
+			
+		}
+		
+	}
+	
 	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
 		if (packetNum < 0 || packetNum >= image.size()) {
