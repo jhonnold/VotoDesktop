@@ -1,8 +1,7 @@
 package gui;
 
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javafx.application.*;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -26,7 +26,7 @@ public class VotoDesktopFX extends Application
 	
 	private ArrayList<String> picList;
 	private Stage hostStage;
-	private Button hostButton, joinButton, startButton;
+	private Button hostButton, joinButton, stopButton;
 	private GridPane hostGrid;
 	private BorderPane rootHost;
 	private ScrollPane picPane;
@@ -102,6 +102,13 @@ public class VotoDesktopFX extends Application
 		catch (SocketException se) {
 			se.printStackTrace();
 		}
+	
+		//Closes program and stops Session
+		hostStage.setOnCloseRequest(e -> {
+			Platform.exit();
+			s.stop();
+			System.exit(0);
+		});
 	}
 	
 	//Open picture from file chooser to host pane
