@@ -108,4 +108,8 @@ public class Session {
 		}
 		return null;
 	}
+
+	public int getCurrentImageSize() {
+		return 0;
+	}
 }

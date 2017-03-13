@@ -92,6 +92,8 @@ public class Controller {
 	protected byte[] mediaPing(byte[] inFromClient) {
 		
 		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID(), (byte) session.getCurrentImagePacketCount()};
+		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(session.getCurrentImageSize()).array());
+		
 		return returnPacket;
 	}
 	
