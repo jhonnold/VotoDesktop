@@ -65,7 +65,7 @@ public class Session {
 	 * @throws IOException
 	 *             - if the filename is invalid
 	 */
-	public ArrayList<byte[]> loadImage(String filename) throws IOException {
+	public void loadImage(String filename) throws IOException {
 
 		int packetsize = 61440; // 60 KB
 
@@ -90,7 +90,7 @@ public class Session {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
 
-		return packetBytes;
+		currentQuestion.questionImg = packetBytes;
 
 		/**
 		 * To decode these packets back into an image: Combine all the packets

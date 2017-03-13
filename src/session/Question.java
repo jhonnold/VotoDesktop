@@ -13,7 +13,7 @@ public class Question {
 	private int imageID;
 	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
 	private HashMap<String, Vote> choices = new HashMap<>();
-	
+	ArrayList<byte[]> questionImg = new ArrayList<byte[]>();
 	
 	public Question(Session s, ArrayList<byte[]> img, int imageID) {
 
