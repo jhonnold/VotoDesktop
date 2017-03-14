@@ -17,9 +17,13 @@ public class Session {
 	public String ID = "test server";
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
-	private Controller control = new Controller(this); 
+	private Controller control = new Controller(this);
 	private Question currentQuestion;
 	
+	/**
+	 * Starts a Voto session
+	 * @throws SocketException
+	 */
 	public void start() throws SocketException {
 		try {
 			control.start();
@@ -28,6 +32,10 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * Stops (or ends) the current Voto session
+	 * @throws IllegalArgumentException
+	 */
 	public void stop() throws IllegalArgumentException {
 		try {
 			control.stop();
@@ -36,18 +44,37 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * Adds a new client to the session's client list with their ID
+	 * @param ID - the new client's ID
+	 */
 	public void addClient(String ID) {
 		clientList.add(new Client(ID));
 	}
 	
+	/**
+	 * Returns the ID for the image of the current question
+	 * @return ID of current question image
+	 */
 	public int getCurrentImageID() {
 		return currentQuestion.imageID();
 	}
 
+	/**
+	 * Returns the number of packets for the current question image
+	 * @return image packet count
+	 */
 	public int getCurrentImagePacketCount() {
 		return currentQuestion.imageSize();
 	}
 
+	/**
+	 * Returns the image packet for the current question of the session
+	 * @param imageID - ID of the question image
+	 * @param packetNumber - corresponding packet number
+	 * @return byte array packet for the current image
+	 * @throws IllegalArgumentException
+	 */
 	public byte[] getImagePacket(int imageID, int packetNumber) throws IllegalArgumentException {
 		if (imageID != currentQuestion.imageID()) {
 			throw new IllegalArgumentException("Cannot request this image at this time");
@@ -100,7 +127,14 @@ public class Session {
 		 */
 	}
 
+	/**
+	 * Returns a client object based off of the client ID passed in
+	 * @param clientID - ID of the desired client
+	 * @return a client object
+	 */
 	public Client getClient(String clientID) {
+		
+		// Search the client list for the specified ID
 		for (Client c : clientList) {
 			if (c.equals(clientID)) {
 				return c;
@@ -109,7 +143,11 @@ public class Session {
 		return null;
 	}
 
+	/**
+	 * Returns the size of the current session image
+	 * @return image size 
+	 */
 	public int getCurrentImageSize() {
-		return 0;
+		return currentQuestion.imageSize();
 	}
 }
