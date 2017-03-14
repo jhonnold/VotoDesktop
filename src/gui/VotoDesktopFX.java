@@ -17,7 +17,7 @@ import javafx.scene.layout.*;
 import javafx.scene.image.*;
 import javafx.stage.*;
 import javafx.geometry.*;
-
+import session.Question;
 import session.Session;
 
 
@@ -128,7 +128,16 @@ public class VotoDesktopFX extends Application
 			iView.setFitHeight(100);
 			iView.setFitWidth(100);
 			pics.getChildren().add(iView);
+			
+			try {
+				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
+				s.currentQuestion = new Question(s, qImg, 0);
+				
+			} catch (Exception e) {
+				
+			}
 			picList.add(file.getPath());
+				
 		}
 	}
 	

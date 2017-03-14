@@ -18,7 +18,7 @@ public class Session {
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
-	private Question currentQuestion;
+	public Question currentQuestion;
 	
 	public void start() throws SocketException {
 		try {
@@ -65,7 +65,7 @@ public class Session {
 	 * @throws IOException
 	 *             - if the filename is invalid
 	 */
-	public void loadImage(String filename) throws IOException {
+	public ArrayList<byte[]> loadImage(String filename) throws IOException {
 
 		int packetsize = 61440; // 60 KB
 
@@ -90,7 +90,7 @@ public class Session {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
 
-		currentQuestion.questionImg = packetBytes;
+		return packetBytes;
 
 		/**
 		 * To decode these packets back into an image: Combine all the packets
