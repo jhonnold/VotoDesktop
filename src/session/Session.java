@@ -15,9 +15,10 @@ import controller.Controller;
 public class Session {
 	
 	public String ID = "test server";
-	private ArrayList<String> clientList = new ArrayList<String>();
+	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
+	private Question currentQuestion;
 	
 	public void start() throws SocketException {
 		try {
@@ -35,33 +36,24 @@ public class Session {
 		}
 	}
 	
-	public void addClient(String client) {
-		if (!clientList.contains(client)) {
-			System.out.println("New client, added as: " + client);
-			clientList.add(client);
-		} else {
-			System.out.println("Client already exists, not adding");
-		}
+	public void addClient(String ID) {
+		clientList.add(new Client(ID));
 	}
 	
 	public int getCurrentImageID() {
-		// TODO Auto-generated method stub
-		return 0;
+		return currentQuestion.imageID();
 	}
 
 	public int getCurrentImagePacketCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		return currentQuestion.imageSize();
 	}
 
-	public boolean isConnectedClient(String string) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	public byte[] getImagePacket(int imageID, int packetNumber) {
-		// TODO Auto-generated method stub
-		return null;
+	public byte[] getImagePacket(int imageID, int packetNumber) throws IllegalArgumentException {
+		if (imageID != currentQuestion.imageID()) {
+			throw new IllegalArgumentException("Cannot request this image at this time");
+		}
+		
+		return currentQuestion.getImagePacket(packetNumber);
 	}
 	
 	/**
@@ -73,7 +65,7 @@ public class Session {
 	 * @throws IOException
 	 *             - if the filename is invalid
 	 */
-	public ArrayList<byte[]> loadImage(String filename) throws IOException {
+	public void loadImage(String filename) throws IOException {
 
 		int packetsize = 61440; // 60 KB
 
@@ -98,7 +90,7 @@ public class Session {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
 
-		return packetBytes;
+		currentQuestion.questionImg = packetBytes;
 
 		/**
 		 * To decode these packets back into an image: Combine all the packets
@@ -106,5 +98,18 @@ public class Session {
 		 * ByteArrayInputStream(bytearray)); ImageIO.write(img, "jpg", new
 		 * File(dirName, "snap.jpg"));
 		 */
+	}
+
+	public Client getClient(String clientID) {
+		for (Client c : clientList) {
+			if (c.equals(clientID)) {
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public int getCurrentImageSize() {
+		return 0;
 	}
 }
