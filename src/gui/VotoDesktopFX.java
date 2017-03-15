@@ -24,26 +24,35 @@ import session.Session;
 
 public class VotoDesktopFX extends Application
 						   implements Runnable, ActionListener {
+
+
+	private ArrayList<String> correctAnswer = new ArrayList<>();
+
 	
-	private ArrayList<String> picList;
 	private Stage hostStage, joinStage;
 	private Button hostButton, joinButton, stopButton, votingButtons[];
 	private GridPane hostGrid, joinGrid;
 	private BorderPane rootHost, rootJoin;
+
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private VBox pics;
 	private Session s = new Session();
+	private int index = 0;
 	
 	//Start GUI
 	@Override
 	public void start(Stage primaryStage) {
-		
+
 		//Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
 		joinButton = new Button("Join Session");
+
+		
+		joinButton.setPrefSize(84, 25);
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
+
 		
 		
 		//Add to stage
@@ -66,9 +75,9 @@ public class VotoDesktopFX extends Application
 		p.close();
 		
 		//Instantiate new GUI elements
-		picList = new ArrayList<>();
 		rootHost = new BorderPane();
 		picPane = new ScrollPane();
+		picPane.setMinWidth(100);
 		pics = new VBox();
 		picPane.setContent(pics);
 		
@@ -168,6 +177,8 @@ public class VotoDesktopFX extends Application
 				Image image = SwingFXUtils.toFXImage(bImage, null);
 				iView = new ImageView();
 				iView.setImage(image);
+				answerStage();
+				
 			} catch (IOException e) {
 				System.exit(1);
 			}
@@ -182,9 +193,42 @@ public class VotoDesktopFX extends Application
 			} catch (Exception e) {
 				
 			}
-			picList.add(file.getPath());
 				
+		}		
+	}
+	
+	//GUI for setting answer for image
+	public void answerStage() {
+		
+		//Instantiate new elements
+		Stage ansStage = new Stage();
+		FlowPane ansPane = new FlowPane();
+		ansPane.setPadding(new Insets(0, 7, 7, 7));
+		ansPane.getChildren().add(new Label("Set Correct Answer"));
+		ansPane.setVgap(10);
+		ansPane.setAlignment(Pos.CENTER);
+		
+		//Create buttons
+		Button[] ansButton = new Button[5];
+		for (int index = 0; index < 5; index++) {
+			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
+			ansButton[index].setMinSize(55, 25);
+			ansPane.getChildren().add(ansButton[index]);
+			
+			//Add correct answer to list
+			ansButton[index].setOnAction(e -> {
+				Object source = e.getSource();
+				if (source instanceof Button) {
+				    Button button = (Button) source;
+				    correctAnswer.add(button.getText());
+				    ansStage.close();
+				}
+			});
 		}
+		
+		Scene ansScene = new Scene(ansPane, 100, 210);
+		ansStage.setScene(ansScene);
+		ansStage.show();
 	}
 	
 	
