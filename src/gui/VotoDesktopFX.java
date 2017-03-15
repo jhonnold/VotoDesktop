@@ -200,38 +200,33 @@ public class VotoDesktopFX extends Application
 	
 	//GUI for setting answer for image
 	public void answerStage() {
-		
+	
 		//Instantiate new elements
-		Stage ansStage = new Stage();
 		FlowPane ansPane = new FlowPane();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
 		ansPane.setVgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		
+		rootHost.setBottom(ansPane);
+			
 		//Create buttons
 		Button[] ansButton = new Button[5];
-		for (int index = 0; index < 5; index++) {
+		for (index = 0; index < 5; index++) {
 			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
 			ansButton[index].setMinSize(55, 25);
 			ansPane.getChildren().add(ansButton[index]);
-			
+				
 			//Add correct answer to list
 			ansButton[index].setOnAction(e -> {
 				Object source = e.getSource();
 				if (source instanceof Button) {
-				    Button button = (Button) source;
-				    correctAnswer.add(button.getText());
-				    ansStage.close();
+					    Button button = (Button) source;
+					    s.currentQuestion.setAnswer((button.getText()));
+					    rootHost.getChildren().remove(ansPane);
 				}
 			});
 		}
-		
-		Scene ansScene = new Scene(ansPane, 100, 210);
-		ansStage.setScene(ansScene);
-		ansStage.show();
 	}
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
