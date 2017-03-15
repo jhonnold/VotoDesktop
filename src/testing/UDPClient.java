@@ -1,9 +1,11 @@
 package testing;
 
+import java.io.IOException;
 import java.net.*;
 
 public class UDPClient implements Runnable {
 	
+	Media media;
 	DatagramSocket socket;
 	private InetAddress GROUP = null;
 	
@@ -18,37 +20,62 @@ public class UDPClient implements Runnable {
 			e.printStackTrace();
 		}
 		
+		media = new Media((byte)123, 406, 24883254);
+		
 	}
 	
 	@Override
 	public void run() {
 		try {
 			socket = new DatagramSocket();
+			byte[] rpBuffer = new byte[71680];
 			
-			byte[] send = {'R', (byte) 3, 'J', 'A', 'Y'};
+			while (true) {
+                try {
+
+                    // Get the mediaRequestMessage.
+                    byte[] msgOut = MessageUtility.getMediaRequestMessage(media.getImgID(),media.getExpectingPacketNumber());
+
+                    // Build and send the packet.
+                    DatagramPacket packet = new DatagramPacket(msgOut, msgOut.length, GROUP, PORT);
+                    socket.send(packet);
+
+                    // Wait for the data to come back.
+                    DatagramPacket rp = new DatagramPacket(rpBuffer, rpBuffer.length);
+                    socket.receive(rp);
+                    byte[] msgIn = rp.getData();
+
+                    // Process the message
+                    if(! MessageUtility.parseMediaResponse(msgIn,media) ){
+                        System.out.println("Error wrong headers media request response");
+                        break;
+                    }
+
+                    if(media.isReady()){
+                        break;
+                    }
+                } catch (SocketTimeoutException e) {
+                	System.out.println("Timeout Reached, resending...");
+
+                } catch (IOException e) {
+                	System.out.println("IO Error on send");
+                    break;
+                }
+            }
 			
-			try {
-				DatagramPacket dp = new DatagramPacket(send, send.length, GROUP, PORT);
-				socket.send(dp);
-				
-				System.out.println(getClass().getName() + ">>> Request packet sent to " + GROUP.getHostAddress());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		
-			System.out.println(getClass().getName() + ">>> Waiting for a reply...");
 			
-			byte[] buffer = new byte[1024];
-			DatagramPacket rp = new DatagramPacket(buffer, buffer.length);
-			socket.receive(rp);
-			
-			System.out.println(getClass().getName() + ">>> Got a reply from: " + rp.getAddress().getHostAddress());
-			System.out.println(getClass().getName() + ">>> Received: " + new String(rp.getData()).trim());
-			
-			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+    class MediaResponse{
+        int imgLength;
+        byte imgID;
+        byte packetCount;
+        MediaResponse(){
+
+        }
+    }
 	
 }

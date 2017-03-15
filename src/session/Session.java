@@ -1,6 +1,7 @@
 package session;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -20,6 +21,10 @@ public class Session {
 	private Controller control = new Controller(this); 
 	public Question currentQuestion;
 	
+	/**
+	 * Starts a Voto session
+	 * @throws SocketException
+	 */
 	public void start() throws SocketException {
 		try {
 			control.start();
@@ -28,6 +33,10 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * Stops (or ends) the current Voto session
+	 * @throws IllegalArgumentException
+	 */
 	public void stop() throws IllegalArgumentException {
 		try {
 			control.stop();
@@ -36,21 +45,40 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * Adds a new client to the session's client list with their ID
+	 * @param ID - the new client's ID
+	 */
 	public void addClient(String ID) {
 		clientList.add(new Client(ID));
 	}
 	
+	/**
+	 * Returns the ID for the image of the current question
+	 * @return ID of current question image
+	 */
 	public int getCurrentImageID() {
 		return currentQuestion.imageID();
 	}
 
+	/**
+	 * Returns the number of packets for the current question image
+	 * @return image packet count
+	 */
 	public int getCurrentImagePacketCount() {
 		return currentQuestion.imageSize();
 	}
 
+	/**
+	 * Returns the image packet for the current question of the session
+	 * @param imageID - ID of the question image
+	 * @param packetNumber - corresponding packet number
+	 * @return byte array packet for the current image
+	 * @throws IllegalArgumentException
+	 */
 	public byte[] getImagePacket(int imageID, int packetNumber) throws IllegalArgumentException {
 		if (imageID != currentQuestion.imageID()) {
-			throw new IllegalArgumentException("Cannot request this image at this time");
+			throw new IllegalArgumentException("Cannot request this image at this time " + imageID);
 		}
 		
 		return currentQuestion.getImagePacket(packetNumber);
@@ -84,12 +112,17 @@ public class Session {
 
 		// Grab the byte array
 		bytearray = baos.toByteArray();
-
+		
+		BufferedImage img2 = ImageIO.read(new ByteArrayInputStream(bytearray));
+		ImageIO.write(img2, "bmp", new File("snaptest.bmp"));
+		
 		// cut the full array into 60 KB by using copyOfRange
 		for (int i = 0; i < bytearray.length; i += packetsize) {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
-
+		
+		System.out.println("Loaded image completely");
+		
 		return packetBytes;
 
 		/**
@@ -100,7 +133,14 @@ public class Session {
 		 */
 	}
 
+	/**
+	 * Returns a client object based off of the client ID passed in
+	 * @param clientID - ID of the desired client
+	 * @return a client object
+	 */
 	public Client getClient(String clientID) {
+		
+		// Search the client list for the specified ID
 		for (Client c : clientList) {
 			if (c.equals(clientID)) {
 				return c;
@@ -109,7 +149,17 @@ public class Session {
 		return null;
 	}
 
+	/**
+	 * Returns the size (in bytes) of the current session image
+	 * @return image size in bytes
+	 */
 	public int getCurrentImageSize() {
-		return 0;
+		int total = 0;
+		
+		for (byte[] b : currentQuestion.questionImg) {
+			total += b.length;
+		}
+		
+		return total;
 	}
 }

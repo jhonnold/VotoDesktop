@@ -46,7 +46,7 @@ public class NetworkHandler implements Runnable, Closeable {
 		try {	
 			reply(control.parseNetworkCommand(data), inFromClient);		
 		} catch (IllegalArgumentException e) {
-			//replyError(kwargs, e.getMessage());
+			e.printStackTrace();//replyError(kwargs, e.getMessage());
 		}
 		
 	}
@@ -56,7 +56,6 @@ public class NetworkHandler implements Runnable, Closeable {
 	 */
 	public void reply(byte[] data, DatagramPacket in) {
 		DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
-		System.out.println("I GOT HERE");
 		socket.send(outToClient);
 	}
 	
