@@ -144,8 +144,8 @@ public class Session {
 	}
 
 	/**
-	 * Returns the size of the current session image
-	 * @return image size 
+	 * Returns the size (in bytes) of the current session image
+	 * @return image size in bytes
 	 */
 	public int getCurrentImageSize() {
 		int total = 0;
