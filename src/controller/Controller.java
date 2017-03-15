@@ -127,8 +127,8 @@ public class Controller {
 
 		char c = (char) data[0];
 
-		if (c != 'R' && c != 'V' && c != 'M') {
-			throw new IllegalArgumentException("This is not a recognized packet!");
+		if (c != 'R' || c != 'V' || c != 'M') {
+			//throw new IllegalArgumentException("This is not a recognized packet!");
 		}
 
 		switch (c) {
@@ -142,7 +142,7 @@ public class Controller {
 				} else if (data[1] == 'R') {
 					returnPacket = mediaRequest(data);
 				} else {
-					throw new IllegalArgumentException("This is not a recognized packet!");
+					//throw new IllegalArgumentException("This is not a recognized packet!");
 				}
 		}
 		

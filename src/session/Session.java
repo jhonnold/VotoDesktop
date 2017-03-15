@@ -17,8 +17,8 @@ public class Session {
 	public String ID = "test server";
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
-	private Controller control = new Controller(this);
-	private Question currentQuestion;
+	private Controller control = new Controller(this); 
+	public Question currentQuestion;
 	
 	/**
 	 * Starts a Voto session
@@ -92,7 +92,7 @@ public class Session {
 	 * @throws IOException
 	 *             - if the filename is invalid
 	 */
-	public void loadImage(String filename) throws IOException {
+	public ArrayList<byte[]> loadImage(String filename) throws IOException {
 
 		int packetsize = 61440; // 60 KB
 
@@ -103,7 +103,7 @@ public class Session {
 		try {
 			// Load the image, write to stream, flush to guarantee all written
 			BufferedImage img = ImageIO.read(new File(filename));
-			ImageIO.write(img, "jpg", baos);
+			ImageIO.write(img, "bmp", baos);
 			baos.flush();
 		} catch (IOException e) {
 			throw new IOException("Could not load specified file!");
@@ -117,7 +117,7 @@ public class Session {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
 
-		currentQuestion.questionImg = packetBytes;
+		return packetBytes;
 
 		/**
 		 * To decode these packets back into an image: Combine all the packets
@@ -148,6 +148,12 @@ public class Session {
 	 * @return image size 
 	 */
 	public int getCurrentImageSize() {
-		return currentQuestion.imageSize();
+		int total = 0;
+		
+		for (byte[] b : currentQuestion.questionImg) {
+			total += b.length;
+		}
+		
+		return total;
 	}
 }
