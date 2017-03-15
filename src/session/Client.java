@@ -48,4 +48,12 @@ public class Client {
 	public boolean equals(String ID) {
 		return this.ID.equals(ID);
 	}
+	
+	/**
+	 * Returns a list of all the clients final votes for current session
+	 * @return List of client votes
+	 */
+	public ArrayList<Vote> getClientVoteList() {
+		return this.voteList;
+	}
 }
