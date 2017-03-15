@@ -7,17 +7,16 @@ import java.util.Hashtable;
 
 public class Question {
 	
-	private ArrayList<byte[]> image;
 	private Session currentSession;
 	private int answer = (int)'A';
 	private int imageID;
 	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
 	private HashMap<String, Vote> choices = new HashMap<>();
-	ArrayList<byte[]> questionImg = new ArrayList<byte[]>();
+	public ArrayList<byte[]> questionImg = new ArrayList<byte[]>();
 	
 	public Question(Session s, ArrayList<byte[]> img, int imageID) {
 
-		image = img;
+		questionImg = img;
 		currentSession = s;
 		this.imageID = imageID;
 		choices.put("A", new Vote(1));
@@ -25,11 +24,12 @@ public class Question {
 		choices.put("C", new Vote(3));
 		choices.put("D", new Vote(4));
 		choices.put("E", new Vote(5));
+		
 	}
 		
 	public void setAnswer(int ans) { answer = ans; }
 	public int imageID() { return imageID; }
-	public int imageSize() { return image.size(); }
+	public int imageSize() { return questionImg.size(); }
 	
 	public void addVote(String clientID, String clientVote) {
 
@@ -61,11 +61,11 @@ public class Question {
 	
 	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
-		if (packetNum < 0 || packetNum >= image.size()) {
+		if (packetNum < 1 || packetNum >= questionImg.size() + 1) {
 			throw new IllegalArgumentException("Packet number is invalid for this image");
 		}
 		
-		return image.get(packetNum);
+		return questionImg.get(packetNum - 1);
 	}
 	
 }

@@ -46,7 +46,7 @@ public class NetworkHandler implements Runnable, Closeable {
 		try {	
 			reply(control.parseNetworkCommand(data), inFromClient);		
 		} catch (IllegalArgumentException e) {
-			//replyError(kwargs, e.getMessage());
+			e.printStackTrace();//replyError(kwargs, e.getMessage());
 		}
 		
 	}

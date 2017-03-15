@@ -76,7 +76,7 @@ public class Session {
 		try {
 			// Load the image, write to stream, flush to guarantee all written
 			BufferedImage img = ImageIO.read(new File(filename));
-			ImageIO.write(img, "jpg", baos);
+			ImageIO.write(img, "bmp", baos);
 			baos.flush();
 		} catch (IOException e) {
 			throw new IOException("Could not load specified file!");
@@ -110,6 +110,12 @@ public class Session {
 	}
 
 	public int getCurrentImageSize() {
-		return 0;
+		int total = 0;
+		
+		for (byte[] b : currentQuestion.questionImg) {
+			total += b.length;
+		}
+		
+		return total;
 	}
 }
