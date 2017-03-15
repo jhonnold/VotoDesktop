@@ -9,7 +9,7 @@ public class Question {
 	
 	private ArrayList<byte[]> image;
 	private Session currentSession;
-	private int answer = (int)'A';
+	private Vote answer = new Vote(1);
 	private int imageID;
 	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
 	private HashMap<String, Vote> choices = new HashMap<>();
@@ -35,9 +35,17 @@ public class Question {
 	
 	/**
 	 * Sets the correct answer for current question
-	 * @param ans - the correct answer
+	 * @param ans - String for the correct answer
 	 */
-	public void setAnswer(int ans) { answer = ans; }
+	public void setAnswer(String ans) {
+		answer = choices.get(ans);
+	}
+	
+	/**
+	 * Returns the correct answer for this question
+	 * @return the Vote corresponding to the correct answer
+	 */
+	public Vote getAnswer() { return answer; }
 	
 	/**
 	 * Returns the image ID for current question
@@ -62,7 +70,7 @@ public class Question {
 		Client c = currentSession.getClient(clientID);
 		Vote lastVote = c.getLastVote();
 		
-		// If no answer has been received for this client, remove them
+		// If client sent previous vote, remove it before adding their new vote
 		if (lastVote != null) {
 			answerSet.get(lastVote).remove(c);
 		}
