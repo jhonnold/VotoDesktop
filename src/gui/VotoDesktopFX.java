@@ -14,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.image.*;
 import javafx.stage.*;
 import javafx.geometry.*;
@@ -24,11 +25,15 @@ import session.Session;
 public class VotoDesktopFX extends Application
 						   implements Runnable, ActionListener {
 
+
 	private ArrayList<String> correctAnswer = new ArrayList<>();
-	private Stage hostStage;
-	private Button hostButton, joinButton, stopButton;
-	private GridPane hostGrid;
-	private BorderPane rootHost;
+
+	
+	private Stage hostStage, joinStage;
+	private Button hostButton, joinButton, stopButton, votingButtons[];
+	private GridPane hostGrid, joinGrid;
+	private BorderPane rootHost, rootJoin;
+
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private VBox pics;
@@ -43,8 +48,11 @@ public class VotoDesktopFX extends Application
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
 		joinButton = new Button("Join Session");
-		//joinButton.setOnAction(e -> joinGUI());
+
+		
 		joinButton.setPrefSize(84, 25);
+		joinButton.setOnAction(e -> joinGUI(primaryStage));
+
 		
 		
 		//Add to stage
@@ -112,6 +120,51 @@ public class VotoDesktopFX extends Application
 			System.exit(0);
 		});
 	}
+	
+	
+	// Join GUI
+	private void joinGUI(Stage p) {
+		p.close();
+		FlowPane center = new FlowPane();
+		center.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(1), new Insets(0, 0, 0, 0))));
+		
+		// Instantiate new GUI items
+		joinGrid = new GridPane();
+		joinGrid.setHgap(20);
+		
+		int numButtons = 4;
+		votingButtons = new Button[numButtons];
+		for (int i = 0; i < numButtons; i++) {
+			votingButtons[i] = new Button(Character.toString((char) (0x0041 +i)));
+			votingButtons[i].setPrefSize(70, 20);
+			joinGrid.add(votingButtons[i], i, 0);
+		}
+		
+		// Set borders
+		FlowPane up = new FlowPane();
+		up.setPrefHeight(30);
+		FlowPane left = new FlowPane();
+		left.setPrefWidth(30);
+		FlowPane right = new FlowPane();
+		right.setPrefWidth(30);
+		FlowPane down = new FlowPane(5,5);
+		down.setPrefHeight(30);
+		down.setAlignment(Pos.CENTER);
+		down.getChildren().add(joinGrid);
+		FlowPane.setMargin(joinGrid, new Insets(5,5,5,5));
+		rootJoin = new BorderPane();
+		rootJoin.setBottom(down);
+		rootJoin.setCenter(center);
+		rootJoin.setTop(up);
+		rootJoin.setLeft(left);
+		rootJoin.setRight(right);
+		
+		Scene scene = new Scene(rootJoin, 600, 400);
+		joinStage = new Stage();
+		joinStage.setScene(scene);
+		joinStage.show();
+	}
+	
 	
 	//Open picture from file chooser to host pane
 	private void  openFile() {
