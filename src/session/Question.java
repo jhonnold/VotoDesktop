@@ -49,7 +49,7 @@ public class Question {
 	 * Returns the size of the current questions image
 	 * @return current image size
 	 */
-	public int imageSize() { return image.size(); }
+	public int imageSize() { return questionImg.size(); }
 	
 	/**
 	 * Adds a vote from a client to the current question 

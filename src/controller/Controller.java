@@ -91,7 +91,8 @@ public class Controller {
 	 */
 	protected byte[] mediaPing(byte[] inFromClient) {
 		
-		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID(), (byte) session.getCurrentImagePacketCount()};
+		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID()};
+		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(session.getCurrentImagePacketCount()).array());
 		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(session.getCurrentImageSize()).array());
 		
 		return returnPacket;
@@ -105,14 +106,22 @@ public class Controller {
 	protected byte[] mediaRequest(byte[] inFromClient) {
 		int cursor = 2;
 		int imageID = inFromClient[cursor++];
-		int packetNumber = inFromClient[cursor++];
+		int packetNumber = ByteBuffer.wrap(inFromClient, cursor, 4).getInt();
 		
-		byte[] payload = session.getImagePacket(imageID, packetNumber);
+		System.out.println("Packet requested: " + packetNumber);
 		
-		byte[] returnPacket = {'M', 'R', (byte) imageID, (byte) packetNumber};
-		
-		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(payload.length).array());
-		return append(returnPacket, payload);
+		try {
+			byte[] payload = session.getImagePacket(imageID, packetNumber);
+			
+			byte[] returnPacket = {(byte)'M', (byte)'R', (byte) imageID};
+			returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(packetNumber).array());
+			returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(payload.length).array());
+			return append(returnPacket, payload);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			byte[] error = {'E'};
+			return error;
+		}
 	}
 	
 	/**
