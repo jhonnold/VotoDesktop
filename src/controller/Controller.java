@@ -14,6 +14,10 @@ public class Controller {
 	
 	private boolean running = false;
 	
+	/**
+	 * Constructor with the session this controller talks to
+	 * @param session - the session that the controller passes commands into
+	 */
 	public Controller(Session session) {
 		this.session = session;
 	}
@@ -243,3 +247,4 @@ public class Controller {
 	}
 	
 }
+	

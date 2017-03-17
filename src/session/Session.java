@@ -163,6 +163,10 @@ public class Session {
 		return total;
 	}
 	
+	/**
+	 * If a current Question is loaded
+	 * @return - True if loaded, false if not (null)
+	 */
 	public boolean hasImage() {
 		return (currentQuestion != null);
 	}

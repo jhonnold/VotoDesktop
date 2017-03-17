@@ -52,7 +52,9 @@ public class NetworkHandler implements Runnable, Closeable {
 	}
 	
 	/**
-	 * Replies back to whoever sent the packet
+	 * Replies the given byte array to the location of the datagram packet
+	 * @param data - the byte array to be sent
+	 * @param in - the datagram packet to have the byte array sent too
 	 */
 	public void reply(byte[] data, DatagramPacket in) {
 		DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
