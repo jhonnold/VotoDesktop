@@ -15,7 +15,7 @@ import controller.Controller;
 
 public class Session {
 	
-	public String ID = "test server";
+	public String ID = "test";
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 

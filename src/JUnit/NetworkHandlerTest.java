@@ -8,7 +8,7 @@ import controller.Controller;
 import networking.NetworkHandler;
 import session.Session;
 
-public class NetworkHandlerTests {
+public class NetworkHandlerTest {
 	
 	private NetworkHandler nh;
 	
