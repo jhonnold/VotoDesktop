@@ -49,8 +49,11 @@ public class Session {
 	 * Adds a new client to the session's client list with their ID
 	 * @param ID - the new client's ID
 	 */
-	public void addClient(String ID) {
-		clientList.add(new Client(ID));
+	public boolean addClient(String ID) {
+		if (clientList.contains(new Client(ID))) {
+			return false;
+		}
+		return clientList.add(new Client(ID));
 	}
 	
 	/**

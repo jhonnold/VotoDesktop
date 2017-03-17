@@ -45,8 +45,18 @@ public class Client {
 	 * @return True if the ID sent in matches the current client's ID
 	 *         False if the IDs don't match
 	 */
-	public boolean equals(String ID) {
-		return this.ID.equals(ID);
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Client)) {
+			return false;
+		}
+		
+		if (o == this) {
+			return true;
+		}
+		
+		Client c = (Client) o;
+		return c.ID.equals(ID);
 	}
 	
 	/**
