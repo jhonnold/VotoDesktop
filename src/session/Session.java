@@ -1,6 +1,7 @@
 package session;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +78,7 @@ public class Session {
 	 */
 	public byte[] getImagePacket(int imageID, int packetNumber) throws IllegalArgumentException {
 		if (imageID != currentQuestion.imageID()) {
-			throw new IllegalArgumentException("Cannot request this image at this time");
+			throw new IllegalArgumentException("Cannot request this image at this time " + imageID);
 		}
 		
 		return currentQuestion.getImagePacket(packetNumber);
@@ -103,7 +104,7 @@ public class Session {
 		try {
 			// Load the image, write to stream, flush to guarantee all written
 			BufferedImage img = ImageIO.read(new File(filename));
-			ImageIO.write(img, "bmp", baos);
+			ImageIO.write(img, "jpg", baos);
 			baos.flush();
 		} catch (IOException e) {
 			throw new IOException("Could not load specified file!");
@@ -111,12 +112,17 @@ public class Session {
 
 		// Grab the byte array
 		bytearray = baos.toByteArray();
-
+		
+		BufferedImage img2 = ImageIO.read(new ByteArrayInputStream(bytearray));
+		ImageIO.write(img2, "bmp", new File("snaptest.bmp"));
+		
 		// cut the full array into 60 KB by using copyOfRange
 		for (int i = 0; i < bytearray.length; i += packetsize) {
 			packetBytes.add(Arrays.copyOfRange(bytearray, i, Math.min(bytearray.length, i + packetsize)));
 		}
-
+		
+		System.out.println("Loaded image completely");
+		
 		return packetBytes;
 
 		/**
@@ -144,8 +150,8 @@ public class Session {
 	}
 
 	/**
-	 * Returns the size of the current session image
-	 * @return image size 
+	 * Returns the size (in bytes) of the current session image
+	 * @return image size in bytes
 	 */
 	public int getCurrentImageSize() {
 		int total = 0;
@@ -155,5 +161,9 @@ public class Session {
 		}
 		
 		return total;
+	}
+	
+	public boolean hasImage() {
+		return (currentQuestion != null);
 	}
 }

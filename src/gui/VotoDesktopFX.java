@@ -188,8 +188,9 @@ public class VotoDesktopFX extends Application
 			
 			try {
 				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				s.currentQuestion = new Question(s, qImg, 123);
+				s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
 				System.out.println("Loaded image size: " + s.getCurrentImageSize());
+				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
 			} catch (Exception e) {
 				
 			}
