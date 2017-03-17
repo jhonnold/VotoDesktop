@@ -8,7 +8,7 @@ import java.util.Hashtable;
 public class Question {
 	
 	private Session currentSession;
-	private Vote answer = new Vote(1);
+	private Vote answer;
 	private int imageID;
 	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
 	private HashMap<String, Vote> choices = new HashMap<>();
@@ -30,6 +30,8 @@ public class Question {
 		choices.put("C", new Vote(3));
 		choices.put("D", new Vote(4));
 		choices.put("E", new Vote(5));
+		
+		answer = choices.get("A");
 		
 	}
 	

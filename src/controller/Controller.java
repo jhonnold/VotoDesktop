@@ -55,7 +55,18 @@ public class Controller {
 	 * @return - the byte array to be returned
 	 */
 	protected byte[] handshakeRequest(byte[] inFromClient) {
+		if (inFromClient.length <= 1) {
+			byte[] temp = {'E'};
+			return temp;
+		}
+		
 		String ID = getDynamicData(inFromClient, 1);
+		
+		if (ID.trim().equals("")) {
+			byte[] temp = {'E'};
+			return temp;
+		}
+		
 		System.out.println("Parsed as a handshake from: "  + ID);
 		session.addClient(ID);
 		
@@ -71,8 +82,19 @@ public class Controller {
 	 */
 	@SuppressWarnings("unused")
 	protected byte[] vote(byte[] inFromClient) {
+		if (inFromClient.length <= 1) {
+			byte[] temp = {'E'};
+			return temp;
+		}
+		
 		int cursor = 1;		
 		String ID = getDynamicData(inFromClient, cursor);
+		
+		if (ID.trim().equals("")) {
+			byte[] temp = {'E'};
+			return temp;
+		}
+		
 		cursor += ID.length();
 		
 		int voteNumber = inFromClient[cursor++];
@@ -90,6 +112,11 @@ public class Controller {
 	 * @return - the byte array to be returned
 	 */
 	protected byte[] mediaPing(byte[] inFromClient) {
+		
+		if (!session.hasImage()) {
+			byte[] temp = {'E'};
+			return temp;
+		}
 		
 		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID()};
 		returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(session.getCurrentImagePacketCount()).array());
@@ -137,22 +164,27 @@ public class Controller {
 		char c = (char) data[0];
 
 		if (c != 'R' || c != 'V' || c != 'M') {
-			//throw new IllegalArgumentException("This is not a recognized packet!");
+			byte[] temp = {'E'};
+			returnPacket = temp;
 		}
 
 		switch (c) {
 			case 'R':
 				returnPacket = handshakeRequest(data);
+				break;
 			case 'V':
 				returnPacket = vote(data);
+				break;
 			case 'M':
 				if (data[1] == 'P') {
 					returnPacket = mediaPing(data);
 				} else if (data[1] == 'R') {
 					returnPacket = mediaRequest(data);
 				} else {
-					//throw new IllegalArgumentException("This is not a recognized packet!");
+					returnPacket = new byte[1];
+					returnPacket[0] = 'E';
 				}
+				break;
 		}
 		
 		return returnPacket;

@@ -162,4 +162,8 @@ public class Session {
 		
 		return total;
 	}
+	
+	public boolean hasImage() {
+		return (currentQuestion != null);
+	}
 }
