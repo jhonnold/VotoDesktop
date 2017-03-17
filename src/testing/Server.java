@@ -2,28 +2,19 @@ package testing;
 
 import java.net.SocketException;
 
-import controller.NetworkController;
-import controller.SessionController;
+import session.Session;
 
 public class Server {
 	
 	public static void main(String[] args) {
-		
-		NetworkController nc = null;
-		SessionController sc;
+		Session s = new Session();
 		
 		try {
-			nc = new NetworkController();
+			s.start();
 		} catch (SocketException e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		sc = new SessionController();
 		
-		nc.addSessionController(sc);
-		sc.addNetworkController(nc);
-		
-		Thread t1 = new Thread(nc);
-		t1.start();
 	}	
 }
