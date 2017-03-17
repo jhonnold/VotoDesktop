@@ -1,5 +1,7 @@
 package gui;
-
+/**
+ * This class contains the GUI methods
+ */
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -24,13 +26,9 @@ import session.Session;
 
 public class VotoDesktopFX extends Application
 						   implements Runnable, ActionListener {
-
-
-	private ArrayList<String> correctAnswer = new ArrayList<>();
-
 	
 	private Stage hostStage, joinStage;
-	private Button hostButton, joinButton, stopButton, votingButtons[];
+	private Button hostButton, joinButton, votingButtons[];
 	private GridPane hostGrid, joinGrid;
 	private BorderPane rootHost, rootJoin;
 
@@ -38,9 +36,10 @@ public class VotoDesktopFX extends Application
 	private FileChooser fc;
 	private VBox pics;
 	private Session s = new Session();
-	private int index = 0;
 	
-	//Start GUI
+	/**
+	 * Start GUI has host or join options
+	 */
 	@Override
 	public void start(Stage primaryStage) {
 
@@ -70,9 +69,14 @@ public class VotoDesktopFX extends Application
 	    primaryStage.show();
 	}
 	
-	//Host GUI
+	/**
+	 * Host GUI displays IP address, allows user to open pictures, 
+	 * displays pictures, and lets the user select the correct answer
+	 * for each picture 
+	 */
 	private void hostGUI(Stage p) {
-		p.close();
+		
+		p.close(); //Close start GUI
 		
 		//Instantiate new GUI elements
 		rootHost = new BorderPane();
@@ -82,8 +86,7 @@ public class VotoDesktopFX extends Application
 		picPane.setContent(pics);
 		
 		Button open = new Button("Open File");
-		
-		open.setOnAction(e -> openFile());
+		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
 		hostGrid = new GridPane();
 		
 		//Add IP address
@@ -103,6 +106,7 @@ public class VotoDesktopFX extends Application
 		Scene scene = new Scene(rootHost, 600, 400);
 		hostStage = new Stage();
 		hostStage.setScene(scene);
+		hostStage.setTitle("Host Session");
 		hostStage.show();
 		
 		//Start session
@@ -126,6 +130,8 @@ public class VotoDesktopFX extends Application
 	private void joinGUI(Stage p) {
 		p.close();
 		FlowPane center = new FlowPane();
+		
+		//Temporary background in place of image
 		center.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(1), new Insets(0, 0, 0, 0))));
 		
 		// Instantiate new GUI items
@@ -166,13 +172,20 @@ public class VotoDesktopFX extends Application
 	}
 	
 	
-	//Open picture from file chooser to host pane
+	/**
+	 * Open picture from file chooser to host pane
+	 */
 	private void  openFile() {
+		
+		//Instantiate
 		fc = new FileChooser();
 		File file = fc.showOpenDialog(null);
 		ImageView iView = null;
+		
+		//Load picture if one was selected
 		if (file != null) {
 			try {
+				//Instantiate image view from picture
 				BufferedImage bImage = ImageIO.read(file);
 				Image image = SwingFXUtils.toFXImage(bImage, null);
 				iView = new ImageView();
@@ -182,6 +195,7 @@ public class VotoDesktopFX extends Application
 			} catch (IOException e) {
 				System.exit(1);
 			}
+			//Add image view to stage
 			iView.setFitHeight(100);
 			iView.setFitWidth(100);
 			pics.getChildren().add(iView);
@@ -200,38 +214,35 @@ public class VotoDesktopFX extends Application
 	
 	//GUI for setting answer for image
 	public void answerStage() {
-		
+	
 		//Instantiate new elements
-		Stage ansStage = new Stage();
 		FlowPane ansPane = new FlowPane();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
 		ansPane.setVgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		
+		rootHost.setBottom(ansPane);
+			
 		//Create buttons
 		Button[] ansButton = new Button[5];
 		for (int index = 0; index < 5; index++) {
 			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
 			ansButton[index].setMinSize(55, 25);
 			ansPane.getChildren().add(ansButton[index]);
-			
+				
 			//Add correct answer to list
 			ansButton[index].setOnAction(e -> {
 				Object source = e.getSource();
 				if (source instanceof Button) {
-				    Button button = (Button) source;
-				    correctAnswer.add(button.getText());
-				    ansStage.close();
+					    Button button = (Button) source;
+					    
+					    //Set correct answer
+					    s.currentQuestion.setAnswer((button.getText()));
+					    rootHost.getChildren().remove(ansPane);
 				}
 			});
 		}
-		
-		Scene ansScene = new Scene(ansPane, 100, 210);
-		ansStage.setScene(ansScene);
-		ansStage.show();
 	}
-	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -249,6 +260,7 @@ public class VotoDesktopFX extends Application
 		s = new Session();		
 	}
 	
+	//main method
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
