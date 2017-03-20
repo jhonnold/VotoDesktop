@@ -7,6 +7,8 @@ public class Client {
 	private String ID = null;
 	private ArrayList<Vote> voteList = new ArrayList<>();
 	
+	public int voteNum = 0;
+	
 	/**
 	 * Client constructor
 	 * @param clientID - this client's ID
