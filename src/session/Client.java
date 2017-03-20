@@ -7,6 +7,8 @@ public class Client {
 	private String ID = null;
 	private ArrayList<Vote> voteList = new ArrayList<>();
 	
+	
+	private Vote lastVote;
 	public int voteNum = 0;
 	
 	/**
@@ -22,11 +24,7 @@ public class Client {
 	 * @return last received vote
 	 */
 	public Vote getLastVote() {
-		if (voteList.size() > 0) {
-			return voteList.get(voteList.size() - 1);
-		} else {
-			return null;
-		}
+		return lastVote;
 	}
 	
 	/**
@@ -34,11 +32,16 @@ public class Client {
 	 * @param lastVote - the most recently sent vote
 	 * @param oldVote - reference to previous client vote to be discarded
 	 */
-	public void setLastVote(Vote lastVote, Vote oldVote) {
-		if (voteList.contains(oldVote)) {
-			voteList.remove(oldVote);
-		}
-		voteList.add(lastVote);
+	public void setLastVote(Vote newVote) {
+		lastVote = newVote;
+	}
+	
+	/**
+	 * 
+	 * @param v
+	 */
+	public void setAnswerVote(Vote v) {
+		voteList.add(v);
 	}
 	
 	/**

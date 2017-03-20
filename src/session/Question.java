@@ -74,6 +74,16 @@ public class Question {
 		if (voteNum > c.voteNum) {
 			c.voteNum = voteNum;
 			Vote v = choices.get(clientVote);
+			ArrayList<Client> voters = answerSet.get(v);
+			
+			Vote lastVote = c.getLastVote();
+			
+			if (lastVote != null) {
+				answerSet.get(lastVote).remove(c);
+			}
+			
+			voters.add(c);
+			c.setLastVote(v);
 		}
 		
 		
@@ -92,7 +102,7 @@ public class Question {
 			
 			for (Client c : answerSet.get(v)) {
 				
-				c.setLastVote(v, null);
+				c.setAnswerVote(v);
 			}
 		}
 	}
