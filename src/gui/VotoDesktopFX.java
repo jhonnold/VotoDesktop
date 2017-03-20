@@ -31,7 +31,8 @@ public class VotoDesktopFX extends Application
 	private Button hostButton, joinButton, votingButtons[];
 	private GridPane hostGrid, joinGrid;
 	private BorderPane rootHost, rootJoin;
-
+	private FlowPane centerPic;
+	
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private VBox pics;
@@ -81,9 +82,10 @@ public class VotoDesktopFX extends Application
 		//Instantiate new GUI elements
 		rootHost = new BorderPane();
 		picPane = new ScrollPane();
-		picPane.setMinWidth(100);
+		picPane.setMinWidth(120);
 		pics = new VBox();
 		picPane.setContent(pics);
+		centerPic = new FlowPane();
 		
 		Button open = new Button("Open File");
 		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
@@ -100,10 +102,11 @@ public class VotoDesktopFX extends Application
 		//Add elements to stage
 		hostGrid.add(open, 0, 1);
 		
-		rootHost.setCenter(hostGrid);
+		rootHost.setLeft(hostGrid);
+		rootHost.setCenter(centerPic);
 		rootHost.setRight(picPane);
 		
-		Scene scene = new Scene(rootHost, 600, 400);
+		Scene scene = new Scene(rootHost, 600, 450);
 		hostStage = new Stage();
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
@@ -190,15 +193,23 @@ public class VotoDesktopFX extends Application
 				Image image = SwingFXUtils.toFXImage(bImage, null);
 				iView = new ImageView();
 				iView.setImage(image);
-				answerStage();
 				
 			} catch (IOException e) {
 				System.exit(1);
 			}
-			//Add image view to stage
-			iView.setFitHeight(100);
-			iView.setFitWidth(100);
-			pics.getChildren().add(iView);
+			//Add previous image view to scrollpane 
+			if (!centerPic.getChildren().isEmpty()) {
+				ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
+				iViewPrev.setFitHeight(100);
+				iViewPrev.setFitWidth(100);
+				pics.getChildren().add(iViewPrev);
+			}
+			
+			//open image to center
+			iView.setFitHeight(410);
+			iView.setFitWidth(400);
+			centerPic.getChildren().add(iView);
+			answerStage();
 			
 			try {
 				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
@@ -239,6 +250,13 @@ public class VotoDesktopFX extends Application
 					    //Set correct answer
 					    s.currentQuestion.setAnswer((button.getText()));
 					    rootHost.getChildren().remove(ansPane);
+					    
+					    if (!centerPic.getChildren().isEmpty()) {
+					    	ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
+							iViewPrev.setFitHeight(100);
+							iViewPrev.setFitWidth(100);
+							pics.getChildren().add(iViewPrev);
+					    }
 				}
 			});
 		}
