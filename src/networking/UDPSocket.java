@@ -107,5 +107,13 @@ public class UDPSocket implements Runnable, Closeable {
 		}
 	}
 	
+	/**
+	 * Is the socket still listening
+	 * @return If the socket is still listening or not
+	 */
+	public boolean isListening() {
+		return isListening;
+	}
+	
 	
 }
