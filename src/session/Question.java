@@ -96,13 +96,12 @@ public class Question {
 	 * be their final recorded vote
 	 */
 	public void endQuestion() {
-		
 		// Set the last vote of every client to their final vote
 		for (Vote v : answerSet.keySet()) {
 			
 			for (Client c : answerSet.get(v)) {
 				
-				c.setAnswerVote(v);
+				c.setAnswerVote(this, v);
 			}
 		}
 	}
@@ -116,7 +115,6 @@ public class Question {
 	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
 		if (packetNum < 1 || packetNum >= questionImg.size() + 1) {
-
 			throw new IllegalArgumentException("Packet number is invalid for this image");
 		}
 		

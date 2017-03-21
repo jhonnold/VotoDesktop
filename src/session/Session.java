@@ -15,11 +15,15 @@ import controller.Controller;
 
 public class Session {
 	
-	public String ID = "test";
+	public final String ID;
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
-	public Question currentQuestion;
+	private Question currentQuestion;
+	
+	public Session(String ID) {
+		this.ID = ID;
+	}
 	
 	/**
 	 * Starts a Voto session
@@ -43,6 +47,10 @@ public class Session {
 		} catch (IllegalArgumentException e) {
 			throw e;
 		}
+	}
+	
+	public Question getCurrentQuestion() {
+		return currentQuestion;
 	}
 	
 	/**

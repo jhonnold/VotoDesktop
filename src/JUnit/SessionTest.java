@@ -11,7 +11,7 @@ public class SessionTest {
 	
 	@Before
 	public void setup() throws Throwable {
-		s = new Session();
+		s = new Session("test");
 	}
 	
 	@org.junit.Test(timeout=1000)

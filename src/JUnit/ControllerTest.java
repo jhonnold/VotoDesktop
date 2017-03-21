@@ -16,7 +16,7 @@ public class ControllerTest {
 
 	@Before
 	public void setup() {
-		c = new Controller(s = new Session());
+		c = new Controller(s = new Session("test"));
 		fakeMsg = new byte[1024];
 	}
 

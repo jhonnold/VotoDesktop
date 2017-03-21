@@ -1,12 +1,12 @@
 package session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Client {
 
 	private String ID = null;
-	private ArrayList<Vote> voteList = new ArrayList<>();
-	
+	private HashMap<Question, Vote> voteList = new HashMap<Question, Vote>();
 	
 	private Vote lastVote;
 	public int voteNum = 0;
@@ -37,11 +37,11 @@ public class Client {
 	}
 	
 	/**
-	 * 
-	 * @param v
+	 * Sets the final vote submitted for the question
+	 * @param v The final vote submitted
 	 */
-	public void setAnswerVote(Vote v) {
-		voteList.add(v);
+	public void setAnswerVote(Question q, Vote v) {
+		voteList.put(q, v);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class Client {
 	 * Returns a list of all the clients final votes for current session
 	 * @return List of client votes
 	 */
-	public ArrayList<Vote> getClientVoteList() {
-		return this.voteList;
+	public Iterable<Vote> getClientVoteList() {
+		return voteList.values();
 	}
 }

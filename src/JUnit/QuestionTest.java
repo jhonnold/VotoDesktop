@@ -15,7 +15,7 @@ public class QuestionTest {
 	
 	@Before
 	public void setup() throws Throwable {
-		s = new Session();
+		s = new Session("test");
 		q = new Question(s, s.loadImage("testImage.png"), 123);
 	}
 	

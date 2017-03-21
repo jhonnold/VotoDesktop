@@ -14,7 +14,7 @@ public class NetworkHandlerTest {
 	
 	@Before
 	public void setup() throws Throwable {
-		nh = new NetworkHandler(new Controller(new Session()));
+		nh = new NetworkHandler(new Controller(new Session("test")));
 		new Thread(nh).start();
 	}
 	
