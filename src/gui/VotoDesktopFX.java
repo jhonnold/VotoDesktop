@@ -201,8 +201,9 @@ public class VotoDesktopFX extends Application
 			pics.getChildren().add(iView);
 			
 			try {
-				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+				//ArrayList<byte[]> qImg = s.loadImage(file.getPath());
+				//s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+				s.newCurrentQuestion(file.getPath(), "A");
 				System.out.println("Loaded image size: " + s.getCurrentImageSize());
 				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
 			} catch (Exception e) {
@@ -237,7 +238,7 @@ public class VotoDesktopFX extends Application
 					    Button button = (Button) source;
 					    
 					    //Set correct answer
-					    s.currentQuestion.setAnswer((button.getText()));
+					    s.getCurrentQuestion().setAnswer((button.getText()));
 					    rootHost.getChildren().remove(ansPane);
 				}
 			});
@@ -257,7 +258,7 @@ public class VotoDesktopFX extends Application
 	
 	@Override
 	public void run() {
-		s = new Session();		
+		s = new Session("test");		
 	}
 	
 	//main method

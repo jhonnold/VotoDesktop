@@ -112,6 +112,7 @@ public class Session {
 		
 		Client c = getClient(clientID);
 		if (c == null) {
+			System.out.println("Client does not exist!");
 			return false;
 		}
 		

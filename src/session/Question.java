@@ -73,6 +73,7 @@ public class Question {
 			Vote v = choices.get(clientVote);
 			
 			if (v == null) {
+				System.out.println("Vote is invalid!");
 				return false;
 			}
 			
@@ -91,8 +92,11 @@ public class Question {
 			voters.add(client);
 			client.setLastVote(v);
 			
+			System.out.println("Added vote for " + client.getID() + ": "+ clientVote);
+			
 			return true;
 		} else {
+			System.out.println("Votenum is less than previous vote: " + voteNum + " " + client.voteNum);
 			return false;
 		}
 		
