@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javafx.application.*;
@@ -31,11 +32,14 @@ public class VotoDesktopFX extends Application
 	private Button hostButton, joinButton, votingButtons[];
 	private GridPane hostGrid, joinGrid;
 	private BorderPane rootHost, rootJoin;
-
+	private FlowPane centerPic;
+	
 	private ScrollPane picPane;
 	private FileChooser fc;
-	private VBox pics;
+	private HBox pics;
 	private Session s = new Session("test");
+	private File file;
+	private int picIndex = 0;
 	
 	/**
 	 * Start GUI has host or join options
@@ -76,14 +80,15 @@ public class VotoDesktopFX extends Application
 	 */
 	private void hostGUI(Stage p) {
 		
-		p.close(); //Close start GUI
+		/*p.close(); //Close start GUI
 		
 		//Instantiate new GUI elements
 		rootHost = new BorderPane();
 		picPane = new ScrollPane();
-		picPane.setMinWidth(100);
-		pics = new VBox();
+		picPane.setMinHeight(120);
+		pics = new HBox();
 		picPane.setContent(pics);
+		centerPic = new FlowPane();
 		
 		Button open = new Button("Open File");
 		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
@@ -100,14 +105,19 @@ public class VotoDesktopFX extends Application
 		//Add elements to stage
 		hostGrid.add(open, 0, 1);
 		
-		rootHost.setCenter(hostGrid);
-		rootHost.setRight(picPane);
+		rootHost.setLeft(hostGrid);
+		rootHost.setCenter(centerPic);
+		rootHost.setBottom(picPane);
 		
-		Scene scene = new Scene(rootHost, 600, 400);
+		Scene scene = new Scene(rootHost, 600, 525);
 		hostStage = new Stage();
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
-		hostStage.show();
+		hostStage.show();*/
+		
+		p.hide();
+		p.setScene(new HostScene(s, 600, 525));
+		p.show();
 		
 		//Start session
 		try {
@@ -118,7 +128,7 @@ public class VotoDesktopFX extends Application
 		}
 	
 		//Closes program and stops Session
-		hostStage.setOnCloseRequest(e -> {
+		p.setOnCloseRequest(e -> {
 			Platform.exit();
 			s.stop();
 			System.exit(0);
@@ -128,7 +138,7 @@ public class VotoDesktopFX extends Application
 	
 	// Join GUI
 	private void joinGUI(Stage p) {
-		p.close();
+		/*p.close();
 		FlowPane center = new FlowPane();
 		
 		//Temporary background in place of image
@@ -168,61 +178,99 @@ public class VotoDesktopFX extends Application
 		Scene scene = new Scene(rootJoin, 600, 400);
 		joinStage = new Stage();
 		joinStage.setScene(scene);
-		joinStage.show();
+		joinStage.show();*/
+		
+		p.hide();
+		p.setScene(new VoteScene(600, 400));
+		p.show();
 	}
 	
 	
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void  openFile() {
+	/*private void  openFile() {
 		
 		//Instantiate
 		fc = new FileChooser();
-		File file = fc.showOpenDialog(null);
-		ImageView iView = null;
+		file = fc.showOpenDialog(null);
+		Scanner txtScan = null;
 		
 		//Load picture if one was selected
 		if (file != null) {
-			try {
-				//Instantiate image view from picture
-				BufferedImage bImage = ImageIO.read(file);
-				Image image = SwingFXUtils.toFXImage(bImage, null);
-				iView = new ImageView();
-				iView.setImage(image);
-				answerStage();
-				
-			} catch (IOException e) {
-				System.exit(1);
+			if (file.getPath().endsWith(".txt")) {
+				try {
+					txtScan = new Scanner(file);
+					while (txtScan.hasNext()) {
+						addPic(txtScan.nextLine());
+						//s.currentQuestion.setAnswer(txtScan.nextLine());
+            s.setCurrentQuestion(file.getPath(), "A");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			//Add image view to stage
-			iView.setFitHeight(100);
-			iView.setFitWidth(100);
-			pics.getChildren().add(iView);
-			
-			try {
-				//ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				//s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
-				s.setCurrentQuestion(file.getPath(), "A");
-				System.out.println("Loaded image size: " + s.getCurrentImageSize());
-				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
-			} catch (Exception e) {
-				
-			}
-				
+			else
+				addPic(file.getAbsolutePath());
 		}		
 	}
 	
+	/*private void addPic(String filepath) {
+		ImageView iView = null;
+		File currentFile = new File(filepath);
+		try {
+			//Instantiate image view from picture
+			BufferedImage bImage = ImageIO.read(currentFile);
+			Image image = SwingFXUtils.toFXImage(bImage, null);
+			iView = new ImageView();
+			iView.setImage(image);
+			
+		} catch (IOException e) {
+			System.exit(1);
+		}
+		
+		
+		//Add previous image view to scrollpane 
+		/*if (!centerPic.getChildren().isEmpty()) {
+			ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
+			iViewPrev.setFitHeight(100);
+			iViewPrev.setFitWidth(100);
+			pics.getChildren().add(iViewPrev);
+		}
+		
+		//open image to center
+		if (!file.getPath().endsWith(".txt")) {
+			iView.setFitHeight(410);
+			iView.setFitWidth(400);
+			centerPic.getChildren().add(iView);
+			answerStage();
+		}
+		else {
+			addImgToSP(iView);
+		}
+		
+		try {
+			ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
+			s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+			System.out.println("Loaded image size: " + s.getCurrentImageSize());
+			System.out.println("Packet count: " + s.getCurrentImagePacketCount());
+		} catch (Exception e) {
+			
+		}
+		
+	}*/
+	
+	
 	//GUI for setting answer for image
-	public void answerStage() {
+	/*private void answerStage() {
 	
 		//Instantiate new elements
-		FlowPane ansPane = new FlowPane();
+		VBox ansPane = new VBox();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
-		ansPane.setVgap(10);
+		//ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		rootHost.setBottom(ansPane);
+		rootHost.setRight(ansPane);
 			
 		//Create buttons
 		Button[] ansButton = new Button[5];
@@ -240,10 +288,22 @@ public class VotoDesktopFX extends Application
 					    //Set correct answer
 					    s.getCurrentQuestion().setAnswer((button.getText()));
 					    rootHost.getChildren().remove(ansPane);
+					    
+					    //Add image to scrollpane
+					    if (!centerPic.getChildren().isEmpty()) {
+					    	addImgToSP((ImageView) centerPic.getChildren().remove(0));
+					    }
 				}
 			});
 		}
 	}
+	
+	private void addImgToSP(ImageView iViewPrev) {
+		iViewPrev.setFitHeight(100);
+		iViewPrev.setFitWidth(100);
+		pics.getChildren().add(picIndex, iViewPrev);
+		picIndex++;
+	}*/
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

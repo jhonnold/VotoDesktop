@@ -198,7 +198,7 @@ public class Session {
 		bytearray = baos.toByteArray();
 		
 		BufferedImage img2 = ImageIO.read(new ByteArrayInputStream(bytearray));
-		ImageIO.write(img2, "bmp", new File("snaptest.bmp"));
+		//ImageIO.write(img2, "bmp", new File("snaptest.bmp"));
 		
 		// cut the full array into 60 KB by using copyOfRange
 		for (int i = 0; i < bytearray.length; i += packetsize) {
