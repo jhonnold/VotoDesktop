@@ -107,6 +107,7 @@ public class Question {
 			if (voters == null) {
 				System.out.println("New Vote Answer Recieved!");
 				voters = new ArrayList<Client>();
+				answerSet.put(v, voters);
 			}
 			
 			// Add
