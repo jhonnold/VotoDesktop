@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
@@ -72,49 +73,30 @@ public class HostScene extends Scene {
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void  openFile() {
-
+private void  openFile() {
+		
 		//Instantiate
 		fc = new FileChooser();
-		File file = fc.showOpenDialog(null);
-		ImageView iView = null;
-
+		file = fc.showOpenDialog(null);
+		Scanner txtScan = null;
+		String filePath = null;
+		
 		//Load picture if one was selected
 		if (file != null) {
-			try {
-				//Instantiate image view from picture
-				BufferedImage bImage = ImageIO.read(file);
-				Image image = SwingFXUtils.toFXImage(bImage, null);
-				iView = new ImageView();
-				iView.setImage(image);
-
-			} catch (IOException e) {
-				System.exit(1);
+			if (file.getPath().endsWith(".txt")) {
+				try {
+					txtScan = new Scanner(file);
+					while (txtScan.hasNext()) {
+						addPic(filePath = txtScan.nextLine());
+						s.setCurrentQuestion(filePath, txtScan.nextLine());
+						//s.setCurrentQuestion(file.getPath(), "A");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			//Add previous image view to scrollpane 
-			if (!centerPic.getChildren().isEmpty()) {
-				ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
-				iViewPrev.setFitHeight(100);
-				iViewPrev.setFitWidth(100);
-				pics.getChildren().add(iViewPrev);
-			}
-
-			//open image to center
-			iView.setFitHeight(410);
-			iView.setFitWidth(400);
-			centerPic.getChildren().add(iView);
-			answerStage();
-
-			try {
-				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				//s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
-				s.setCurrentQuestion(file.getPath(), "A");
-				System.out.println("Loaded image size: " + s.getCurrentImageSize());
-				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
-			} catch (Exception e) {
-
-			}
-
+			else
+				addPic(file.getAbsolutePath());
 		}		
 	}
 
