@@ -18,7 +18,13 @@ public class Client {
 	public Client(String clientID) {
 		ID = clientID;
 	}
-
+	
+	/**
+	 * Gets the client ID
+	 * @return the client's ID as a string
+	 */
+	public String getID() { return ID; }
+	
 	/**
 	 * Returns the last vote sent by the specified client
 	 * @return last received vote

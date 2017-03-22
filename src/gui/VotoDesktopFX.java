@@ -35,7 +35,7 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private VBox pics;
-	private Session s = new Session();
+	private Session s = new Session("test");
 	
 	/**
 	 * Start GUI has host or join options

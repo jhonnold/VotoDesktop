@@ -66,24 +66,34 @@ public class Question {
 	 * @param clientID - ID of the client sending the vote
 	 * @param clientVote - the actual vote sent by the client
 	 */
-	public void addVote(String clientID, String clientVote, int voteNum) {
-
-		// Get the clients most recent vote
-		Client c = currentSession.getClient(clientID);
+	public boolean addVote(Client client, String clientVote, int voteNum) {
 		
-		if (voteNum > c.voteNum) {
-			c.voteNum = voteNum;
+		if (voteNum > client.voteNum) {
+			client.voteNum = voteNum;
 			Vote v = choices.get(clientVote);
-			ArrayList<Client> voters = answerSet.get(v);
 			
-			Vote lastVote = c.getLastVote();
-			
-			if (lastVote != null) {
-				answerSet.get(lastVote).remove(c);
+			if (v == null) {
+				return false;
 			}
 			
-			voters.add(c);
-			c.setLastVote(v);
+			ArrayList<Client> voters = answerSet.get(v);
+			
+			Vote lastVote = client.getLastVote();
+			
+			if (lastVote != null) {
+				answerSet.get(lastVote).remove(client);
+			}
+			
+			if (voters == null) {
+				voters = new ArrayList<Client>();
+			}
+			
+			voters.add(client);
+			client.setLastVote(v);
+			
+			return true;
+		} else {
+			return false;
 		}
 		
 		

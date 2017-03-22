@@ -21,6 +21,8 @@ public class Session {
 	private Controller control = new Controller(this); 
 	private Question currentQuestion;
 	
+	private int imageID = 1;
+	
 	public Session(String ID) {
 		this.ID = ID;
 	}
@@ -49,8 +51,26 @@ public class Session {
 		}
 	}
 	
+	/**
+	 * the current Question
+	 * @return the current quesion
+	 */
 	public Question getCurrentQuestion() {
 		return currentQuestion;
+	}
+
+	public boolean newCurrentQuestion(String filename, String answer) {
+		
+		try {
+			ArrayList<byte[]> imageBytes = loadImage(filename);
+			currentQuestion = new Question(this, imageBytes, imageID++);
+			currentQuestion.setAnswer(answer);
+			return true;
+		} catch (IOException e) {
+			System.out.println("Failed to load image!");
+			return false;
+		}
+		
 	}
 	
 	/**
@@ -61,8 +81,44 @@ public class Session {
 		if (clientList.contains(new Client(ID))) {
 			return false;
 		}
+		
+		System.out.println("Added new client: " + ID);
 		return clientList.add(new Client(ID));
 	}
+	
+	/**
+	 * Returns a client object based off of the client ID passed in
+	 * @param clientID - ID of the desired client
+	 * @return a client object
+	 */
+	public Client getClient(String clientID) {
+		
+		// Search the client list for the specified ID
+		for (Client c : clientList) {
+			if (c.getID().equals(clientID)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Adds a client vote to the current Question
+	 * @param clientID The string of the clients ID
+	 * @param vote The vote string
+	 * @return false if not added or invalid, true if added
+	 */
+	public boolean addClientVote(String clientID, String vote, int voteNum) {
+		
+		Client c = getClient(clientID);
+		if (c == null) {
+			return false;
+		}
+		
+		return currentQuestion.addVote(c, vote, voteNum);
+		
+	}
+	
 	
 	/**
 	 * Returns the ID for the image of the current question
@@ -142,22 +198,6 @@ public class Session {
 		 * ByteArrayInputStream(bytearray)); ImageIO.write(img, "jpg", new
 		 * File(dirName, "snap.jpg"));
 		 */
-	}
-
-	/**
-	 * Returns a client object based off of the client ID passed in
-	 * @param clientID - ID of the desired client
-	 * @return a client object
-	 */
-	public Client getClient(String clientID) {
-		
-		// Search the client list for the specified ID
-		for (Client c : clientList) {
-			if (c.equals(clientID)) {
-				return c;
-			}
-		}
-		return null;
 	}
 
 	/**
