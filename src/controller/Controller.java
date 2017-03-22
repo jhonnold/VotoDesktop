@@ -86,18 +86,14 @@ public class Controller {
 	 */
 	@SuppressWarnings("unused")
 	protected byte[] vote(byte[] inFromClient) {
+		System.out.println("Parsed as vote!");
+		
 		if (inFromClient.length <= 1) {
-			byte[] temp = {'E'};
-			return temp;
+			return null;
 		}
 		
 		int cursor = 1;		
 		String ID = getDynamicData(inFromClient, cursor);
-		
-		if (ID.trim().equals("")) {
-			byte[] temp = {'E'};
-			return temp;
-		}
 		
 		cursor += ID.length();
 		
@@ -105,9 +101,17 @@ public class Controller {
 		
 		String vote = getDynamicData(inFromClient, cursor);
 		
+		boolean voteSuccess = session.addClientVote(ID, vote, voteNumber);
+		
+		if (voteSuccess) {
 		//do something with the vote
-		byte[] returnPacket = {'V', 'R', (byte) voteNumber};
-		return returnPacket;
+			System.out.println("Replying");
+			byte[] returnPacket = {'V', 'R', (byte) voteNumber};
+			return returnPacket;
+		} else {
+			System.out.println("Vote ignored");
+			return null;
+		}
 	}
 
 	/**

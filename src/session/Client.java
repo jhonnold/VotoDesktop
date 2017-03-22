@@ -9,7 +9,7 @@ public class Client {
 	private HashMap<Question, Vote> voteList = new HashMap<Question, Vote>();
 	
 	private Vote lastVote;
-	public int voteNum = 0;
+	public int voteNum = Integer.MIN_VALUE;
 	
 	/**
 	 * Client constructor
