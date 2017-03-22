@@ -121,7 +121,7 @@ public class VotoDesktopFX extends Application
 		}
 	
 		//Closes program and stops Session
-		hostStage.setOnCloseRequest(e -> {
+		p.setOnCloseRequest(e -> {
 			Platform.exit();
 			s.stop();
 			System.exit(0);
