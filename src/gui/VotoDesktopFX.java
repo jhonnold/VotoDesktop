@@ -80,7 +80,7 @@ public class VotoDesktopFX extends Application
 	 */
 	private void hostGUI(Stage p) {
 		
-		p.close(); //Close start GUI
+		/*p.close(); //Close start GUI
 		
 		//Instantiate new GUI elements
 		rootHost = new BorderPane();
@@ -113,7 +113,11 @@ public class VotoDesktopFX extends Application
 		hostStage = new Stage();
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
-		hostStage.show();
+		hostStage.show();*/
+		
+		p.hide();
+		p.setScene(new HostScene(s, 600, 525));
+		p.show();
 		
 		//Start session
 		try {
@@ -134,7 +138,7 @@ public class VotoDesktopFX extends Application
 	
 	// Join GUI
 	private void joinGUI(Stage p) {
-		p.close();
+		/*p.close();
 		FlowPane center = new FlowPane();
 		
 		//Temporary background in place of image
@@ -174,14 +178,18 @@ public class VotoDesktopFX extends Application
 		Scene scene = new Scene(rootJoin, 600, 400);
 		joinStage = new Stage();
 		joinStage.setScene(scene);
-		joinStage.show();
+		joinStage.show();*/
+		
+		p.hide();
+		p.setScene(new VoteScene(600, 400));
+		p.show();
 	}
 	
 	
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void  openFile() {
+	/*private void  openFile() {
 		
 		//Instantiate
 		fc = new FileChooser();
@@ -206,7 +214,7 @@ public class VotoDesktopFX extends Application
 		}		
 	}
 	
-	private void addPic(String filepath) {
+	/*private void addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
 		try {
@@ -227,7 +235,7 @@ public class VotoDesktopFX extends Application
 			iViewPrev.setFitHeight(100);
 			iViewPrev.setFitWidth(100);
 			pics.getChildren().add(iViewPrev);
-		}*/
+		}
 		
 		//open image to center
 		if (!file.getPath().endsWith(".txt")) {
@@ -249,11 +257,11 @@ public class VotoDesktopFX extends Application
 			
 		}
 		
-	}
+	}*/
 	
 	
 	//GUI for setting answer for image
-	private void answerStage() {
+	/*private void answerStage() {
 	
 		//Instantiate new elements
 		VBox ansPane = new VBox();
@@ -294,7 +302,7 @@ public class VotoDesktopFX extends Application
 		iViewPrev.setFitWidth(100);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
-	}
+	}*/
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
