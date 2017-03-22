@@ -7,7 +7,7 @@ import session.Session;
 public class Server {
 	
 	public static void main(String[] args) {
-		Session s = new Session();
+		Session s = new Session("test");
 		
 		try {
 			s.start();
