@@ -73,7 +73,7 @@ public class HostScene extends Scene {
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-private void  openFile() {
+	private void  openFile() {
 		
 		//Instantiate
 		fc = new FileChooser();
