@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javafx.application.*;
@@ -35,8 +36,10 @@ public class VotoDesktopFX extends Application
 	
 	private ScrollPane picPane;
 	private FileChooser fc;
-	private VBox pics;
+	private HBox pics;
 	private Session s = new Session();
+	private File file;
+	private int picIndex = 0;
 	
 	/**
 	 * Start GUI has host or join options
@@ -82,8 +85,8 @@ public class VotoDesktopFX extends Application
 		//Instantiate new GUI elements
 		rootHost = new BorderPane();
 		picPane = new ScrollPane();
-		picPane.setMinWidth(120);
-		pics = new VBox();
+		picPane.setMinHeight(120);
+		pics = new HBox();
 		picPane.setContent(pics);
 		centerPic = new FlowPane();
 		
@@ -104,9 +107,9 @@ public class VotoDesktopFX extends Application
 		
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
-		rootHost.setRight(picPane);
+		rootHost.setBottom(picPane);
 		
-		Scene scene = new Scene(rootHost, 600, 450);
+		Scene scene = new Scene(rootHost, 600, 525);
 		hostStage = new Stage();
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
@@ -182,57 +185,83 @@ public class VotoDesktopFX extends Application
 		
 		//Instantiate
 		fc = new FileChooser();
-		File file = fc.showOpenDialog(null);
-		ImageView iView = null;
+		file = fc.showOpenDialog(null);
+		Scanner txtScan = null;
 		
 		//Load picture if one was selected
 		if (file != null) {
-			try {
-				//Instantiate image view from picture
-				BufferedImage bImage = ImageIO.read(file);
-				Image image = SwingFXUtils.toFXImage(bImage, null);
-				iView = new ImageView();
-				iView.setImage(image);
-				
-			} catch (IOException e) {
-				System.exit(1);
+			if (file.getPath().endsWith(".txt")) {
+				try {
+					txtScan = new Scanner(file);
+					while (txtScan.hasNext()) {
+						addPic(txtScan.nextLine());
+						s.currentQuestion.setAnswer(txtScan.nextLine());
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			//Add previous image view to scrollpane 
-			if (!centerPic.getChildren().isEmpty()) {
-				ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
-				iViewPrev.setFitHeight(100);
-				iViewPrev.setFitWidth(100);
-				pics.getChildren().add(iViewPrev);
-			}
+			else
+				addPic(file.getAbsolutePath());
+		}		
+	}
+	
+	private void addPic(String filepath) {
+		ImageView iView = null;
+		File currentFile = new File(filepath);
+		try {
+			//Instantiate image view from picture
+			BufferedImage bImage = ImageIO.read(currentFile);
+			Image image = SwingFXUtils.toFXImage(bImage, null);
+			iView = new ImageView();
+			iView.setImage(image);
 			
-			//open image to center
+		} catch (IOException e) {
+			System.exit(1);
+		}
+		
+		
+		//Add previous image view to scrollpane 
+		/*if (!centerPic.getChildren().isEmpty()) {
+			ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
+			iViewPrev.setFitHeight(100);
+			iViewPrev.setFitWidth(100);
+			pics.getChildren().add(iViewPrev);
+		}*/
+		
+		//open image to center
+		if (!file.getPath().endsWith(".txt")) {
 			iView.setFitHeight(410);
 			iView.setFitWidth(400);
 			centerPic.getChildren().add(iView);
 			answerStage();
+		}
+		else {
+			addImgToSP(iView);
+		}
+		
+		try {
+			ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
+			s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+			System.out.println("Loaded image size: " + s.getCurrentImageSize());
+			System.out.println("Packet count: " + s.getCurrentImagePacketCount());
+		} catch (Exception e) {
 			
-			try {
-				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
-				System.out.println("Loaded image size: " + s.getCurrentImageSize());
-				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
-			} catch (Exception e) {
-				
-			}
-				
-		}		
+		}
+		
 	}
 	
+	
 	//GUI for setting answer for image
-	public void answerStage() {
+	private void answerStage() {
 	
 		//Instantiate new elements
-		FlowPane ansPane = new FlowPane();
+		VBox ansPane = new VBox();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
-		ansPane.setVgap(10);
+		//ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		rootHost.setBottom(ansPane);
+		rootHost.setRight(ansPane);
 			
 		//Create buttons
 		Button[] ansButton = new Button[5];
@@ -248,18 +277,23 @@ public class VotoDesktopFX extends Application
 					    Button button = (Button) source;
 					    
 					    //Set correct answer
-					    s.currentQuestion.setAnswer((button.getText()));
+					    s.currentQuestion.setAnswer(button.getText());
 					    rootHost.getChildren().remove(ansPane);
 					    
+					    //Add image to scrollpane
 					    if (!centerPic.getChildren().isEmpty()) {
-					    	ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
-							iViewPrev.setFitHeight(100);
-							iViewPrev.setFitWidth(100);
-							pics.getChildren().add(iViewPrev);
+					    	addImgToSP((ImageView) centerPic.getChildren().remove(0));
 					    }
 				}
 			});
 		}
+	}
+	
+	private void addImgToSP(ImageView iViewPrev) {
+		iViewPrev.setFitHeight(100);
+		iViewPrev.setFitWidth(100);
+		pics.getChildren().add(picIndex, iViewPrev);
+		picIndex++;
 	}
 	
 	@Override
