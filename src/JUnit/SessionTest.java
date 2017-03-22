@@ -147,7 +147,7 @@ public class SessionTest {
 			s.addClient(name);
 		}
 		
-		s.newCurrentQuestion("testimage.jpg", "A");
+		s.setCurrentQuestion("testimage.jpg", "A");
 		
 		for (String name : nameList) {
 			
@@ -160,6 +160,56 @@ public class SessionTest {
 		
 		if (error) {
 			Assert.fail("Failed to accept a valid clients vote!");
+		}	
+	}
+	
+	@org.junit.Test(timeout = 5000)
+	public void Test7() throws Throwable {
+		
+		boolean error = false;
+		
+		s.setCurrentQuestion("testimage.jpg", "A");
+		
+		for (String name : nameList) {
+			
+			if (s.addClientVote(name, "A", 10)) {
+				error = true;
+			}
+			
+		}
+		
+		if (error) {
+			Assert.fail("Server accepts votes from non-handshaked clients!");
+		}
+	}
+	
+	@org.junit.Test(timeout = 5000)
+	public void Test8() throws Throwable {
+		
+		boolean error = false;
+		String vote = "ABCDE";
+		Random rnd = new Random();
+		
+		s.setCurrentQuestion("testimage.jpg", "A");
+		
+		for (String name : nameList) {
+			s.addClient(name);
+		}
+		
+		for (String name : nameList) {
+			
+			int index = (int) (rnd.nextFloat() * vote.length());
+			s.addClientVote(name, String.valueOf(vote.charAt(index)), 10);
+			
+			if (!s.getClient(name).getLastVote().getID().equals(String.valueOf(vote.charAt(index)))) {
+				error = true;
+				break;
+			}
+			
+		}
+		
+		if (error) {
+			Assert.fail("Last vote is stored improperly");
 		}
 		
 	}

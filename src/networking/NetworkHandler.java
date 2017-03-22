@@ -45,9 +45,7 @@ public class NetworkHandler implements Runnable, Closeable {
 		System.out.println("I have received a packet containing: " + new String(data));
 		try {	
 			byte[] replyData = control.parseNetworkCommand(data);
-			if (replyData != null && replyData[0] != 'E') {
-				reply(replyData, inFromClient);
-			}
+			reply(replyData, inFromClient);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();//replyError(kwargs, e.getMessage());
 		}

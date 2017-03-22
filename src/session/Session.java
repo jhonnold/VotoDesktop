@@ -58,8 +58,24 @@ public class Session {
 	public Question getCurrentQuestion() {
 		return currentQuestion;
 	}
-
-	public boolean newCurrentQuestion(String filename, String answer) {
+	
+	/**
+	 * Sets a new Question for the Session.
+	 * Loads image via filename and sets the correct answer to be
+	 * that of the inputted string.
+	 * @param filename The image file to be loaded
+	 * @param answer The answer string to be accepted 
+	 * @return True if loads properly, False if image fails
+	 */
+	public boolean setCurrentQuestion(String filename, String answer) {
+		
+		if (currentQuestion != null) {
+			
+			for (Client c : clientList) {
+				c.setLastVote(null);
+			}
+			
+		}
 		
 		try {
 			ArrayList<byte[]> imageBytes = loadImage(filename);

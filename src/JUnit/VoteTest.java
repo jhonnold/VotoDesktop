@@ -9,19 +9,19 @@ public class VoteTest {
 	@org.junit.Test(timeout=1000)
 	public void Test1() throws Throwable {
 		
-		Vote v = new Vote(1);
+		Vote v = new Vote("A");
 		
-		if (v.equals(new Vote(2))) {
-			org.junit.Assert.fail("Vote 1 and 2 registered equal!");
+		if (v.equals(new Vote("B"))) {
+			org.junit.Assert.fail("Vote A and B registered equal!");
 		}
 	}
 	
 	@org.junit.Test(timeout=1000)
 	public void Test2() throws Throwable {
 		
-		Vote v = new Vote(1);
+		Vote v = new Vote("A");
 		
-		if (!v.equals(new Vote(1))) {
+		if (!v.equals(new Vote("A"))) {
 			org.junit.Assert.fail("Vote 1 and 1 registered unequal!");
 		}
 		

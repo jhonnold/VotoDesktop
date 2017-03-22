@@ -70,15 +70,23 @@ public class ControllerTest {
 	@org.junit.Test(timeout = 5000)
 	public void Test4() throws Throwable {
 		
-		s.currentQuestion = new Question(s, s.loadImage("testimage.jpg"), 123);
+		s.addClient("T");
+		s.setCurrentQuestion("testimage.jpg", "A");
 		
-		fakeMsg[0] = 'M';
-		fakeMsg[1] = 'P';
+		byte[] fakeMsg = new byte[1024];
+		
+		fakeMsg[0] = 'V';
+		fakeMsg[1] = (byte) 1;
+		fakeMsg[2] = 'T';
+		fakeMsg[3] = (byte) 0;
+		fakeMsg[4] = (byte) 1;
+		fakeMsg[5] = 'A';
 		
 		byte[] data = c.parseNetworkCommand(fakeMsg);
 		
-		if (data[0] != 'M' && data[1] != 'P' && data[2] != (byte) 123) {
-			org.junit.Assert.fail("Doesn't properly reply to media ping");
+		if (data == null) {
+			Assert.fail("Doesn't accept votes properly!");
 		}
+		
 	}
 }

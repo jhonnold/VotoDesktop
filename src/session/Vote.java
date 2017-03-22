@@ -2,17 +2,17 @@ package session;
 
 public class Vote {
 	
-	private final int ID;
+	private String ID;
 	
 	/**
 	 * Vote constructor
 	 * @param i - ID for the vote object
 	 */
-	public Vote(int i) {
+	public Vote(String i) {
 		this.ID = i;
 	}
 	
-	public int getID() { return ID; }
+	public String getID() { return ID; }
 	
 	@Override
 	public boolean equals(Object o) {
@@ -25,6 +25,7 @@ public class Vote {
 		}
 		
 		Vote v = (Vote) o;
-		return this.ID == v.getID();
+		
+		return ID.equals(v.getID());
 	}
 }

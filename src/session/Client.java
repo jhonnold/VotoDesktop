@@ -9,7 +9,7 @@ public class Client {
 	private HashMap<Question, Vote> voteList = new HashMap<Question, Vote>();
 	
 	private Vote lastVote;
-	public int voteNum = Integer.MIN_VALUE;
+	public int voteNum = -100;
 	
 	/**
 	 * Client constructor
@@ -39,6 +39,7 @@ public class Client {
 	 * @param oldVote - reference to previous client vote to be discarded
 	 */
 	public void setLastVote(Vote newVote) {
+		
 		lastVote = newVote;
 	}
 	
