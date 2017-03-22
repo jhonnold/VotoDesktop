@@ -15,11 +15,17 @@ import controller.Controller;
 
 public class Session {
 	
-	public String ID = "test server";
+	public final String ID;
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
-	public Question currentQuestion;
+	private Question currentQuestion;
+	
+	private int imageID = 1;
+	
+	public Session(String ID) {
+		this.ID = ID;
+	}
 	
 	/**
 	 * Starts a Voto session
@@ -46,12 +52,90 @@ public class Session {
 	}
 	
 	/**
+	 * the current Question
+	 * @return the current quesion
+	 */
+	public Question getCurrentQuestion() {
+		return currentQuestion;
+	}
+	
+	/**
+	 * Sets a new Question for the Session.
+	 * Loads image via filename and sets the correct answer to be
+	 * that of the inputted string.
+	 * @param filename The image file to be loaded
+	 * @param answer The answer string to be accepted 
+	 * @return True if loads properly, False if image fails
+	 */
+	public boolean setCurrentQuestion(String filename, String answer) {
+		
+		if (currentQuestion != null) {
+			
+			for (Client c : clientList) {
+				c.setLastVote(null);
+			}
+			
+		}
+		
+		try {
+			ArrayList<byte[]> imageBytes = loadImage(filename);
+			currentQuestion = new Question(this, imageBytes, imageID++);
+			currentQuestion.setAnswer(answer);
+			return true;
+		} catch (IOException e) {
+			System.out.println("Failed to load image!");
+			return false;
+		}
+		
+	}
+	
+	/**
 	 * Adds a new client to the session's client list with their ID
 	 * @param ID - the new client's ID
 	 */
-	public void addClient(String ID) {
-		clientList.add(new Client(ID));
+	public boolean addClient(String ID) {
+		if (clientList.contains(new Client(ID))) {
+			return false;
+		}
+		
+		System.out.println("Added new client: " + ID);
+		return clientList.add(new Client(ID));
 	}
+	
+	/**
+	 * Returns a client object based off of the client ID passed in
+	 * @param clientID - ID of the desired client
+	 * @return a client object
+	 */
+	public Client getClient(String clientID) {
+		
+		// Search the client list for the specified ID
+		for (Client c : clientList) {
+			if (c.getID().equals(clientID)) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Adds a client vote to the current Question
+	 * @param clientID The string of the clients ID
+	 * @param vote The vote string
+	 * @return false if not added or invalid, true if added
+	 */
+	public boolean addClientVote(String clientID, String vote, int voteNum) {
+		
+		Client c = getClient(clientID);
+		if (c == null) {
+			System.out.println("Client does not exist!");
+			return false;
+		}
+		
+		return currentQuestion.addVote(c, vote, voteNum);
+		
+	}
+	
 	
 	/**
 	 * Returns the ID for the image of the current question
@@ -134,22 +218,6 @@ public class Session {
 	}
 
 	/**
-	 * Returns a client object based off of the client ID passed in
-	 * @param clientID - ID of the desired client
-	 * @return a client object
-	 */
-	public Client getClient(String clientID) {
-		
-		// Search the client list for the specified ID
-		for (Client c : clientList) {
-			if (c.equals(clientID)) {
-				return c;
-			}
-		}
-		return null;
-	}
-
-	/**
 	 * Returns the size (in bytes) of the current session image
 	 * @return image size in bytes
 	 */
@@ -163,6 +231,10 @@ public class Session {
 		return total;
 	}
 	
+	/**
+	 * If a current Question is loaded
+	 * @return - True if loaded, false if not (null)
+	 */
 	public boolean hasImage() {
 		return (currentQuestion != null);
 	}

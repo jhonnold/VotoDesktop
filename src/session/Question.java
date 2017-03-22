@@ -10,7 +10,7 @@ public class Question {
 	private Session currentSession;
 	private Vote answer;
 	private int imageID;
-	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<>();
+	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<Vote, ArrayList<Client>>();
 	private HashMap<String, Vote> choices = new HashMap<>();
 	public ArrayList<byte[]> questionImg = new ArrayList<byte[]>();
 	
@@ -25,11 +25,11 @@ public class Question {
 		questionImg = img;
 		currentSession = s;
 		this.imageID = imageID;
-		choices.put("A", new Vote(1));
-		choices.put("B", new Vote(2));
-		choices.put("C", new Vote(3));
-		choices.put("D", new Vote(4));
-		choices.put("E", new Vote(5));
+		choices.put("A", new Vote("A"));
+		choices.put("B", new Vote("B"));
+		choices.put("C", new Vote("C"));
+		choices.put("D", new Vote("D"));
+		choices.put("E", new Vote("E"));
 		
 		answer = choices.get("A");
 		
@@ -49,6 +49,15 @@ public class Question {
 	 */
 	public Vote getAnswer() { return answer; }
 	
+	
+	/**
+	 * Returns the mapping of clients to their votes for the current question
+	 * @return HashMap of votes listing the clients who selected it
+	 */
+	public HashMap<Vote, ArrayList<Client>> getAnswerSet() {
+		return answerSet;
+	}
+	
 	/**
 	 * Returns the image ID for current question
 	 * @return the image ID
@@ -66,23 +75,51 @@ public class Question {
 	 * @param clientID - ID of the client sending the vote
 	 * @param clientVote - the actual vote sent by the client
 	 */
-	public void addVote(String clientID, String clientVote) {
-
-		// Get the clients most recent vote
-		Client c = currentSession.getClient(clientID);
-		Vote lastVote = c.getLastVote();
+	public boolean addVote(Client client, String clientVote, int voteNum) {
 		
-		// If client sent previous vote, remove it before adding their new vote
-		if (lastVote != null) {
-			answerSet.get(lastVote).remove(c);
-		}
+		// Confirm the new vote is in order
+		if (voteNum > client.voteNum) {
 		
-		// Get the clients vote from the optional choices
-		Vote v = choices.get(clientVote);
-		
-		// Add the vote to the client and set it as their most recent vote
-		answerSet.get(v).add(c);
-		c.setLastVote(v, lastVote);
+			Vote v = choices.get(clientVote);
+			
+			// if this vote isn't option its invalid
+			if (v == null) {
+				System.out.println("Vote is invalid!");
+				return false;
+			}
+			
+			client.voteNum = voteNum;
+			
+			Vote lastVote = client.getLastVote();
+			
+			// If they have a previous vote for this question, update it
+			if (lastVote != null) {
+				ArrayList<Client> temp = answerSet.get(lastVote);
+				if (temp != null) {
+					System.out.println("Removed " + client.getID() + " from old vote of " + lastVote.getID());
+					temp.remove(client);
+				}
+			}
+			
+			ArrayList<Client> voters = answerSet.get(v);
+			
+			// Make the arraylist if no one has answered this one before
+			if (voters == null) {
+				System.out.println("New Vote Answer Recieved!");
+				voters = new ArrayList<Client>();
+			}
+			
+			// Add
+			voters.add(client);
+			client.setLastVote(v);
+			
+			System.out.println("Added vote for " + client.getID() + ": "+ clientVote);
+			
+			return true;
+		} else {
+			System.out.println("Votenum is less than previous vote: " + voteNum + " " + client.voteNum);
+			return false;
+		}	
 	}
 	
 	/**
@@ -90,13 +127,12 @@ public class Question {
 	 * be their final recorded vote
 	 */
 	public void endQuestion() {
-		
 		// Set the last vote of every client to their final vote
 		for (Vote v : answerSet.keySet()) {
 			
 			for (Client c : answerSet.get(v)) {
 				
-				c.setLastVote(v, null);
+				c.setAnswerVote(this, v);
 			}
 		}
 	}
@@ -110,11 +146,9 @@ public class Question {
 	public byte[] getImagePacket(int packetNum) throws IllegalArgumentException {
 		
 		if (packetNum < 1 || packetNum >= questionImg.size() + 1) {
-
 			throw new IllegalArgumentException("Packet number is invalid for this image");
 		}
 		
 		return questionImg.get(packetNum - 1);
 	}
-	
 }

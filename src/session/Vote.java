@@ -1,16 +1,31 @@
 package session;
 
-import java.util.ArrayList;
-
 public class Vote {
 	
-	private final Integer ID;
+	private String ID;
 	
 	/**
 	 * Vote constructor
 	 * @param i - ID for the vote object
 	 */
-	public Vote(Integer i) {
+	public Vote(String i) {
 		this.ID = i;
+	}
+	
+	public String getID() { return ID; }
+	
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Vote)) {
+			return false;
+		}
+		
+		if (o == this) {
+			return true;
+		}
+		
+		Vote v = (Vote) o;
+		
+		return ID.equals(v.getID());
 	}
 }

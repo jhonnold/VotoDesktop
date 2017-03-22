@@ -44,7 +44,8 @@ public class NetworkHandler implements Runnable, Closeable {
 
 		System.out.println("I have received a packet containing: " + new String(data));
 		try {	
-			reply(control.parseNetworkCommand(data), inFromClient);		
+			byte[] replyData = control.parseNetworkCommand(data);
+			reply(replyData, inFromClient);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();//replyError(kwargs, e.getMessage());
 		}
@@ -52,11 +53,18 @@ public class NetworkHandler implements Runnable, Closeable {
 	}
 	
 	/**
-	 * Replies back to whoever sent the packet
+	 * Replies the given byte array to the location of the datagram packet
+	 * @param data - the byte array to be sent
+	 * @param in - the datagram packet to have the byte array sent too
 	 */
 	public void reply(byte[] data, DatagramPacket in) {
-		DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
-		socket.send(outToClient);
+			
+		if (data != null) {
+			DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
+			socket.send(outToClient);
+		} else {
+			return;
+		}
 	}
 	
 	/**

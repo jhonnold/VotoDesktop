@@ -1,11 +1,15 @@
 package session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Client {
 
 	private String ID = null;
-	private ArrayList<Vote> voteList = new ArrayList<>();
+	private HashMap<Question, Vote> voteList = new HashMap<Question, Vote>();
+	
+	private Vote lastVote;
+	public int voteNum = -100;
 	
 	/**
 	 * Client constructor
@@ -14,17 +18,19 @@ public class Client {
 	public Client(String clientID) {
 		ID = clientID;
 	}
-
+	
+	/**
+	 * Gets the client ID
+	 * @return the client's ID as a string
+	 */
+	public String getID() { return ID; }
+	
 	/**
 	 * Returns the last vote sent by the specified client
 	 * @return last received vote
 	 */
 	public Vote getLastVote() {
-		if (voteList.size() > 0) {
-			return voteList.get(voteList.size() - 1);
-		} else {
-			return null;
-		}
+		return lastVote;
 	}
 	
 	/**
@@ -32,11 +38,17 @@ public class Client {
 	 * @param lastVote - the most recently sent vote
 	 * @param oldVote - reference to previous client vote to be discarded
 	 */
-	public void setLastVote(Vote lastVote, Vote oldVote) {
-		if (voteList.contains(oldVote)) {
-			voteList.remove(oldVote);
-		}
-		voteList.add(lastVote);
+	public void setLastVote(Vote newVote) {
+		
+		lastVote = newVote;
+	}
+	
+	/**
+	 * Sets the final vote submitted for the question
+	 * @param v The final vote submitted
+	 */
+	public void setAnswerVote(Question q, Vote v) {
+		voteList.put(q, v);
 	}
 	
 	/**
@@ -45,15 +57,25 @@ public class Client {
 	 * @return True if the ID sent in matches the current client's ID
 	 *         False if the IDs don't match
 	 */
-	public boolean equals(String ID) {
-		return this.ID.equals(ID);
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Client)) {
+			return false;
+		}
+		
+		if (o == this) {
+			return true;
+		}
+		
+		Client c = (Client) o;
+		return c.ID.equals(ID);
 	}
 	
 	/**
 	 * Returns a list of all the clients final votes for current session
 	 * @return List of client votes
 	 */
-	public ArrayList<Vote> getClientVoteList() {
-		return this.voteList;
+	public Iterable<Vote> getClientVoteList() {
+		return voteList.values();
 	}
 }

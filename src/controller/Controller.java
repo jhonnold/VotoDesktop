@@ -14,6 +14,10 @@ public class Controller {
 	
 	private boolean running = false;
 	
+	/**
+	 * Constructor with the session this controller talks to
+	 * @param session - the session that the controller passes commands into
+	 */
 	public Controller(Session session) {
 		this.session = session;
 	}
@@ -56,19 +60,21 @@ public class Controller {
 	 */
 	protected byte[] handshakeRequest(byte[] inFromClient) {
 		if (inFromClient.length <= 1) {
-			byte[] temp = {'E'};
-			return temp;
+			return null;
 		}
 		
+		// Retrive string ID
 		String ID = getDynamicData(inFromClient, 1);
 		
+		// If empty ID, ignore it
 		if (ID.trim().equals("")) {
-			byte[] temp = {'E'};
-			return temp;
+			return null;
 		}
 		
 		System.out.println("Parsed as a handshake from: "  + ID);
-		session.addClient(ID);
+		if (!session.addClient(ID)) {
+			System.out.println("This user has already connected!");
+		}
 		
 		int l = session.ID.length();
 		byte[] returnPacket = {'R', (byte) l};
@@ -80,28 +86,30 @@ public class Controller {
 	 * @param inFromClient {'V' (1), IDlength (1), ID (x), voteNumber (1), Votelength (1), Vote (x)}
 	 * @return - the byte array to be returned
 	 */
-	@SuppressWarnings("unused")
 	protected byte[] vote(byte[] inFromClient) {
+		System.out.println("Parsed as vote! " + new String(inFromClient));
+		
+		// invalid packet
 		if (inFromClient.length <= 1) {
-			byte[] temp = {'E'};
-			return temp;
+			return null;
 		}
 		
 		int cursor = 1;		
-		String ID = getDynamicData(inFromClient, cursor);
-		
-		if (ID.trim().equals("")) {
-			byte[] temp = {'E'};
-			return temp;
-		}
+		// Retrieve the ID of the client
+		String ID = getDynamicData(inFromClient, cursor++);
 		
 		cursor += ID.length();
 		
-		int voteNumber = inFromClient[cursor++];
+		// Get the number of the vote
+		int voteNumber = (int) inFromClient[cursor++];
 		
-		String vote = getDynamicData(inFromClient, cursor);
+		String vote = getDynamicData(inFromClient, cursor++);
 		
-		//do something with the vote
+		// Apply the vote
+		boolean voteSuccess = session.addClientVote(ID, vote, voteNumber);
+		
+		System.out.println((voteSuccess ? "Vote Accepted" : "Vote Ignored"));
+		
 		byte[] returnPacket = {'V', 'R', (byte) voteNumber};
 		return returnPacket;
 	}
@@ -113,9 +121,9 @@ public class Controller {
 	 */
 	protected byte[] mediaPing(byte[] inFromClient) {
 		
+		// Dont reply to pings when no image is loaded
 		if (!session.hasImage()) {
-			byte[] temp = {'E'};
-			return temp;
+			return null;
 		}
 		
 		byte[] returnPacket = {'M', 'P', (byte) session.getCurrentImageID()};
@@ -139,15 +147,13 @@ public class Controller {
 		
 		try {
 			byte[] payload = session.getImagePacket(imageID, packetNumber);
-			
 			byte[] returnPacket = {(byte)'M', (byte)'R', (byte) imageID};
 			returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(packetNumber).array());
 			returnPacket = append(returnPacket, ByteBuffer.allocate(4).putInt(payload.length).array());
 			return append(returnPacket, payload);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			byte[] error = {'E'};
-			return error;
+			return null;
 		}
 	}
 	
@@ -164,8 +170,7 @@ public class Controller {
 		char c = (char) data[0];
 
 		if (c != 'R' || c != 'V' || c != 'M') {
-			byte[] temp = {'E'};
-			returnPacket = temp;
+			returnPacket = null;
 		}
 
 		switch (c) {
@@ -181,8 +186,7 @@ public class Controller {
 				} else if (data[1] == 'R') {
 					returnPacket = mediaRequest(data);
 				} else {
-					returnPacket = new byte[1];
-					returnPacket[0] = 'E';
+					returnPacket = null;
 				}
 				break;
 		}
@@ -243,3 +247,4 @@ public class Controller {
 	}
 	
 }
+	

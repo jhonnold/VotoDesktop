@@ -37,7 +37,7 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private HBox pics;
-	private Session s = new Session();
+	private Session s = new Session("test");
 	private File file;
 	private int picIndex = 0;
 	
@@ -203,7 +203,8 @@ public class VotoDesktopFX extends Application
 					txtScan = new Scanner(file);
 					while (txtScan.hasNext()) {
 						addPic(txtScan.nextLine());
-						s.currentQuestion.setAnswer(txtScan.nextLine());
+						//s.currentQuestion.setAnswer(txtScan.nextLine());
+            s.setCurrentQuestion(file.getPath(), "A");
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -285,7 +286,7 @@ public class VotoDesktopFX extends Application
 					    Button button = (Button) source;
 					    
 					    //Set correct answer
-					    s.currentQuestion.setAnswer(button.getText());
+					    s.getCurrentQuestion().setAnswer((button.getText()));
 					    rootHost.getChildren().remove(ansPane);
 					    
 					    //Add image to scrollpane
@@ -317,7 +318,7 @@ public class VotoDesktopFX extends Application
 	
 	@Override
 	public void run() {
-		s = new Session();		
+		s = new Session("test");		
 	}
 	
 	//main method
