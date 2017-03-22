@@ -131,4 +131,12 @@ public class Question {
 		return questionImg.get(packetNum - 1);
 	}
 	
+	/**
+	 * Returns the mapping of clients to their votes for the current question
+	 * @return HashMap of votes listing the clients who selected it
+	 */
+	public HashMap<Vote, ArrayList<Client>> getAnswerSet() {
+		return answerSet;
+	}
+	
 }
