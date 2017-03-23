@@ -94,6 +94,7 @@ public class HostScene extends Scene {
 		file = fc.showOpenDialog(null);
 		Scanner txtScan = null;
 		String filePath = null;
+		String answer = null;
 		
 		//Load picture if one was selected
 		if (file != null) {
@@ -101,8 +102,10 @@ public class HostScene extends Scene {
 				try {
 					txtScan = new Scanner(file);
 					while (txtScan.hasNext()) {
-						addPic(filePath = txtScan.nextLine());
-						s.setCurrentQuestion(filePath, txtScan.nextLine());
+						filePath = txtScan.nextLine();
+						answer = txtScan.nextLine();
+						addPic(filePath);
+						s.setCurrentQuestion(filePath, answer);
 						//s.setCurrentQuestion(file.getPath(), "A");
 					}
 				} catch (IOException e) {
