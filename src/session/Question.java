@@ -2,12 +2,10 @@ package session;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 
 public class Question {
 	
-	private Session currentSession;
 	private Vote answer;
 	private int imageID;
 	private HashMap<Vote, ArrayList<Client>> answerSet = new HashMap<Vote, ArrayList<Client>>();
@@ -20,10 +18,9 @@ public class Question {
 	 * @param img - image loaded with this question
 	 * @param imageID - image ID for image param
 	 */
-	public Question(Session s, ArrayList<byte[]> img, int imageID) {
+	public Question(ArrayList<byte[]> img, int imageID) {
 
 		questionImg = img;
-		currentSession = s;
 		this.imageID = imageID;
 		choices.put("A", new Vote("A"));
 		choices.put("B", new Vote("B"));
@@ -56,6 +53,10 @@ public class Question {
 	 */
 	public HashMap<Vote, ArrayList<Client>> getAnswerSet() {
 		return answerSet;
+	}
+	
+	public HashMap<String, Vote> getChoices() {
+		return choices;
 	}
 	
 	/**

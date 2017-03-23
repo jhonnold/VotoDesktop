@@ -7,7 +7,6 @@ import java.util.Random;
 import org.junit.*;
 
 import session.Client;
-import session.Question;
 import session.Session;
 import session.Vote;
 
@@ -215,7 +214,7 @@ public class SessionTest {
 		}
 	}
 
-	@org.junit.Test(timeout = 10000)
+	@org.junit.Test(timeout = 5000)
 	public void Test9() throws Throwable {
 
 		boolean error = false;
@@ -229,7 +228,7 @@ public class SessionTest {
 			s.addClient(name);
 			votes.put(name, new ArrayList<String>());
 		}
-		
+
 		for (int i = 0; i < 250; i++) {
 			s.setCurrentQuestion("testimage.jpg", "A");
 			for (String name : nameList) {
@@ -241,28 +240,109 @@ public class SessionTest {
 				votes.get(name).add(v);
 			}
 		}
-		
+
 		for (String name : nameList) {
 			int i = 0;
 			ArrayList<String> expectedVotes = votes.get(name);
 			for (Vote v : s.getClient(name).getClientVoteList()) {
-				
+
 				if (!v.getID().equals(expectedVotes.get(i++))) {
 					error = true;
 				}
-				
+
 			}
-			
+
 			if (i != expectedVotes.size() - 1) {
 				error = true;
 			}
-			
+
 		}
-		
+
 		if (error) {
 			Assert.fail("Vote history not properly returned");
 		}
+	}
+
+	@org.junit.Test(timeout = 10000)
+	public void Test10() throws Throwable {
+
+		boolean error = false;
+		String vote = "ABCDE";
+		Random rnd = new Random();
+		int voteNum = 0;
+
+		for (String name : nameList) {
+			s.addClient(name);
+		}
 		
+		
+		
+		for (int i = 0; i < 100; i++) {
+			
+			s.setCurrentQuestion("testimage.jpg", "A");
+			
+			int a = 0;
+			int b = 0;
+			int c = 0;
+			int d = 0;
+			int e = 0;
+
+			for (String name : nameList) {
+
+				int index = (int) (rnd.nextFloat() * vote.length());
+				String v = String.valueOf(vote.charAt(index));
+				s.addClientVote(name, v, voteNum++);
+
+				index = (int) (rnd.nextFloat() * vote.length());
+				v = String.valueOf(vote.charAt(index));
+				s.addClientVote(name, v, voteNum++);
+
+				index = (int) (rnd.nextFloat() * vote.length());
+				v = String.valueOf(vote.charAt(index));
+				s.addClientVote(name, v, voteNum++);
+				
+				switch (v) {
+					case "A":
+						a++;
+						break;
+					case "B":
+						b++;
+						break;
+					case "C":
+						c++;
+						break;
+					case "D":
+						d++;
+						break;
+					case "E":
+						e++;
+						break;
+				}
+			}
+			
+			HashMap<Vote, ArrayList<Client>> answers = s.getCurrentQuestion().getAnswerSet();
+			HashMap<String, Vote> choices = s.getCurrentQuestion().getChoices();
+			
+			if (a != answers.get(choices.get("A")).size()) {
+				error = true;
+			}
+			if (b != answers.get(choices.get("B")).size()) {
+				error = true;
+			}
+			if (c != answers.get(choices.get("C")).size()) {
+				error = true;
+			}
+			if (d != answers.get(choices.get("D")).size()) {
+				error = true;
+			}
+			if (e != answers.get(choices.get("E")).size()) {
+				error = true;
+			}
+		}
+		
+		if (error) {
+			Assert.fail("Failed");
+		}
 
 	}
 
