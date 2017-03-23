@@ -61,8 +61,6 @@ public class VotoDesktopFX extends Application
 		
 		joinButton.setPrefSize(84, 25);
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
-
-		
 		
 		//Add to stage
 		GridPane startPane = new GridPane();
@@ -74,7 +72,7 @@ public class VotoDesktopFX extends Application
 	    startPane.add(joinButton, 0, 2);
 	    startPane.add(setupButton, 0, 3);
 	     
-	    Scene scene = new Scene(startPane, 175, 175);
+	    Scene scene = new Scene(startPane, 275, 275);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.show();

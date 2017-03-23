@@ -3,16 +3,16 @@ package gui;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
+import javafx.application.Platform;
+import javafx.scene.control.TextArea;
 
 public class ConsoleOutput extends OutputStream {
 	
-	private final JTextArea output;
+	private final TextArea output;
 	private final StringBuilder sb = new StringBuilder();
 	private String title;
 	
-	public ConsoleOutput(final JTextArea out, String title) {
+	public ConsoleOutput(final TextArea out, String title) {
 		this.output = out;
 		this.title = title;
 		sb.append(title + "> ");
@@ -31,9 +31,9 @@ public class ConsoleOutput extends OutputStream {
 		
 		if (b == '\n') {
 			final String text = sb.toString() + "\n";
-			SwingUtilities.invokeLater(new Runnable() {
+			Platform.runLater(new Runnable() {
 				public void run() {
-					output.append(text);
+					output.appendText(text);
 				}
 			});
 			sb.setLength(0);

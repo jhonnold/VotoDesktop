@@ -3,6 +3,7 @@ package gui;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -36,7 +37,9 @@ public class HostScene extends Scene {
 	private Session s;
 	private File file;
 	private int picIndex = 0;
-
+	private TextArea consoleOutput = new TextArea();
+	
+	
 	public HostScene(Session se, double width, double height) {
 		super(rootHost, width, height);
 
@@ -61,12 +64,17 @@ public class HostScene extends Scene {
 			System.exit(1);
 		}
 		
+		ConsoleOutput co = new ConsoleOutput(consoleOutput, "Voto-Desktop");
+		
 		//Add elements to stage
 		hostGrid.add(open, 0, 1);
+		hostGrid.add(consoleOutput, 0, 2);
 		
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
 		rootHost.setBottom(picPane);
+		
+		System.setOut(new PrintStream(co));
 	}
 
 
