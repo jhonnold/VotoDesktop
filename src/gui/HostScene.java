@@ -119,7 +119,7 @@ public class HostScene extends Scene {
 
 
 	//GUI for setting answer for image
-	private void answerStage() {
+	/*private void answerStage() {
 		
 		//Instantiate new elements
 		VBox ansPane = new VBox();
@@ -153,7 +153,7 @@ public class HostScene extends Scene {
 				}
 			});
 		}
-	}
+	}*/
 
 	private void addPic(String filepath) {
 		ImageView iView = null;
@@ -183,7 +183,7 @@ public class HostScene extends Scene {
 			iView.setFitHeight(410);
 			iView.setFitWidth(400);
 			centerPic.getChildren().add(iView);
-			answerStage();
+			//answerStage();
 		}
 		else {
 			addImgToSP(iView);
