@@ -109,6 +109,7 @@ public class VotoDesktopFX extends Application
 		// Window menu
 		windowMenu = new Menu("Window");
 		consoleItem = new MenuItem("Console");
+		consoleItem.setOnAction(e -> new ConsoleStage());
 		windowMenu.getItems().addAll(consoleItem);
 		
 		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
@@ -159,7 +160,6 @@ public class VotoDesktopFX extends Application
 		p.hide();
 		p.setScene(new HostScene(s, 600, 525));
 		
-		new ConsoleStage();
 		
 		p.show();
 		
