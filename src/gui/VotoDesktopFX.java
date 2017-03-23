@@ -133,7 +133,7 @@ public class VotoDesktopFX extends Application
 		//exitItem.setOnAction(e -> new ConsoleStage());
 		//nextItem.setOnAction(e -> new ConsoleStage());
 		consoleItem.setOnAction(e -> new ConsoleStage());
-		//clientsItem.setOnAction(e -> new ClientsStage());
+		clientsItem.setOnAction(e -> new ClientStage(s));
 		//graphItem.setOnAction(e -> new GraphStage());
 		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
