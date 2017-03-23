@@ -180,8 +180,7 @@ public class VotoDesktopFX extends Application
 		hostStage.setTitle("Host Session");
 		hostStage.show();*/
 		
-		p.hide();
-		p.setScene(new HostScene(s, 600, 525));
+		p.setScene(new HostScene(s, 600, 200));
 		
 		p.show();
 		
@@ -253,7 +252,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		//p.setScene(new SetupScene(600, 525));
+		p.setScene(new SetupScene(600, 525));
 		p.show();
 	}
 	
