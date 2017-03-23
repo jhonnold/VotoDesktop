@@ -123,7 +123,7 @@ public class VotoDesktopFX extends Application
 		p.hide();
 		p.setScene(new HostScene(s, 600, 525));
 		
-		new ConsoleStage();
+		new ClientStage(s);
 		
 		p.show();
 		

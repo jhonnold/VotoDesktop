@@ -26,7 +26,7 @@ public class ConsoleStage extends Stage {
 		activeScene = new Scene(gp);
 		
 		setScene(activeScene);
-		setResizable(false);
+		setResizable(false);	
 		show();
 		
 		System.setOut(new PrintStream(co));

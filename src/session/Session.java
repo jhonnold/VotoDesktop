@@ -238,4 +238,8 @@ public class Session {
 	public boolean hasImage() {
 		return (currentQuestion != null);
 	}
+
+	public Iterable<Client> getClients() {
+		return clientList;
+	}
 }
