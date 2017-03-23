@@ -26,9 +26,13 @@ public class SetupScene extends Scene {
 	private int picIndex = 0;
 	private GridPane setupGrid;
 	private Button open, done;
+	private VotoDesktopFX voto;
+	private Stage primaryStage;
 	
-	public SetupScene(double width, double height) {
+	public SetupScene(double width, double height, VotoDesktopFX v, Stage p) {
 		super(rootSetup, width, height); 
+		voto = v;
+		primaryStage = p;
 		
 		picPane = new ScrollPane();
 		picPane.setMinHeight(120);
@@ -155,6 +159,7 @@ public class SetupScene extends Scene {
 		try {
 			output.flush();
 			output.close();
+			voto.start(primaryStage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

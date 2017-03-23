@@ -46,6 +46,8 @@ public class VotoDesktopFX extends Application
 	 */
 	@Override
 	public void start(Stage primaryStage) {
+		
+		primaryStage.hide();
 
 		//Instantiate elements
 		hostButton = new Button("Host Session");
@@ -192,7 +194,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		p.setScene(new SetupScene(600, 525));
+		p.setScene(new SetupScene(600, 525, this, p));
 		p.show();
 	}
 	
