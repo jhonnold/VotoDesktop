@@ -4,48 +4,26 @@ package gui;
  */
 import java.awt.Toolkit;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
-import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Scanner;
 
-import javax.imageio.ImageIO;
 import javafx.application.*;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.event.EventHandler;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.image.*;
 import javafx.stage.*;
 import javafx.geometry.*;
-import session.Question;
 import session.Session;
 
 
 public class VotoDesktopFX extends Application
 						   implements Runnable, ActionListener {
 	
-	private Stage hostStage, joinStage;
-	private Button hostButton, joinButton, setupButton, votingButtons[];
-	private GridPane hostGrid, joinGrid;
-	private BorderPane rootHost, rootJoin;
-	private FlowPane centerPic;
-	
-	private ScrollPane picPane;
-	private FileChooser fc;
-	private HBox pics;
+	private Button hostButton, joinButton, setupButton;
 	private Session s = new Session("test");
-	private File file;
-	private int picIndex = 0;
 	private String IP;
-	private MenuBar menu;
-	private Menu fileMenu, sessionMenu, windowMenu;
-	private MenuItem newItem, openItem, saveItem, exitItem;
-	private MenuItem nextItem;
-	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
+	private MenuBar menu = new VotoMenuBar(s);
+	private BorderPane root;
+	
 	
 	/**
 	 * Start GUI has host or join options
@@ -67,18 +45,15 @@ public class VotoDesktopFX extends Application
 		//Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
+		
 		joinButton = new Button("Join Session");
+		joinButton.setOnAction(e -> joinGUI(primaryStage));
 		
 		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-
-		joinButton.setOnAction(e -> joinGUI(primaryStage));
-
-		
 		
 		//Add to stage
-		BorderPane root = new BorderPane();
-		createMenu();
+		root = new BorderPane();
 		root.setTop(menu);
 		StackPane startPane = new StackPane();
 		FlowPane buttonPane = new FlowPane();
@@ -98,44 +73,6 @@ public class VotoDesktopFX extends Application
 	    primaryStage.setResizable(false);
 	    primaryStage.setTitle("VOTO - " + IP);
 	    primaryStage.show();
-	}
-	
-	public void createMenu() {
-		menu = new MenuBar();
-		
-		// File menu
-		fileMenu = new Menu("File");
-		newItem = new MenuItem("New");
-		openItem = new MenuItem("Open");
-		saveItem = new MenuItem("Save");
-		exitItem = new MenuItem("Exit");
-		fileMenu.getItems().addAll(newItem, openItem, saveItem, exitItem);
-		
-		// Session menu
-		sessionMenu = new Menu("Session");
-		nextItem = new MenuItem("Next");
-		sessionMenu.getItems().addAll(nextItem);
-		
-		// Window menu
-		windowMenu = new Menu("Window");
-		consoleItem = new MenuItem("Console");
-		clientsItem = new MenuItem("Clients");
-		graphItem = new MenuItem("Graph");
-		connectionItem = new MenuItem("Connection Info");
-		windowMenu.getItems().addAll(consoleItem, clientsItem, graphItem, connectionItem);
-		
-		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
-		
-		// Set menu item actions
-		//newItem.setOnAction(e -> new ConsoleStage());
-		//openItem.setOnAction(e -> new ConsoleStage());
-		//saveItem.setOnAction(e -> new ConsoleStage());
-		//exitItem.setOnAction(e -> new ConsoleStage());
-		//nextItem.setOnAction(e -> new ConsoleStage());
-		consoleItem.setOnAction(e -> new ConsoleStage());
-		clientsItem.setOnAction(e -> new ClientStage(s));
-		//graphItem.setOnAction(e -> new GraphStage());
-		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
 	
 	/**
@@ -179,9 +116,8 @@ public class VotoDesktopFX extends Application
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
 		hostStage.show();*/
-
-		p.setScene(new HostScene(s, 600, 200));
 		
+		p.setScene(new HostScene(s, 600, 200, menu));
 		p.show();
 		
 		//Start session
