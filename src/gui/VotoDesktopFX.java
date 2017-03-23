@@ -40,6 +40,7 @@ public class VotoDesktopFX extends Application
 	private Session s = null;
 	private File file;
 	private int picIndex = 0;
+	private String IP;
 	
 	/**
 	 * Start GUI has host or join options
@@ -48,6 +49,14 @@ public class VotoDesktopFX extends Application
 	public void start(Stage primaryStage) {
 		
 		primaryStage.hide();
+		
+		//Add IP address
+		try {
+			IP = InetAddress.getLocalHost().getHostAddress();
+		}
+		catch (UnknownHostException ue) {
+			System.exit(1);
+		}
 
 		//Instantiate elements
 		hostButton = new Button("Host Session");
@@ -56,25 +65,28 @@ public class VotoDesktopFX extends Application
 		
 		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-		//setupButton.setPrefSize(160, 25);
-
+				
 		
-		//joinButton.setPrefSize(84, 25);
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
 		
 		//Add to stage
-		GridPane startPane = new GridPane();
-		startPane.setPadding(new Insets(15, 25, 25,45));
-		startPane.setVgap(15);
+		StackPane startPane = new StackPane();
+		FlowPane buttonPane = new FlowPane();
+		startPane.setPadding(new Insets(100, 125, 125, 150));
+		
 	    
-	    startPane.add(new Label("VOTO"), 0, 0);
-		startPane.add(hostButton, 0, 1);	     
-	    startPane.add(joinButton, 0, 2);
-	    startPane.add(setupButton, 0, 3);
-	     
-	    Scene scene = new Scene(startPane, 275, 275);
+		buttonPane.getChildren().add(hostButton);
+		buttonPane.getChildren().add(joinButton);
+		buttonPane.getChildren().add(setupButton);
+		buttonPane.setHgap(30);
+		
+		startPane.getChildren().add(buttonPane);
+		
+		
+	    Scene scene = new Scene(startPane, 600, 200);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
+	    primaryStage.setTitle("VOTO - " + IP);
 	    primaryStage.show();
 	}
 	
