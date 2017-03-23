@@ -77,7 +77,7 @@ public class HostScene extends Scene {
 		
 		//Instantiate
 		fc = new FileChooser();
-		fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
+		//fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = 
                 new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
         fc.getExtensionFilters().add(extFilter);
