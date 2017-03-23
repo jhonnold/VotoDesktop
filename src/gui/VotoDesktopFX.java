@@ -127,7 +127,7 @@ public class VotoDesktopFX extends Application
 		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
 		
 		// Set menu item actions
-		//newItem.setOnAction(e -> new ConsoleStage());
+		newItem.setOnAction(e -> new SetupStage());
 		//openItem.setOnAction(e -> new ConsoleStage());
 		//saveItem.setOnAction(e -> new ConsoleStage());
 		//exitItem.setOnAction(e -> new ConsoleStage());
@@ -253,7 +253,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		//p.setScene(new SetupScene(600, 525));
+		p.setScene(new SetupScene(600, 525, this, p));
 		p.show();
 	}
 	
