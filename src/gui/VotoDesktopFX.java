@@ -37,7 +37,7 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private HBox pics;
-	private Session s = new Session("test");
+	private Session s = null;
 	private File file;
 	private int picIndex = 0;
 	
@@ -46,21 +46,21 @@ public class VotoDesktopFX extends Application
 	 */
 	@Override
 	public void start(Stage primaryStage) {
+		
+		primaryStage.hide();
 
 		//Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
 		joinButton = new Button("Join Session");
 		
-		setupButton = new Button("Setup");
+		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-		setupButton.setPrefSize(84, 25);
+		//setupButton.setPrefSize(160, 25);
 
 		
-		joinButton.setPrefSize(84, 25);
+		//joinButton.setPrefSize(84, 25);
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
-
-		
 		
 		//Add to stage
 		GridPane startPane = new GridPane();
@@ -72,7 +72,7 @@ public class VotoDesktopFX extends Application
 	    startPane.add(joinButton, 0, 2);
 	    startPane.add(setupButton, 0, 3);
 	     
-	    Scene scene = new Scene(startPane, 175, 175);
+	    Scene scene = new Scene(startPane, 275, 275);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.show();
@@ -125,17 +125,17 @@ public class VotoDesktopFX extends Application
 		p.show();
 		
 		//Start session
-		try {
+		/*try {
 			s.start();
 		} 
 		catch (SocketException se) {
 			se.printStackTrace();
-		}
+		}*/
 	
 		//Closes program and stops Session
 		p.setOnCloseRequest(e -> {
 			Platform.exit();
-			s.stop();
+			if (s != null) s.stop();
 			System.exit(0);
 		});
 	}
@@ -192,7 +192,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		p.setScene(new SetupScene(600, 525));
+		p.setScene(new SetupScene(600, 525, this, p));
 		p.show();
 	}
 	

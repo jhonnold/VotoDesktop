@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -26,9 +28,14 @@ public class SetupScene extends Scene {
 	private int picIndex = 0;
 	private GridPane setupGrid;
 	private Button open, done;
+	private VotoDesktopFX voto;
+	private Stage primaryStage;
+	private String fileName;
 	
-	public SetupScene(double width, double height) {
+	public SetupScene(double width, double height, VotoDesktopFX v, Stage p) {
 		super(rootSetup, width, height); 
+		voto = v;
+		primaryStage = p;
 		
 		picPane = new ScrollPane();
 		picPane.setMinHeight(120);
@@ -52,13 +59,29 @@ public class SetupScene extends Scene {
 		rootSetup.setCenter(centerPic);
 		rootSetup.setBottom(picPane);
 		
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setContentText("Please enter session name:");
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    fileName = result.get();
+		}
 		
 		try {
-			File outFile = new File("output.txt");
+			File outFile = new File(fileName+".voto");
 			output = new BufferedWriter(new FileWriter(outFile));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		
+		primaryStage.setOnCloseRequest(e -> {
+			Platform.exit();
+			try {
+				output.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			System.exit(0);
+		});
 	}
 	
 	private void  openFile() {
@@ -155,6 +178,7 @@ public class SetupScene extends Scene {
 		try {
 			output.flush();
 			output.close();
+			voto.start(primaryStage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

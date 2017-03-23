@@ -3,7 +3,9 @@ package gui;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -35,8 +37,11 @@ public class HostScene extends Scene {
 	private FileChooser fc;
 	private Session s;
 	private File file;
+	private Button next;
 	private int picIndex = 0;
-
+	private TextArea consoleOutput = new TextArea();
+	
+	
 	public HostScene(Session se, double width, double height) {
 		super(rootHost, width, height);
 
@@ -53,20 +58,27 @@ public class HostScene extends Scene {
 		open.setOnAction(e -> openFile()); // Add action listener to open file
 											// chooser
 		hostGrid = new GridPane();
-
-		// Add IP address
+		next = new Button("Begin");
+		next.setOnAction(e -> nextPic());
+		
+		//Add IP address
 		try {
 			hostGrid.add(new Label(InetAddress.getLocalHost().getHostAddress()), 0, 0);
 		} catch (UnknownHostException ue) {
 			System.exit(1);
 		}
-
-		// Add elements to stage
+		
+		ConsoleOutput co = new ConsoleOutput(consoleOutput, "Voto-Desktop");
+		
+		//Add elements to stage
 		hostGrid.add(open, 0, 1);
-
+		hostGrid.add(consoleOutput, 0, 3);
+		hostGrid.add(next, 0, 2);
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
 		rootHost.setBottom(picPane);
+		
+		System.setOut(new PrintStream(co));
 	}
 
 	/**
@@ -76,13 +88,17 @@ public class HostScene extends Scene {
 
 		// Instantiate
 		fc = new FileChooser();
+		//fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
+		FileChooser.ExtensionFilter extFilter = 
+                new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
+        fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
 		Scanner txtScan = null;
 		String filePath = null;
 
 		// Load picture if one was selected
 		if (file != null) {
-			if (file.getPath().endsWith(".txt")) {
+			if (file.getPath().endsWith(".voto")) {
 				try {
 					txtScan = new Scanner(file);
 					while (txtScan.hasNext()) {
@@ -159,7 +175,7 @@ public class HostScene extends Scene {
 			}*/
 
 		//open image to center
-		if (!file.getPath().endsWith(".txt")) {
+		if (!file.getPath().endsWith(".voto")) {
 			iView.setFitHeight(410);
 			iView.setFitWidth(400);
 			centerPic.getChildren().add(iView);
@@ -185,5 +201,20 @@ public class HostScene extends Scene {
 		iViewPrev.setFitWidth(100);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
+	}
+	
+	
+	private void nextPic() {
+		if (s == null) {
+			try {
+
+				s = new Session("test");
+				s.start();
+				next.setText("Next");
+			}
+			catch (SocketException se) {
+				se.printStackTrace();
+			}
+		}
 	}
 }
