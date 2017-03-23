@@ -42,12 +42,9 @@ public class VotoDesktopFX extends Application
 	private int picIndex = 0;
 	private MenuBar menu;
 	private Menu fileMenu, sessionMenu, windowMenu;
-	private MenuItem newItem;
-	private MenuItem openItem;
-	private MenuItem saveItem;
-	private MenuItem exitItem;
+	private MenuItem newItem, openItem, saveItem, exitItem;
 	private MenuItem nextItem;
-	private MenuItem consoleItem;
+	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
 	
 	/**
 	 * Start GUI has host or join options
@@ -96,9 +93,9 @@ public class VotoDesktopFX extends Application
 		// File menu
 		fileMenu = new Menu("File");
 		newItem = new MenuItem("New");
-		openItem = new MenuItem("New");
-		saveItem = new MenuItem("New");
-		exitItem = new MenuItem("New");
+		openItem = new MenuItem("Open");
+		saveItem = new MenuItem("Save");
+		exitItem = new MenuItem("Exit");
 		fileMenu.getItems().addAll(newItem, openItem, saveItem, exitItem);
 		
 		// Session menu
@@ -109,10 +106,23 @@ public class VotoDesktopFX extends Application
 		// Window menu
 		windowMenu = new Menu("Window");
 		consoleItem = new MenuItem("Console");
-		consoleItem.setOnAction(e -> new ConsoleStage());
-		windowMenu.getItems().addAll(consoleItem);
+		clientsItem = new MenuItem("Clients");
+		graphItem = new MenuItem("Graph");
+		connectionItem = new MenuItem("Connection Info");
+		windowMenu.getItems().addAll(consoleItem, clientsItem, graphItem, connectionItem);
 		
 		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
+		
+		// Set menu item actions
+		//newItem.setOnAction(e -> new ConsoleStage());
+		//openItem.setOnAction(e -> new ConsoleStage());
+		//saveItem.setOnAction(e -> new ConsoleStage());
+		//exitItem.setOnAction(e -> new ConsoleStage());
+		//nextItem.setOnAction(e -> new ConsoleStage());
+		consoleItem.setOnAction(e -> new ConsoleStage());
+		//clientsItem.setOnAction(e -> new ClientsStage());
+		//graphItem.setOnAction(e -> new GraphStage());
+		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
 	
 	/**
@@ -159,7 +169,6 @@ public class VotoDesktopFX extends Application
 		
 		p.hide();
 		p.setScene(new HostScene(s, 600, 525));
-		
 		
 		p.show();
 		
