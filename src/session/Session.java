@@ -70,7 +70,7 @@ public class Session {
 	public boolean setCurrentQuestion(String filename, String answer) {
 		
 		if (currentQuestion != null) {
-			
+			currentQuestion.endQuestion();
 			for (Client c : clientList) {
 				c.setLastVote(null);
 			}

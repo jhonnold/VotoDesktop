@@ -129,10 +129,8 @@ public class Question {
 	 */
 	public void endQuestion() {
 		// Set the last vote of every client to their final vote
-		for (Vote v : answerSet.keySet()) {
-			
+		for (Vote v : answerSet.keySet()) {	
 			for (Client c : answerSet.get(v)) {
-				
 				c.setAnswerVote(this, v);
 			}
 		}

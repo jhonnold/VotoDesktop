@@ -106,8 +106,7 @@ public class HostScene extends Scene {
 			answerStage();
 
 			try {
-				ArrayList<byte[]> qImg = s.loadImage(file.getPath());
-				s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+				s.setCurrentQuestion(file.getPath(), "A");
 				System.out.println("Loaded image size: " + s.getCurrentImageSize());
 				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
 			} catch (Exception e) {
@@ -143,7 +142,7 @@ public class HostScene extends Scene {
 					    Button button = (Button) source;
 					    
 					    //Set correct answer
-					    s.currentQuestion.setAnswer(button.getText());
+					    s.getCurrentQuestion().setAnswer(button.getText());
 					    rootHost.getChildren().remove(ansPane);
 					    
 					    //Add image to scrollpane
@@ -190,8 +189,9 @@ public class HostScene extends Scene {
 		}
 
 		try {
-			ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
-			s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+			//ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
+			//s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
+			s.setCurrentQuestion(currentFile.getPath(), "A");
 			System.out.println("Loaded image size: " + s.getCurrentImageSize());
 			System.out.println("Packet count: " + s.getCurrentImagePacketCount());
 		} catch (Exception e) {
