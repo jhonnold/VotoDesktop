@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 
@@ -41,114 +42,94 @@ public class HostScene extends Scene {
 
 		s = se;
 
-		//Instantiate new GUI elements
+		// Instantiate new GUI elements
 		picPane = new ScrollPane();
 		picPane.setMinHeight(120);
 		pics = new HBox();
 		picPane.setContent(pics);
 		centerPic = new FlowPane();
-		
+
 		Button open = new Button("Open File");
-		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
+		open.setOnAction(e -> openFile()); // Add action listener to open file
+											// chooser
 		hostGrid = new GridPane();
-		
-		//Add IP address
+
+		// Add IP address
 		try {
 			hostGrid.add(new Label(InetAddress.getLocalHost().getHostAddress()), 0, 0);
-		}
-		catch (UnknownHostException ue) {
+		} catch (UnknownHostException ue) {
 			System.exit(1);
 		}
-		
-		//Add elements to stage
+
+		// Add elements to stage
 		hostGrid.add(open, 0, 1);
-		
+
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
 		rootHost.setBottom(picPane);
 	}
 
-
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void  openFile() {
+	private void openFile() {
 
-		//Instantiate
+		// Instantiate
 		fc = new FileChooser();
-		File file = fc.showOpenDialog(null);
-		ImageView iView = null;
+		file = fc.showOpenDialog(null);
+		Scanner txtScan = null;
+		String filePath = null;
 
-		//Load picture if one was selected
+		// Load picture if one was selected
 		if (file != null) {
-			try {
-				//Instantiate image view from picture
-				BufferedImage bImage = ImageIO.read(file);
-				Image image = SwingFXUtils.toFXImage(bImage, null);
-				iView = new ImageView();
-				iView.setImage(image);
-
-			} catch (IOException e) {
-				System.exit(1);
-			}
-			//Add previous image view to scrollpane 
-			if (!centerPic.getChildren().isEmpty()) {
-				ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
-				iViewPrev.setFitHeight(100);
-				iViewPrev.setFitWidth(100);
-				pics.getChildren().add(iViewPrev);
-			}
-
-			//open image to center
-			iView.setFitHeight(410);
-			iView.setFitWidth(400);
-			centerPic.getChildren().add(iView);
-			answerStage();
-
-			try {
-				s.setCurrentQuestion(file.getPath(), "A");
-				System.out.println("Loaded image size: " + s.getCurrentImageSize());
-				System.out.println("Packet count: " + s.getCurrentImagePacketCount());
-			} catch (Exception e) {
-
-			}
-
-		}		
+			if (file.getPath().endsWith(".txt")) {
+				try {
+					txtScan = new Scanner(file);
+					while (txtScan.hasNext()) {
+						addPic(filePath = txtScan.nextLine());
+						s.setCurrentQuestion(filePath, txtScan.nextLine());
+						// s.setCurrentQuestion(file.getPath(), "A");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else
+				addPic(file.getAbsolutePath());
+		}
 	}
 
-
-	//GUI for setting answer for image
+	// GUI for setting answer for image
 	private void answerStage() {
-		
-		//Instantiate new elements
+
+		// Instantiate new elements
 		VBox ansPane = new VBox();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
-		//ansPane.hgap(10);
+		// ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
 		rootHost.setRight(ansPane);
-			
-		//Create buttons
+
+		// Create buttons
 		Button[] ansButton = new Button[5];
 		for (int index = 0; index < 5; index++) {
-			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
+			ansButton[index] = new Button(Character.toString((char) (0x0041 + index)));
 			ansButton[index].setMinSize(55, 25);
 			ansPane.getChildren().add(ansButton[index]);
-				
-			//Add correct answer to list
+
+			// Add correct answer to list
 			ansButton[index].setOnAction(e -> {
 				Object source = e.getSource();
 				if (source instanceof Button) {
-					    Button button = (Button) source;
-					    
-					    //Set correct answer
-					    s.getCurrentQuestion().setAnswer(button.getText());
-					    rootHost.getChildren().remove(ansPane);
-					    
-					    //Add image to scrollpane
-					    if (!centerPic.getChildren().isEmpty()) {
-					    	addImgToSP((ImageView) centerPic.getChildren().remove(0));
-					    }
+					Button button = (Button) source;
+
+					// Set correct answer
+					s.getCurrentQuestion().setAnswer(button.getText());
+					rootHost.getChildren().remove(ansPane);
+
+					// Add image to scrollpane
+					if (!centerPic.getChildren().isEmpty()) {
+						addImgToSP((ImageView) centerPic.getChildren().remove(0));
+					}
 				}
 			});
 		}
@@ -189,9 +170,8 @@ public class HostScene extends Scene {
 		}
 
 		try {
-			//ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
 			//s.currentQuestion = new Question(s, qImg, (int)(Math.random() * 20));
-			s.setCurrentQuestion(currentFile.getPath(), "A");
+			s.setCurrentQuestion(file.getPath(), "A");
 			System.out.println("Loaded image size: " + s.getCurrentImageSize());
 			System.out.println("Packet count: " + s.getCurrentImagePacketCount());
 		} catch (Exception e) {
@@ -203,7 +183,7 @@ public class HostScene extends Scene {
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setFitHeight(100);
 		iViewPrev.setFitWidth(100);
-		pics.getChildren().add(picIndex , iViewPrev);
+		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
 }

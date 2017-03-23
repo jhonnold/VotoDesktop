@@ -147,7 +147,6 @@ public class VotoDesktop implements Runnable, ActionListener {
 	
 	@Override
 	public void run() {
-		
 		s = new Session("test");		
 	}
 	

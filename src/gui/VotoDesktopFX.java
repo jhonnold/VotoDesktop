@@ -29,7 +29,7 @@ public class VotoDesktopFX extends Application
 						   implements Runnable, ActionListener {
 	
 	private Stage hostStage, joinStage;
-	private Button hostButton, joinButton, votingButtons[];
+	private Button hostButton, joinButton, setupButton, votingButtons[];
 	private GridPane hostGrid, joinGrid;
 	private BorderPane rootHost, rootJoin;
 	private FlowPane centerPic;
@@ -51,6 +51,10 @@ public class VotoDesktopFX extends Application
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
 		joinButton = new Button("Join Session");
+		
+		setupButton = new Button("Setup");
+		setupButton.setOnAction(e -> setupGUI(primaryStage));
+		setupButton.setPrefSize(84, 25);
 
 		
 		joinButton.setPrefSize(84, 25);
@@ -66,8 +70,9 @@ public class VotoDesktopFX extends Application
 	    startPane.add(new Label("VOTO"), 0, 0);
 		startPane.add(hostButton, 0, 1);	     
 	    startPane.add(joinButton, 0, 2);
+	    startPane.add(setupButton, 0, 3);
 	     
-	    Scene scene = new Scene(startPane, 175, 150);
+	    Scene scene = new Scene(startPane, 175, 175);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.show();
@@ -182,6 +187,12 @@ public class VotoDesktopFX extends Application
 		
 		p.hide();
 		p.setScene(new VoteScene(600, 400));
+		p.show();
+	}
+	
+	private void setupGUI(Stage p) {
+		p.hide();
+		p.setScene(new SetupScene(600, 525));
 		p.show();
 	}
 	
