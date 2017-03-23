@@ -37,7 +37,7 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private HBox pics;
-	private Session s = new Session("test");
+	private Session s = null;
 	private File file;
 	private int picIndex = 0;
 	
@@ -125,17 +125,17 @@ public class VotoDesktopFX extends Application
 		p.show();
 		
 		//Start session
-		try {
+		/*try {
 			s.start();
 		} 
 		catch (SocketException se) {
 			se.printStackTrace();
-		}
+		}*/
 	
 		//Closes program and stops Session
 		p.setOnCloseRequest(e -> {
 			Platform.exit();
-			s.stop();
+			if (s != null) s.stop();
 			System.exit(0);
 		});
 	}

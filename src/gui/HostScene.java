@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -36,6 +37,7 @@ public class HostScene extends Scene {
 	private FileChooser fc;
 	private Session s;
 	private File file;
+	private Button next;
 	private int picIndex = 0;
 	private TextArea consoleOutput = new TextArea();
 	
@@ -56,6 +58,9 @@ public class HostScene extends Scene {
 		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
 		hostGrid = new GridPane();
 		
+		next = new Button("Begin");
+		next.setOnAction(e -> nextPic());
+		
 		//Add IP address
 		try {
 			hostGrid.add(new Label(InetAddress.getLocalHost().getHostAddress()), 0, 0);
@@ -68,7 +73,8 @@ public class HostScene extends Scene {
 		
 		//Add elements to stage
 		hostGrid.add(open, 0, 1);
-		hostGrid.add(consoleOutput, 0, 2);
+		hostGrid.add(consoleOutput, 0, 3);
+		hostGrid.add(next, 0, 2);
 		
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
@@ -85,7 +91,7 @@ public class HostScene extends Scene {
 		
 		//Instantiate
 		fc = new FileChooser();
-		fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
+		//fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = 
                 new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
         fc.getExtensionFilters().add(extFilter);
@@ -201,5 +207,20 @@ public class HostScene extends Scene {
 		iViewPrev.setFitWidth(100);
 		pics.getChildren().add(picIndex , iViewPrev);
 		picIndex++;
+	}
+	
+	
+	private void nextPic() {
+		if (s == null) {
+			try {
+
+				s = new Session("test");
+				s.start();
+				next.setText("Next");
+			}
+			catch (SocketException se) {
+				se.printStackTrace();
+			}
+		}
 	}
 }
