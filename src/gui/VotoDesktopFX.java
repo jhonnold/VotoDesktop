@@ -56,7 +56,7 @@ public class VotoDesktopFX extends Application
 		
 		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-		setupButton.setPrefSize(160, 25);
+		//setupButton.setPrefSize(160, 25);
 
 		
 		//joinButton.setPrefSize(84, 25);
