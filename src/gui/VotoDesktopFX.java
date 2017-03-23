@@ -37,17 +37,22 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private HBox pics;
-	private Session s = null;
+	private Session s = new Session("test");
 	private File file;
 	private int picIndex = 0;
 	private String IP;
+	private MenuBar menu;
+	private Menu fileMenu, sessionMenu, windowMenu;
+	private MenuItem newItem, openItem, saveItem, exitItem;
+	private MenuItem nextItem;
+	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
 	
 	/**
 	 * Start GUI has host or join options
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-		
+	
 		primaryStage.hide();
 		
 		//Add IP address
@@ -58,6 +63,7 @@ public class VotoDesktopFX extends Application
 			System.exit(1);
 		}
 
+
 		//Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
@@ -65,14 +71,18 @@ public class VotoDesktopFX extends Application
 		
 		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-				
-		
+
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
+
+		
 		
 		//Add to stage
+		BorderPane root = new BorderPane();
+		createMenu();
+		root.setTop(menu);
 		StackPane startPane = new StackPane();
 		FlowPane buttonPane = new FlowPane();
-		startPane.setPadding(new Insets(100, 125, 125, 150));
+		startPane.setPadding(new Insets(75, 125, 125, 150));
 		
 	    
 		buttonPane.getChildren().add(hostButton);
@@ -81,13 +91,51 @@ public class VotoDesktopFX extends Application
 		buttonPane.setHgap(30);
 		
 		startPane.getChildren().add(buttonPane);
+		root.setCenter(startPane);
 		
-		
-	    Scene scene = new Scene(startPane, 600, 200);
+	    Scene scene = new Scene(root, 600, 200);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.setTitle("VOTO - " + IP);
 	    primaryStage.show();
+	}
+	
+	public void createMenu() {
+		menu = new MenuBar();
+		
+		// File menu
+		fileMenu = new Menu("File");
+		newItem = new MenuItem("New");
+		openItem = new MenuItem("Open");
+		saveItem = new MenuItem("Save");
+		exitItem = new MenuItem("Exit");
+		fileMenu.getItems().addAll(newItem, openItem, saveItem, exitItem);
+		
+		// Session menu
+		sessionMenu = new Menu("Session");
+		nextItem = new MenuItem("Next");
+		sessionMenu.getItems().addAll(nextItem);
+		
+		// Window menu
+		windowMenu = new Menu("Window");
+		consoleItem = new MenuItem("Console");
+		clientsItem = new MenuItem("Clients");
+		graphItem = new MenuItem("Graph");
+		connectionItem = new MenuItem("Connection Info");
+		windowMenu.getItems().addAll(consoleItem, clientsItem, graphItem, connectionItem);
+		
+		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
+		
+		// Set menu item actions
+		//newItem.setOnAction(e -> new ConsoleStage());
+		//openItem.setOnAction(e -> new ConsoleStage());
+		//saveItem.setOnAction(e -> new ConsoleStage());
+		//exitItem.setOnAction(e -> new ConsoleStage());
+		//nextItem.setOnAction(e -> new ConsoleStage());
+		consoleItem.setOnAction(e -> new ConsoleStage());
+		//clientsItem.setOnAction(e -> new ClientsStage());
+		//graphItem.setOnAction(e -> new GraphStage());
+		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
 	
 	/**
@@ -134,20 +182,21 @@ public class VotoDesktopFX extends Application
 		
 		p.hide();
 		p.setScene(new HostScene(s, 600, 525));
+		
 		p.show();
 		
 		//Start session
-		/*try {
+		try {
 			s.start();
 		} 
 		catch (SocketException se) {
 			se.printStackTrace();
-		}*/
+		}
 	
 		//Closes program and stops Session
 		p.setOnCloseRequest(e -> {
 			Platform.exit();
-			if (s != null) s.stop();
+			s.stop();
 			System.exit(0);
 		});
 	}
@@ -204,7 +253,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		p.setScene(new SetupScene(600, 525, this, p));
+		//p.setScene(new SetupScene(600, 525));
 		p.show();
 	}
 	
