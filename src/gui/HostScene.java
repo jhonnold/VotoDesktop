@@ -33,13 +33,18 @@ public class HostScene extends Scene {
 	private ScrollPane picPane;
 	private HBox pics;
 	private FlowPane centerPic;
-	private GridPane hostGrid;
 	private FileChooser fc;
 	private Session s;
 	private File file;
 	private Button next;
 	private int picIndex = 0;
 	private TextArea consoleOutput = new TextArea();
+	
+	private MenuBar menu;
+	private Menu fileMenu, sessionMenu, windowMenu;
+	private MenuItem newItem, openItem, saveItem, exitItem;
+	private MenuItem nextItem;
+	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
 	
 	
 	public HostScene(Session se, double width, double height) {
@@ -49,34 +54,34 @@ public class HostScene extends Scene {
 
 		//Instantiate new GUI elements
 		picPane = new ScrollPane();
-		picPane.setMinHeight(200);
+		//picPane.setMinHeight(200);
 		pics = new HBox();
 		picPane.setContent(pics);
-		centerPic = new FlowPane();
 		
-		Button open = new Button("Open File");
-		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
-		hostGrid = new GridPane();
+		//Button open = new Button("Open File");
+		//open.setOnAction(e -> openFile());	//Add action listener to open file chooser
 		
-		next = new Button("Begin");
-		next.setOnAction(e -> nextPic());
+		//next = new Button("Begin");
+		//next.setOnAction(e -> nextPic());
 		
 		//Add IP address
-		try {
+		/*try {
 			hostGrid.add(new Label(InetAddress.getLocalHost().getHostAddress()), 0, 0);
 		}
 		catch (UnknownHostException ue) {
 			System.exit(1);
-		}
+		}*/
 		
 		//Add elements to stage
-		hostGrid.add(open, 0, 1);
+		/*hostGrid.add(open, 0, 1);
 		hostGrid.add(consoleOutput, 0, 3);
-		hostGrid.add(next, 0, 2);
+		hostGrid.add(next, 0, 2);*/
 		
-		rootHost.setLeft(hostGrid);
-		rootHost.setCenter(centerPic);
-		rootHost.setBottom(picPane);
+		/*rootHost.setLeft(hostGrid);
+		rootHost.setCenter(centerPic);*/
+		createMenu();
+		rootHost.setTop(menu);
+		rootHost.setCenter(picPane);
 	}
 
 
@@ -117,44 +122,6 @@ public class HostScene extends Scene {
 		}		
 	}
 
-
-	//GUI for setting answer for image
-	/*private void answerStage() {
-		
-		//Instantiate new elements
-		VBox ansPane = new VBox();
-		ansPane.setPadding(new Insets(0, 7, 7, 7));
-		ansPane.getChildren().add(new Label("Set Correct Answer"));
-		//ansPane.hgap(10);
-		ansPane.setAlignment(Pos.CENTER);
-		rootHost.setRight(ansPane);
-			
-		//Create buttons
-		Button[] ansButton = new Button[5];
-		for (int index = 0; index < 5; index++) {
-			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
-			ansButton[index].setMinSize(55, 25);
-			ansPane.getChildren().add(ansButton[index]);
-				
-			//Add correct answer to list
-			ansButton[index].setOnAction(e -> {
-				Object source = e.getSource();
-				if (source instanceof Button) {
-					    Button button = (Button) source;
-					    
-					    //Set correct answer
-					    s.getCurrentQuestion().setAnswer(button.getText());
-					    rootHost.getChildren().remove(ansPane);
-					    
-					    //Add image to scrollpane
-					    if (!centerPic.getChildren().isEmpty()) {
-					    	addImgToSP((ImageView) centerPic.getChildren().remove(0));
-					    }
-				}
-			});
-		}
-	}*/
-
 	private void addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
@@ -169,25 +136,8 @@ public class HostScene extends Scene {
 			System.exit(1);
 		}
 
+		addImgToSP(iView);
 
-		//Add previous image view to scrollpane 
-		/*if (!centerPic.getChildren().isEmpty()) {
-				ImageView iViewPrev = (ImageView) centerPic.getChildren().remove(0);
-				iViewPrev.setFitHeight(100);
-				iViewPrev.setFitWidth(100);
-				pics.getChildren().add(iViewPrev);
-			}*/
-
-		//open image to center
-		if (!file.getPath().endsWith(".voto")) {
-			iView.setFitHeight(410);
-			iView.setFitWidth(400);
-			centerPic.getChildren().add(iView);
-			//answerStage();
-		}
-		else {
-			addImgToSP(iView);
-		}
 
 		try {
 			ArrayList<byte[]> qImg = s.loadImage(currentFile.getPath());
@@ -203,8 +153,7 @@ public class HostScene extends Scene {
 
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(180);
-		//iViewPrev.setFitWidth(100);
+		iViewPrev.setFitHeight(165);
 		pics.getChildren().add(picIndex , iViewPrev);
 		picIndex++;
 	}
@@ -222,5 +171,43 @@ public class HostScene extends Scene {
 				se.printStackTrace();
 			}
 		}
+	}
+	
+	public void createMenu() {
+		menu = new MenuBar();
+		
+		// File menu
+		fileMenu = new Menu("File");
+		newItem = new MenuItem("New");
+		openItem = new MenuItem("Open");
+		saveItem = new MenuItem("Save");
+		exitItem = new MenuItem("Exit");
+		fileMenu.getItems().addAll(newItem, openItem, saveItem, exitItem);
+		
+		// Session menu
+		sessionMenu = new Menu("Session");
+		nextItem = new MenuItem("Next");
+		sessionMenu.getItems().addAll(nextItem);
+		
+		// Window menu
+		windowMenu = new Menu("Window");
+		consoleItem = new MenuItem("Console");
+		clientsItem = new MenuItem("Clients");
+		graphItem = new MenuItem("Graph");
+		connectionItem = new MenuItem("Connection Info");
+		windowMenu.getItems().addAll(consoleItem, clientsItem, graphItem, connectionItem);
+		
+		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
+		
+		// Set menu item actions
+		//newItem.setOnAction(e -> new ConsoleStage());
+		openItem.setOnAction(e -> openFile());
+		//saveItem.setOnAction(e -> new ConsoleStage());
+		//exitItem.setOnAction(e -> new ConsoleStage());
+		//nextItem.setOnAction(e -> new ConsoleStage());
+		consoleItem.setOnAction(e -> new ConsoleStage());
+		clientsItem.setOnAction(e -> new ClientStage(s));
+		//graphItem.setOnAction(e -> new GraphStage());
+		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
 }
