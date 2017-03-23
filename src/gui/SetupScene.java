@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -28,6 +30,7 @@ public class SetupScene extends Scene {
 	private Button open, done;
 	private VotoDesktopFX voto;
 	private Stage primaryStage;
+	private String fileName;
 	
 	public SetupScene(double width, double height, VotoDesktopFX v, Stage p) {
 		super(rootSetup, width, height); 
@@ -56,13 +59,29 @@ public class SetupScene extends Scene {
 		rootSetup.setCenter(centerPic);
 		rootSetup.setBottom(picPane);
 		
+		TextInputDialog dialog = new TextInputDialog();
+		dialog.setContentText("Please enter session name:");
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+		    fileName = result.get();
+		}
 		
 		try {
-			File outFile = new File("output.txt");
+			File outFile = new File(fileName+".voto");
 			output = new BufferedWriter(new FileWriter(outFile));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		
+		primaryStage.setOnCloseRequest(e -> {
+			Platform.exit();
+			try {
+				output.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			System.exit(0);
+		});
 	}
 	
 	private void  openFile() {
