@@ -32,10 +32,9 @@ public class SetupScene extends Scene {
 	private Stage primaryStage;
 	private String fileName;
 	
-	public SetupScene(double width, double height, VotoDesktopFX v, Stage p) {
+	public SetupScene(double width, double height) {
 		super(rootSetup, width, height); 
-		voto = v;
-		primaryStage = p;
+		
 		
 		picPane = new ScrollPane();
 		picPane.setMinHeight(120);
@@ -73,15 +72,6 @@ public class SetupScene extends Scene {
 			e1.printStackTrace();
 		}
 		
-		primaryStage.setOnCloseRequest(e -> {
-			Platform.exit();
-			try {
-				output.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			System.exit(0);
-		});
 	}
 	
 	private void  openFile() {
@@ -170,7 +160,7 @@ public class SetupScene extends Scene {
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setFitHeight(100);
 		iViewPrev.setFitWidth(100);
-		pics.getChildren().add(picIndex  , iViewPrev);
+		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
 	
@@ -178,7 +168,6 @@ public class SetupScene extends Scene {
 		try {
 			output.flush();
 			output.close();
-			voto.start(primaryStage);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

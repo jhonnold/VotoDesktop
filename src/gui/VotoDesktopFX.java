@@ -133,7 +133,7 @@ public class VotoDesktopFX extends Application
 		//exitItem.setOnAction(e -> new ConsoleStage());
 		//nextItem.setOnAction(e -> new ConsoleStage());
 		consoleItem.setOnAction(e -> new ConsoleStage());
-		//clientsItem.setOnAction(e -> new ClientsStage());
+		clientsItem.setOnAction(e -> new ClientStage(s));
 		//graphItem.setOnAction(e -> new GraphStage());
 		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
@@ -179,9 +179,8 @@ public class VotoDesktopFX extends Application
 		hostStage.setScene(scene);
 		hostStage.setTitle("Host Session");
 		hostStage.show();*/
-		
-		p.hide();
-		p.setScene(new HostScene(s, 600, 525));
+
+		p.setScene(new HostScene(s, 600, 200));
 		
 		p.show();
 		
@@ -253,7 +252,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		p.setScene(new SetupScene(600, 525, this, p));
+		p.setScene(new SetupScene(600, 525));
 		p.show();
 	}
 	

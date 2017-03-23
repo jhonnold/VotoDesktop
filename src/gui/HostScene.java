@@ -49,7 +49,7 @@ public class HostScene extends Scene {
 
 		//Instantiate new GUI elements
 		picPane = new ScrollPane();
-		picPane.setMinHeight(120);
+		picPane.setMinHeight(200);
 		pics = new HBox();
 		picPane.setContent(pics);
 		centerPic = new FlowPane();
@@ -119,7 +119,7 @@ public class HostScene extends Scene {
 
 
 	//GUI for setting answer for image
-	private void answerStage() {
+	/*private void answerStage() {
 		
 		//Instantiate new elements
 		VBox ansPane = new VBox();
@@ -153,7 +153,7 @@ public class HostScene extends Scene {
 				}
 			});
 		}
-	}
+	}*/
 
 	private void addPic(String filepath) {
 		ImageView iView = null;
@@ -183,7 +183,7 @@ public class HostScene extends Scene {
 			iView.setFitHeight(410);
 			iView.setFitWidth(400);
 			centerPic.getChildren().add(iView);
-			answerStage();
+			//answerStage();
 		}
 		else {
 			addImgToSP(iView);
@@ -202,8 +202,9 @@ public class HostScene extends Scene {
 	}
 
 	private void addImgToSP(ImageView iViewPrev) {
-		iViewPrev.setFitHeight(100);
-		iViewPrev.setFitWidth(100);
+		iViewPrev.setPreserveRatio(true);
+		iViewPrev.setFitHeight(180);
+		//iViewPrev.setFitWidth(100);
 		pics.getChildren().add(picIndex , iViewPrev);
 		picIndex++;
 	}
