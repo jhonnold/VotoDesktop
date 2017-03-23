@@ -69,8 +69,6 @@ public class HostScene extends Scene {
 			System.exit(1);
 		}
 		
-		ConsoleOutput co = new ConsoleOutput(consoleOutput, "Voto-Desktop");
-		
 		//Add elements to stage
 		hostGrid.add(open, 0, 1);
 		hostGrid.add(consoleOutput, 0, 3);
@@ -79,8 +77,6 @@ public class HostScene extends Scene {
 		rootHost.setLeft(hostGrid);
 		rootHost.setCenter(centerPic);
 		rootHost.setBottom(picPane);
-		
-		System.setOut(new PrintStream(co));
 	}
 
 

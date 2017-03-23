@@ -37,7 +37,7 @@ public class VotoDesktopFX extends Application
 	private ScrollPane picPane;
 	private FileChooser fc;
 	private HBox pics;
-	private Session s = null;
+	private Session s = new Session("test");
 	private File file;
 	private int picIndex = 0;
 	
@@ -46,21 +46,21 @@ public class VotoDesktopFX extends Application
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-		
-		primaryStage.hide();
 
 		//Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> hostGUI(primaryStage));
 		joinButton = new Button("Join Session");
 		
-		setupButton = new Button("Setup Session");
+		setupButton = new Button("Setup");
 		setupButton.setOnAction(e -> setupGUI(primaryStage));
-		//setupButton.setPrefSize(160, 25);
+		setupButton.setPrefSize(84, 25);
 
 		
-		//joinButton.setPrefSize(84, 25);
+		joinButton.setPrefSize(84, 25);
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
+
+		
 		
 		//Add to stage
 		GridPane startPane = new GridPane();
@@ -72,7 +72,7 @@ public class VotoDesktopFX extends Application
 	    startPane.add(joinButton, 0, 2);
 	    startPane.add(setupButton, 0, 3);
 	     
-	    Scene scene = new Scene(startPane, 275, 275);
+	    Scene scene = new Scene(startPane, 175, 175);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.show();
@@ -122,20 +122,23 @@ public class VotoDesktopFX extends Application
 		
 		p.hide();
 		p.setScene(new HostScene(s, 600, 525));
+		
+		new ConsoleStage();
+		
 		p.show();
 		
 		//Start session
-		/*try {
+		try {
 			s.start();
 		} 
 		catch (SocketException se) {
 			se.printStackTrace();
-		}*/
+		}
 	
 		//Closes program and stops Session
 		p.setOnCloseRequest(e -> {
 			Platform.exit();
-			if (s != null) s.stop();
+			s.stop();
 			System.exit(0);
 		});
 	}
@@ -192,7 +195,7 @@ public class VotoDesktopFX extends Application
 	
 	private void setupGUI(Stage p) {
 		p.hide();
-		p.setScene(new SetupScene(600, 525, this, p));
+		//p.setScene(new SetupScene(600, 525));
 		p.show();
 	}
 	
