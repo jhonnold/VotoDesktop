@@ -40,6 +40,14 @@ public class VotoDesktopFX extends Application
 	private Session s = null;
 	private File file;
 	private int picIndex = 0;
+	private MenuBar menu;
+	private Menu fileMenu, sessionMenu, windowMenu;
+	private MenuItem newItem;
+	private MenuItem openItem;
+	private MenuItem saveItem;
+	private MenuItem exitItem;
+	private MenuItem nextItem;
+	private MenuItem consoleItem;
 	
 	/**
 	 * Start GUI has host or join options
@@ -66,16 +74,44 @@ public class VotoDesktopFX extends Application
 		GridPane startPane = new GridPane();
 		startPane.setPadding(new Insets(15, 25, 25,45));
 		startPane.setVgap(15);
-	    
-	    startPane.add(new Label("VOTO"), 0, 0);
+		
+		createMenu();
+	    BorderPane root = new BorderPane();
+	    root.setTop(menu);
+		
 		startPane.add(hostButton, 0, 1);	     
 	    startPane.add(joinButton, 0, 2);
 	    startPane.add(setupButton, 0, 3);
+	    root.setCenter(startPane);
 	     
-	    Scene scene = new Scene(startPane, 275, 275);
+	    Scene scene = new Scene(root, 275, 275);
 	    primaryStage.setScene(scene);
 	    primaryStage.setResizable(false);
 	    primaryStage.show();
+	}
+	
+	public void createMenu() {
+		menu = new MenuBar();
+		
+		// File menu
+		fileMenu = new Menu("File");
+		newItem = new MenuItem("New");
+		openItem = new MenuItem("New");
+		saveItem = new MenuItem("New");
+		exitItem = new MenuItem("New");
+		fileMenu.getItems().addAll(newItem, openItem, saveItem, exitItem);
+		
+		// Session menu
+		sessionMenu = new Menu("Session");
+		nextItem = new MenuItem("Next");
+		sessionMenu.getItems().addAll(nextItem);
+		
+		// Window menu
+		windowMenu = new Menu("Window");
+		consoleItem = new MenuItem("Console");
+		windowMenu.getItems().addAll(consoleItem);
+		
+		menu.getMenus().addAll(fileMenu, sessionMenu, windowMenu);
 	}
 	
 	/**
