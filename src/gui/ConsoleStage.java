@@ -16,17 +16,21 @@ public class ConsoleStage extends Stage {
 	private Scene activeScene;
 	private TextArea consoleOutput = new TextArea();
 	private VotoMenuBar parent;
-	
-	public ConsoleStage(VotoMenuBar mb) {
+	/**
+	 * Constructor that creates a 50/15 consolestage
+	 * @param parent The menubar who enabled the console
+	 */
+	public ConsoleStage(VotoMenuBar parent) {
 		super();
 		
-		setTitle("Voto - Console");
+		this.parent = parent;
 		
-		mb.greyOutConsole();
+		setTitle("Voto - Console");
 		
 		consoleOutput.setPrefColumnCount(50);
 		consoleOutput.setPrefRowCount(15);
 		ConsoleOutput co = new ConsoleOutput(consoleOutput, "Voto-Desktop");
+		System.setOut(new PrintStream(co));
 		
 		GridPane gp = new GridPane();
 		gp.add(consoleOutput,  0,  0);
@@ -34,18 +38,11 @@ public class ConsoleStage extends Stage {
 		
 		setScene(activeScene);
 		setResizable(false);	
-		sizeToScene();
+		sizeToScene(); //pack()
 		show();
-		
-		System.setOut(new PrintStream(co));
-	}	
 	
-	@Override
-	public void stop() {
-		
-		parent.enableConsole();
-		super.close();
-		
+		// On close reenable the close buttton in the menubar
+		setOnCloseRequest(e -> parent.enableConsole());
 	}
 	
 }

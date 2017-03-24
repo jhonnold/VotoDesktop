@@ -59,6 +59,8 @@ public class SetupScene extends Scene {
 		rootSetup.setBottom(picPane);
 		
 		TextInputDialog dialog = new TextInputDialog();
+		dialog.setHeaderText(null);
+		dialog.setTitle("New Session");
 		dialog.setContentText("Please enter session name:");
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){

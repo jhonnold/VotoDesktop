@@ -8,10 +8,12 @@ import javafx.scene.control.TextArea;
 
 public class ConsoleOutput extends OutputStream {
 	
+	//TextArea is the text box, StringBuilder is to build the input
 	private final TextArea output;
 	private final StringBuilder sb = new StringBuilder();
 	private String title;
 	
+	//Get textarea pointer and title
 	public ConsoleOutput(final TextArea out, String title) {
 		this.output = out;
 		this.title = title;
@@ -24,6 +26,10 @@ public class ConsoleOutput extends OutputStream {
 	@Override
 	public void close() {}
 	
+	/**
+	 * Writes out to the text area
+	 */
+	@Override
 	public void write(int b) throws IOException {
 		/*if (b == '\r') {
 			return;
