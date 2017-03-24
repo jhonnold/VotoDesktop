@@ -56,5 +56,9 @@ public class VotoMenuBar extends MenuBar {
 		openItem.setOnAction(value);
 		
 	}
+	
+	public void setNext(EventHandler<ActionEvent> value) {
+		nextItem.setOnAction(value);
+	}
 		
 }

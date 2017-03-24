@@ -3,6 +3,7 @@ package gui;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -30,12 +31,17 @@ public class HostScene extends Scene {
 	private Button next;
 	private int picIndex = 0;
 	private MenuBar mb;
+	private ArrayList<String> questions;
+	private int questionIndex = 0;
 	
 	public HostScene(Session se, double width, double height, VotoMenuBar mb) {
 		super(rootHost, width, height);
 		
+		questions = new ArrayList<>();
+		
 		this.mb = mb;
 		mb.setOpenFile(e -> openFile());
+		mb.setNext(e -> nextQuestion());
 		
 		s = se;
 
@@ -71,7 +77,8 @@ public class HostScene extends Scene {
 						filePath = txtScan.nextLine();
 						answer = txtScan.nextLine();
 						addPic(filePath);
-						s.setCurrentQuestion(filePath, answer);
+						questions.add(filePath);
+						questions.add(answer);
 						//s.setCurrentQuestion(file.getPath(), "A");
 					}
 				} catch (IOException e) {
@@ -104,6 +111,11 @@ public class HostScene extends Scene {
 		iViewPrev.setFitHeight(160);
 		pics.getChildren().add(picIndex , iViewPrev);
 		picIndex++;
+	}
+	
+	private void nextQuestion() {
+		s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex) );
+		questionIndex++;
 	}
 	
 }
