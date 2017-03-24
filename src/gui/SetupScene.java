@@ -26,11 +26,14 @@ public class SetupScene extends Scene {
 	private HBox pics;
 	private FlowPane centerPic;
 	private int picIndex = 0;
-	private GridPane setupGrid;
 	private Button open, done;
-	private VotoDesktopFX voto;
-	private Stage primaryStage;
 	private String fileName;
+	private boolean buttonDisabled = true;
+	Button[] ansButton;
+	
+	private Menu fileMenu;
+	private MenuBar menuBar;
+	private MenuItem newItem, openItem, saveItem, exitItem;
 	
 	public SetupScene(double width, double height) {
 		super(rootSetup, width, height); 
@@ -40,23 +43,24 @@ public class SetupScene extends Scene {
 		picPane.setMinHeight(120);
 		pics = new HBox();
 		picPane.setContent(pics);
-		centerPic = new FlowPane();
-		setupGrid = new GridPane();
+		//centerPic = new FlowPane();
+		rootSetup.setCenter(picPane);
+		answerPane();
+		addMenu();
 		
-		
-		open = new Button("Open File");
+		/*open = new Button("Open File");
 		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
 		done = new Button("Finish");
 		done.setOnAction(e -> close());
-		done.setPrefSize(67, 25);
+		done.setPrefSize(67, 25);*/
 		
 		//Add elements to stage
-		setupGrid.add(open, 0, 0);
+		/*setupGrid.add(open, 0, 0);
 		setupGrid.add(done, 0, 1);
 				
 		rootSetup.setLeft(setupGrid);
 		rootSetup.setCenter(centerPic);
-		rootSetup.setBottom(picPane);
+		rootSetup.setBottom(picPane);*/
 		
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setHeaderText(null);
@@ -90,6 +94,14 @@ public class SetupScene extends Scene {
 				addPic(filePath);
 				output.write(filePath);
 				output.newLine();
+								
+				//enable buttons
+				buttonDisabled = false;
+				for (Button b : ansButton) {
+					b.setDisable(false);
+				}
+				openItem.setDisable(true);
+				saveItem.setDisable(true);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -109,16 +121,11 @@ public class SetupScene extends Scene {
 		} catch (IOException e) {
 			System.exit(1);
 		}
-
-		//open image to center
-			iView.setFitHeight(410);
-			iView.setFitWidth(400);
-			centerPic.getChildren().add(iView);
-			answerStage();
+		addImgToSP(iView);
 	}
 	
 	//GUI for setting answer for image
-	private void answerStage() {
+	private void answerPane() {
 			
 		//Instantiate new elements
 		VBox ansPane = new VBox();
@@ -126,13 +133,14 @@ public class SetupScene extends Scene {
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
 		//ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		rootSetup.setRight(ansPane);
+		rootSetup.setLeft(ansPane);
 			
 		//Create buttons
-		Button[] ansButton = new Button[5];
+		ansButton = new Button[5];
 		for (int index = 0; index < 5; index++) {
 			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
 			ansButton[index].setMinSize(55, 25);
+			ansButton[index].setDisable(true);
 			ansPane.getChildren().add(ansButton[index]);
 					
 			//Add correct answer to list
@@ -148,25 +156,45 @@ public class SetupScene extends Scene {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-					    rootSetup.getChildren().remove(ansPane);
-						    
-						//Add image to scrollpane
-						if (!centerPic.getChildren().isEmpty()) {
-						 	addImgToSP((ImageView) centerPic.getChildren().remove(0));
+					    
+					    //disable buttons
+					    for (Button b : ansButton) {
+							b.setDisable(true);
 						}
+					    buttonDisabled = true;
+					    openItem.setDisable(false);
+					    saveItem.setDisable(false);
 				}
 			});
 		}
 	}
 	
+	private void addMenu() {
+		menuBar = new MenuBar();
+		fileMenu = new Menu("File");
+		fileMenu = new Menu("File");
+		openItem = new MenuItem("Open");
+		saveItem = new MenuItem("Save");
+		exitItem = new MenuItem("Exit");
+		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
+		
+		menuBar.getMenus().addAll(fileMenu);
+		rootSetup.setTop(menuBar);
+		
+		// Set menu item actions
+		openItem.setOnAction(e -> openFile());
+		saveItem.setOnAction(e -> saveFile());
+		//exitItem.setOnAction(e -> new ConsoleStage());
+	}
+	
 	private void addImgToSP(ImageView iViewPrev) {
-		iViewPrev.setFitHeight(100);
-		iViewPrev.setFitWidth(100);
+		iViewPrev.setPreserveRatio(true);
+		iViewPrev.setFitHeight(160);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
 	
-	private void close() {
+	private void saveFile() {
 		try {
 			output.flush();
 			output.close();
