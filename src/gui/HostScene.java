@@ -23,6 +23,7 @@ import session.*;
 public class HostScene extends Scene {
 
 	private static BorderPane rootHost = new BorderPane();
+	private static Pane pane = new Pane();
 	private ScrollPane picPane;
 	private HBox pics;
 	private FileChooser fc;
@@ -33,27 +34,48 @@ public class HostScene extends Scene {
 	private MenuBar mb;
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
-	
+
 	public HostScene(Session se, double width, double height, VotoMenuBar mb) {
-		super(rootHost, width, height);
+		super(pane, width, height);
+		
+		rootHost.setPrefHeight(height);
+		rootHost.setPrefWidth(width);
 		
 		questions = new ArrayList<>();
 		this.mb = mb;
+
 		mb.setOpenFile(e -> openFile());
 		mb.setNext(e -> nextQuestion());
-		
+
 		s = se;
 
 		// Instantiate new GUI elements
 		picPane = new ScrollPane();
-		//picPane.setMinHeight(200);
+		// picPane.setMinHeight(200);
 		pics = new HBox();
+		pics.setPrefHeight(160);
 		picPane.setContent(pics);
-		
 
 		openFile();
+
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
+		
+		pane.getChildren().add(rootHost);
+		
+		Button next = new Button("Next");
+		next.setPrefHeight(25);
+		next.setPrefWidth(50);
+		next.setOnAction(e -> nextQuestion());
+		next.setLayoutX(width - next.getPrefWidth() - 30);
+		next.setLayoutY(height - next.getPrefHeight() - 30);
+		
+		pane.getChildren().add(next);
+		
+		for (int i = 0; i < questions.size(); i+=2) {
+			addPic(questions.get(i));
+		}
+		
 	}
 
 	/**
@@ -63,38 +85,36 @@ public class HostScene extends Scene {
 
 		// Instantiate
 		fc = new FileChooser();
-		//fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
-		FileChooser.ExtensionFilter extFilter = 
-                new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
-        fc.getExtensionFilters().add(extFilter);
+		// fc.setInitialDirectory(new File(System.getProperty("user.home") +
+		// ".voto-desktop"));
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
+		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
+		
 		Scanner txtScan = null;
 		String filePath = null;
 		String answer = null;
-		if (file != null) {
-			if (file.getPath().endsWith(".voto")) {
-				try {
-					txtScan = new Scanner(file);
-					while (txtScan.hasNext()) {
-						filePath = txtScan.nextLine();
-						answer = txtScan.nextLine();
-						addPic(filePath);
-						if (questionIndex == 0) {
-							s.setCurrentQuestion(filePath, answer);
-							questionIndex += 2;
-							questions.add(filePath);
-							questions.add(answer);
-						}
-						else {				
-							questions.add(filePath);
-							questions.add(answer);
-						}
+		
+		if (file.getPath().endsWith(".voto")) {
+			try {
+				txtScan = new Scanner(file);
+				while (txtScan.hasNext()) {
+					filePath = txtScan.nextLine();
+					answer = txtScan.nextLine();
+					//addPic(filePath);
+					if (questionIndex == 0) {
+						s.setCurrentQuestion(filePath, answer);
+						questionIndex += 2;
+						questions.add(filePath);
+						questions.add(answer);
+					} else {
+						questions.add(filePath);
+						questions.add(answer);
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
 				}
-			} else
-				addPic(file.getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -102,7 +122,7 @@ public class HostScene extends Scene {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
 		try {
-			//Instantiate image view from picture
+			// Instantiate image view from picture
 			BufferedImage bImage = ImageIO.read(currentFile);
 			Image image = SwingFXUtils.toFXImage(bImage, null);
 			iView = new ImageView();
@@ -118,13 +138,13 @@ public class HostScene extends Scene {
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
 		iViewPrev.setFitHeight(160);
-		pics.getChildren().add(picIndex , iViewPrev);
+		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
-	
+
 	private void nextQuestion() {
-		s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex) );
+		s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
 		questionIndex++;
 	}
-	
+
 }
