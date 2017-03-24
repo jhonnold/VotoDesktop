@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -24,16 +23,13 @@ public class SetupScene extends Scene {
 	
 	private ScrollPane picPane;
 	private HBox pics;
-	private FlowPane centerPic;
 	private int picIndex = 0;
-	private Button open, done;
 	private String fileName;
-	private boolean buttonDisabled = true;
 	Button[] ansButton;
 	
 	private Menu fileMenu;
 	private MenuBar menuBar;
-	private MenuItem newItem, openItem, saveItem, exitItem;
+	private MenuItem openItem, saveItem, exitItem;
 	
 	public SetupScene(double width, double height) {
 		super(rootSetup, width, height); 
@@ -47,20 +43,6 @@ public class SetupScene extends Scene {
 		rootSetup.setCenter(picPane);
 		answerPane();
 		addMenu();
-		
-		/*open = new Button("Open File");
-		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
-		done = new Button("Finish");
-		done.setOnAction(e -> close());
-		done.setPrefSize(67, 25);*/
-		
-		//Add elements to stage
-		/*setupGrid.add(open, 0, 0);
-		setupGrid.add(done, 0, 1);
-				
-		rootSetup.setLeft(setupGrid);
-		rootSetup.setCenter(centerPic);
-		rootSetup.setBottom(picPane);*/
 		
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setHeaderText(null);
@@ -96,7 +78,6 @@ public class SetupScene extends Scene {
 				output.newLine();
 								
 				//enable buttons
-				buttonDisabled = false;
 				for (Button b : ansButton) {
 					b.setDisable(false);
 				}
@@ -161,7 +142,6 @@ public class SetupScene extends Scene {
 					    for (Button b : ansButton) {
 							b.setDisable(true);
 						}
-					    buttonDisabled = true;
 					    openItem.setDisable(false);
 					    saveItem.setDisable(false);
 				}
