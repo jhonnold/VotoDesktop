@@ -60,7 +60,8 @@ public class ClientStage extends Stage{
 		activeScene = new Scene(gp);
 		
 		setScene(activeScene);
-		setResizable(false);	
+		setResizable(false);
+		sizeToScene();
 		show();
 	} 
 }
