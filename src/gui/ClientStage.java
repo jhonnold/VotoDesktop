@@ -18,10 +18,14 @@ public class ClientStage extends Stage{
 	private Scene activeScene;
 	private final Session session;
 	
+	// Subclass for the textarea which refreshes every second
 	public class ClientArea extends TextArea implements ActionListener {
 		
 		private Timer t = new Timer(1000, this);
 		
+		/**
+		 * Constructor that makes 20/6 textarea and starts timer
+		 */
 		public ClientArea() {
 			setEditable(false);
 			setPrefColumnCount(20);
@@ -29,6 +33,9 @@ public class ClientStage extends Stage{
 			t.start();
 		}
 		
+		/**
+		 * When timer fires, recall client list and write out to the textarea
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
@@ -45,7 +52,10 @@ public class ClientStage extends Stage{
 		
 	}
 	
-	
+	/**
+	 * Constructor that takes session pointer
+	 * @param s Reference back to the running session
+	 */
 	public ClientStage(Session s) {
 		super();
 		
@@ -60,7 +70,8 @@ public class ClientStage extends Stage{
 		activeScene = new Scene(gp);
 		
 		setScene(activeScene);
-		setResizable(false);	
+		setResizable(false);
+		sizeToScene(); //pack()
 		show();
 	} 
 }
