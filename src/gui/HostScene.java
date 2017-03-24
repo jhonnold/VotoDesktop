@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -51,6 +50,7 @@ public class HostScene extends Scene {
 
 		// Instantiate new GUI elements
 		picPane = new ScrollPane();
+		picPane.setFitToHeight(true);
 		// picPane.setMinHeight(200);
 		pics = new HBox();
 		pics.setPrefHeight(160);
