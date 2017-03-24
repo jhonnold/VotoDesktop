@@ -20,6 +20,7 @@ public class Session {
 	
 	private Controller control = new Controller(this); 
 	private Question currentQuestion;
+	private QuestionData questionData;
 	
 	private int imageID = 1;
 	
@@ -235,5 +236,12 @@ public class Session {
 	 */
 	public boolean hasImage() {
 		return (currentQuestion != null);
+	}
+	
+	/**
+	 * Gets the question data, separating from the question image
+	 */
+	public void parseQuestionData() {
+		//@TODO
 	}
 }
