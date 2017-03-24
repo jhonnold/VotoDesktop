@@ -21,7 +21,7 @@ public class VotoDesktopFX extends Application
 	private Button hostButton, joinButton, setupButton;
 	private Session s = new Session("test");
 	private String IP;
-	private MenuBar menu = new VotoMenuBar(s);
+	private VotoMenuBar menu = new VotoMenuBar(s);
 	private BorderPane root;
 	
 	

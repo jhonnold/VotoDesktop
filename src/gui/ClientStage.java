@@ -20,10 +20,12 @@ public class ClientStage extends Stage{
 	
 	public class ClientArea extends TextArea implements ActionListener {
 		
-		private Timer t = new Timer(100, this);
+		private Timer t = new Timer(1000, this);
 		
 		public ClientArea() {
 			setEditable(false);
+			setPrefColumnCount(20);
+			setPrefRowCount(6);
 			t.start();
 		}
 		

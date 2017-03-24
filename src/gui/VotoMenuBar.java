@@ -1,5 +1,7 @@
 package gui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -48,6 +50,11 @@ public class VotoMenuBar extends MenuBar {
 		clientsItem.setOnAction(e -> new ClientStage(s));
 		//graphItem.setOnAction(e -> new GraphStage());
 		//connectionItem.setOnAction(e -> new ConnectionStage());
+	}
+	
+	public void setOpenFile(EventHandler<ActionEvent> value) {
+		openItem.setOnAction(value);
+		
 	}
 		
 }

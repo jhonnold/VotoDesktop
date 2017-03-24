@@ -31,10 +31,12 @@ public class HostScene extends Scene {
 	private int picIndex = 0;
 	private MenuBar mb;
 	
-	public HostScene(Session se, double width, double height, MenuBar mb) {
+	public HostScene(Session se, double width, double height, VotoMenuBar mb) {
 		super(rootHost, width, height);
 		
 		this.mb = mb;
+		mb.setOpenFile(e -> openFile());
+		
 		s = se;
 
 		//Instantiate new GUI elements
@@ -45,7 +47,6 @@ public class HostScene extends Scene {
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
 	}
-
 
 	/**
 	 * Open picture from file chooser to host pane
