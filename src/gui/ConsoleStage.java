@@ -17,8 +17,8 @@ public class ConsoleStage extends Stage {
 		
 		setTitle("Voto - Console");
 		
-		consoleOutput.setPrefColumnCount(80);
-		consoleOutput.setPrefRowCount(24);
+		consoleOutput.setPrefColumnCount(50);
+		consoleOutput.setPrefRowCount(15);
 		ConsoleOutput co = new ConsoleOutput(consoleOutput, "Voto-Desktop");
 		
 		GridPane gp = new GridPane();
@@ -27,6 +27,7 @@ public class ConsoleStage extends Stage {
 		
 		setScene(activeScene);
 		setResizable(false);	
+		sizeToScene();
 		show();
 		
 		System.setOut(new PrintStream(co));
