@@ -38,7 +38,6 @@ public class HostScene extends Scene {
 		super(rootHost, width, height);
 		
 		questions = new ArrayList<>();
-		
 		this.mb = mb;
 		mb.setOpenFile(e -> openFile());
 		mb.setNext(e -> nextQuestion());
@@ -50,6 +49,9 @@ public class HostScene extends Scene {
 		//picPane.setMinHeight(200);
 		pics = new HBox();
 		picPane.setContent(pics);
+		
+
+		openFile();
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
 	}
@@ -77,9 +79,16 @@ public class HostScene extends Scene {
 						filePath = txtScan.nextLine();
 						answer = txtScan.nextLine();
 						addPic(filePath);
-						questions.add(filePath);
-						questions.add(answer);
-						//s.setCurrentQuestion(file.getPath(), "A");
+						if (questionIndex == 0) {
+							s.setCurrentQuestion(filePath, answer);
+							questionIndex += 2;
+							questions.add(filePath);
+							questions.add(answer);
+						}
+						else {				
+							questions.add(filePath);
+							questions.add(answer);
+						}
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
