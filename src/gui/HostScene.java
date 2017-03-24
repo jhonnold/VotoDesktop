@@ -39,7 +39,7 @@ public class HostScene extends Scene {
 		
 		s = se;
 
-		//Instantiate new GUI elements
+		// Instantiate new GUI elements
 		picPane = new ScrollPane();
 		//picPane.setMinHeight(200);
 		pics = new HBox();
@@ -51,9 +51,9 @@ public class HostScene extends Scene {
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void  openFile() {
-		
-		//Instantiate
+	private void openFile() {
+
+		// Instantiate
 		fc = new FileChooser();
 		//fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = 
@@ -63,8 +63,6 @@ public class HostScene extends Scene {
 		Scanner txtScan = null;
 		String filePath = null;
 		String answer = null;
-		
-		//Load picture if one was selected
 		if (file != null) {
 			if (file.getPath().endsWith(".voto")) {
 				try {
@@ -79,10 +77,9 @@ public class HostScene extends Scene {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-			}
-			else
+			} else
 				addPic(file.getAbsolutePath());
-		}		
+		}
 	}
 
 	private void addPic(String filepath) {
@@ -98,7 +95,6 @@ public class HostScene extends Scene {
 		} catch (IOException e) {
 			System.exit(1);
 		}
-
 		addImgToSP(iView);
 
 	}
