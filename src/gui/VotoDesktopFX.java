@@ -55,18 +55,32 @@ public class VotoDesktopFX extends Application
 		//Add to stage
 		root = new BorderPane();
 		root.setTop(menu);
-		StackPane startPane = new StackPane();
-		FlowPane buttonPane = new FlowPane();
-		startPane.setPadding(new Insets(75, 125, 125, 150));
 		
-	    
-		buttonPane.getChildren().add(hostButton);
-		buttonPane.getChildren().add(joinButton);
-		buttonPane.getChildren().add(setupButton);
-		buttonPane.setHgap(30);
+		// Create 3x1 Grid pane 100% for row, 33.33% for each column
+		GridPane gp = new GridPane();
+		ColumnConstraints c = new ColumnConstraints();
+		RowConstraints r = new RowConstraints();
+		c.setPercentWidth(33.33);
+		r.setPercentHeight(100);
+		gp.getColumnConstraints().addAll(c, c, c);
+		gp.getRowConstraints().add(r);
 		
-		startPane.getChildren().add(buttonPane);
-		root.setCenter(startPane);
+		// Add button to each HBox centered
+		HBox b1 = new HBox();
+		b1.setAlignment(Pos.CENTER);
+		b1.getChildren().add(hostButton);
+		HBox b2 = new HBox();
+		b2.setAlignment(Pos.CENTER);
+		b2.getChildren().add(joinButton);
+		HBox b3 = new HBox();
+		b3.setAlignment(Pos.CENTER);
+		b3.getChildren().add(setupButton);
+		
+		// Add the HBox's to the gridpane
+		gp.add(b1, 0, 0);
+		gp.add(b2, 1, 0);
+		gp.add(b3, 2, 0);
+		root.setCenter(gp);
 		
 	    Scene scene = new Scene(root, 600, 200);
 	    primaryStage.setScene(scene);
