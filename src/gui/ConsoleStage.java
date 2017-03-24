@@ -13,6 +13,10 @@ public class ConsoleStage extends Stage {
 	private TextArea consoleOutput = new TextArea();
 	private VotoMenuBar parent;
 	
+	/**
+	 * Constructor that creates a 50/15 consolestage
+	 * @param parent The menubar who enabled the console
+	 */
 	public ConsoleStage(VotoMenuBar parent) {
 		super();
 		
@@ -31,9 +35,10 @@ public class ConsoleStage extends Stage {
 		
 		setScene(activeScene);
 		setResizable(false);	
-		sizeToScene();
+		sizeToScene(); //pack()
 		show();
 		
+		// On close reenable the close buttton in the menubar
 		setOnCloseRequest(e -> parent.enableConsole());
 	}
 	
