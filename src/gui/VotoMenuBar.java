@@ -1,5 +1,6 @@
 package gui;
 
+import javafx.application.Platform;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -42,12 +43,18 @@ public class VotoMenuBar extends MenuBar {
 		//newItem.setOnAction(e -> new ConsoleStage());
 		//openItem.setOnAction(e -> new ConsoleStage());
 		//saveItem.setOnAction(e -> new ConsoleStage());
-		//exitItem.setOnAction(e -> new ConsoleStage());
+		//exitItem.setOnAction(e -> exitProgram());
 		//nextItem.setOnAction(e -> new ConsoleStage());
 		consoleItem.setOnAction(e -> new ConsoleStage());
 		clientsItem.setOnAction(e -> new ClientStage(s));
 		//graphItem.setOnAction(e -> new GraphStage());
 		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
-		
+	
+	
+	private void exitProgram() {
+		Platform.exit();
+		s.stop();
+		System.exit(0);
+	}
 }
