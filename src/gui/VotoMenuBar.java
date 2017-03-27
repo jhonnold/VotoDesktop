@@ -1,6 +1,8 @@
 package gui;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -45,16 +47,31 @@ public class VotoMenuBar extends MenuBar {
 		//saveItem.setOnAction(e -> new ConsoleStage());
 		//exitItem.setOnAction(e -> exitProgram());
 		//nextItem.setOnAction(e -> new ConsoleStage());
-		consoleItem.setOnAction(e -> new ConsoleStage());
-		clientsItem.setOnAction(e -> new ClientStage(s));
+		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
+		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
 		//graphItem.setOnAction(e -> new GraphStage());
 		//connectionItem.setOnAction(e -> new ConnectionStage());
 	}
-	
 	
 	private void exitProgram() {
 		Platform.exit();
 		s.stop();
 		System.exit(0);
+	}
+	
+	public void setOpenFile(EventHandler<ActionEvent> value) {
+		openItem.setOnAction(value);
+	}
+
+	public void enableConsole() {
+		consoleItem.setDisable(false);
+	}
+	
+	public void enableClient() {
+		clientsItem.setDisable(false);
+	}
+	
+	public void setNext(EventHandler<ActionEvent> value) {
+		nextItem.setOnAction(value);
 	}
 }

@@ -87,7 +87,7 @@ public class Controller {
 	 * @return - the byte array to be returned
 	 */
 	protected byte[] vote(byte[] inFromClient) {
-		System.out.println("Parsed as vote! " + new String(inFromClient));
+		System.out.println("Parsed as vote!");
 		
 		// invalid packet
 		if (inFromClient.length <= 1) {

@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Client {
 
 	private String ID = null;
-	private HashMap<Question, Vote> voteList = new HashMap<Question, Vote>();
+	private ArrayList<Vote> voteList = new ArrayList<Vote>();
 	
 	private Vote lastVote;
 	public int voteNum = -100;
@@ -48,7 +48,8 @@ public class Client {
 	 * @param v The final vote submitted
 	 */
 	public void setAnswerVote(Question q, Vote v) {
-		voteList.put(q, v);
+		//voteList.put(q, v);
+		voteList.add(v);
 	}
 	
 	/**
@@ -76,6 +77,6 @@ public class Client {
 	 * @return List of client votes
 	 */
 	public Iterable<Vote> getClientVoteList() {
-		return voteList.values();
+		return voteList;//.values();
 	}
 }
