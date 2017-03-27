@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.*;
 import javafx.scene.Scene;
@@ -15,49 +14,40 @@ import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-public class SetupStage extends Stage {
+public class SetupStage extends Stage{
 	
-	private static BorderPane rootSetup = new BorderPane();
+	private BorderPane rootSetup;
 	private FileChooser fc;
 	private File file;
 	private BufferedWriter output;
 	
 	private ScrollPane picPane;
 	private HBox pics;
-	private FlowPane centerPic;
 	private int picIndex = 0;
-	private GridPane setupGrid;
-	private Button open, done;
-	private VotoDesktopFX voto;
-	private Stage primaryStage;
 	private String fileName;
+	Button[] ansButton;
+	
+	private Menu fileMenu;
+	private MenuBar menuBar;
+	private MenuItem openItem, saveItem, exitItem;
 	
 	public SetupStage() {
-		super();
+		super(); 
+		
+		rootSetup = new BorderPane();
 		
 		picPane = new ScrollPane();
 		picPane.setMinHeight(120);
 		pics = new HBox();
 		picPane.setContent(pics);
-		centerPic = new FlowPane();
-		setupGrid = new GridPane();
-		
-		
-		open = new Button("Open File");
-		open.setOnAction(e -> openFile());	//Add action listener to open file chooser
-		done = new Button("Finish");
-		done.setOnAction(e -> close());
-		done.setPrefSize(67, 25);
-		
-		//Add elements to stage
-		setupGrid.add(open, 0, 0);
-		setupGrid.add(done, 0, 1);
-				
-		rootSetup.setLeft(setupGrid);
-		rootSetup.setCenter(centerPic);
-		rootSetup.setBottom(picPane);
+		//centerPic = new FlowPane();
+		rootSetup.setCenter(picPane);
+		answerPane();
+		addMenu();
 		
 		TextInputDialog dialog = new TextInputDialog();
+		dialog.setHeaderText(null);
+		dialog.setTitle("New Session");
 		dialog.setContentText("Please enter session name:");
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
@@ -71,15 +61,11 @@ public class SetupStage extends Stage {
 			e1.printStackTrace();
 		}
 		
-		setScene(new Scene(rootSetup, 600, 525));
-		setResizable(false);
+		Scene scene = new Scene(rootSetup, 600, 200);
+		setScene(scene);
+		setTitle("Choose Picture");
 		show();
 		
-		this.setOnCloseRequest(e -> {
-			//Platform.exit();
-			closeWindow();
-			//System.exit(0);
-		});
 	}
 	
 	private void  openFile() {
@@ -96,6 +82,14 @@ public class SetupStage extends Stage {
 				addPic(filePath);
 				output.write(filePath);
 				output.newLine();
+								
+				//enable buttons
+				for (Button b : ansButton) {
+					b.setDisable(false);
+				}
+				openItem.setDisable(true);
+				saveItem.setDisable(true);
+				setTitle("Set Correct Answer");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,16 +109,11 @@ public class SetupStage extends Stage {
 		} catch (IOException e) {
 			System.exit(1);
 		}
-
-		//open image to center
-			iView.setFitHeight(410);
-			iView.setFitWidth(400);
-			centerPic.getChildren().add(iView);
-			answerStage();
+		addImgToSP(iView);
 	}
 	
 	//GUI for setting answer for image
-	private void answerStage() {
+	private void answerPane() {
 			
 		//Instantiate new elements
 		VBox ansPane = new VBox();
@@ -132,13 +121,14 @@ public class SetupStage extends Stage {
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
 		//ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
-		rootSetup.setRight(ansPane);
+		rootSetup.setLeft(ansPane);
 			
 		//Create buttons
-		Button[] ansButton = new Button[5];
+		ansButton = new Button[5];
 		for (int index = 0; index < 5; index++) {
 			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
 			ansButton[index].setMinSize(55, 25);
+			ansButton[index].setDisable(true);
 			ansPane.getChildren().add(ansButton[index]);
 					
 			//Add correct answer to list
@@ -154,27 +144,46 @@ public class SetupStage extends Stage {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-					    rootSetup.getChildren().remove(ansPane);
-						    
-						//Add image to scrollpane
-						if (!centerPic.getChildren().isEmpty()) {
-						 	addImgToSP((ImageView) centerPic.getChildren().remove(0));
+					    
+					    //disable buttons
+					    for (Button b : ansButton) {
+							b.setDisable(true);
 						}
+					    openItem.setDisable(false);
+					    saveItem.setDisable(false);
+					    setTitle("Choose Picture");
 				}
 			});
 		}
 	}
 	
+	private void addMenu() {
+		menuBar = new MenuBar();
+		fileMenu = new Menu("File");
+		fileMenu = new Menu("File");
+		openItem = new MenuItem("Open");
+		saveItem = new MenuItem("Save");
+		exitItem = new MenuItem("Exit");
+		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
+		
+		menuBar.getMenus().addAll(fileMenu);
+		rootSetup.setTop(menuBar);
+		
+		// Set menu item actions
+		openItem.setOnAction(e -> openFile());
+		saveItem.setOnAction(e -> saveFile());
+		exitItem.setOnAction(e -> close());
+	}
+	
 	private void addImgToSP(ImageView iViewPrev) {
-		iViewPrev.setFitHeight(100);
-		iViewPrev.setFitWidth(100);
-		pics.getChildren().add(picIndex  , iViewPrev);
+		iViewPrev.setPreserveRatio(true);
+		iViewPrev.setFitHeight(160);
+		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
 	
-	private void closeWindow() {
+	private void saveFile() {
 		try {
-			System.out.println("Close");
 			output.flush();
 			output.close();
 		} catch (IOException e) {
@@ -183,4 +192,3 @@ public class SetupStage extends Stage {
 	}
 
 }
-
