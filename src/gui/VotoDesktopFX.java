@@ -20,6 +20,7 @@ public class VotoDesktopFX extends Application {
 	protected static String IP;
 	private VotoMenuBar menu = new VotoMenuBar(s, this);
 	private BorderPane root;
+	private Stage primary;
 	
 	
 	/**
@@ -29,6 +30,7 @@ public class VotoDesktopFX extends Application {
 	public void start(Stage primaryStage) {
 	
 		primaryStage.hide();
+		primary = primaryStage;
 		
 		//Add IP address
 		try {
@@ -41,13 +43,13 @@ public class VotoDesktopFX extends Application {
 
 		//Instantiate elements
 		hostButton = new Button("Host Session");
-		hostButton.setOnAction(e -> hostGUI(primaryStage));
+		hostButton.setOnAction(e -> hostGUI());
 		
 		joinButton = new Button("Join Session");
 		joinButton.setOnAction(e -> joinGUI(primaryStage));
 		
 		setupButton = new Button("Setup Session");
-		setupButton.setOnAction(e -> setupGUI(primaryStage));
+		setupButton.setOnAction(e -> new SetupStage());
 		
 		//Add to stage
 		root = new BorderPane();
@@ -89,7 +91,7 @@ public class VotoDesktopFX extends Application {
 	    primaryStage.setOnCloseRequest(e -> exitProgram());
 	}
 	
-	public void exitProgram() {
+	protected void exitProgram() {
 		Platform.exit();
 		try {
 			s.stop();
@@ -103,9 +105,9 @@ public class VotoDesktopFX extends Application {
 	 * displays pictures, and lets the user select the correct answer
 	 * for each picture 
 	 */
-	private void hostGUI(Stage p) {
-		p.setScene(new HostScene(s, 600, 200, menu));
-		p.show();
+	protected void hostGUI() {
+		primary.setScene(new HostScene(s, 600, 200, menu));
+		primary.show();
 		
 		//Start session
 		try {
@@ -122,13 +124,6 @@ public class VotoDesktopFX extends Application {
 		p.hide();
 		p.setScene(new VoteScene(600, 400));
 		p.show();
-	}
-	
-	private void setupGUI(Stage p) {
-		/*p.hide();
-		p.setScene(new SetupScene(600, 200));
-		p.show();*/
-		new SetupStage();
 	}
 	
 	//main method

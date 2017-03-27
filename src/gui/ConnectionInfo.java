@@ -7,20 +7,23 @@ import javafx.stage.Stage;
 
 public class ConnectionInfo extends Stage {
 	
-	public ConnectionInfo(String n) {
+	public ConnectionInfo(String n, VotoMenuBar parent) {
 		super();
 		
 		Label lbl = new Label("IP: " + VotoDesktopFX.IP + "\nSession: " + n);
 		lbl.setStyle("-fx-font-size: 40px;");
 		BorderPane root = new BorderPane();
 		root.setCenter(lbl);
-		
+
 		Scene scene = new Scene(root, 400, 200);
-		
+
 		setScene(scene);
 		setTitle("VOTO - Connection Information");
 		sizeToScene();
 		setResizable(false);
 		show();
+
+		// On close reenable the close buttton in the menubar
+		setOnCloseRequest(e -> parent.enableConnection());
 	}
 }

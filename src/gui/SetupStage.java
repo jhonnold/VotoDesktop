@@ -51,21 +51,19 @@ public class SetupStage extends Stage{
 		dialog.setContentText("Please enter session name:");
 		Optional<String> result = dialog.showAndWait();
 		if (result.isPresent()){
-		    fileName = result.get();
+			fileName = result.get();
+			try {
+				File outFile = new File(fileName+".voto");
+				output = new BufferedWriter(new FileWriter(outFile));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+
+			Scene scene = new Scene(rootSetup, 600, 200);
+			setScene(scene);
+			setTitle("Choose Picture");
+			show();
 		}
-		
-		try {
-			File outFile = new File(fileName+".voto");
-			output = new BufferedWriter(new FileWriter(outFile));
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		Scene scene = new Scene(rootSetup, 600, 200);
-		setScene(scene);
-		setTitle("Choose Picture");
-		show();
-		
 	}
 	
 	private void  openFile() {

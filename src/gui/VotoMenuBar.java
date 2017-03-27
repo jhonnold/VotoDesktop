@@ -1,12 +1,7 @@
 package gui;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.DialogPane;
-import javafx.stage.Modality;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -18,11 +13,9 @@ public class VotoMenuBar extends MenuBar {
 	private MenuItem newItem, openItem, saveItem, exitItem;
 	private MenuItem nextItem;
 	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
-	private Session s;
 	private VotoDesktopFX parent;
 	
 	public VotoMenuBar(Session s, VotoDesktopFX p) {
-		this.s = s;
 		parent = p;
 		
 		fileMenu = new Menu("File");
@@ -48,15 +41,15 @@ public class VotoMenuBar extends MenuBar {
 		getMenus().addAll(fileMenu, sessionMenu, windowMenu);
 		
 		// Set menu item actions
-		//newItem.setOnAction(e -> new ConsoleStage());
-		//openItem.setOnAction(e -> new ConsoleStage());
+		newItem.setOnAction(e -> new SetupStage());
+		openItem.setOnAction(e -> parent.hostGUI());
 		//saveItem.setOnAction(e -> new ConsoleStage());
 		exitItem.setOnAction(e -> parent.exitProgram());
-		//nextItem.setOnAction(e -> new ConsoleStage());
+		nextItem.setDisable(true);
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
 		//graphItem.setOnAction(e -> new GraphStage());
-		connectionItem.setOnAction(e -> new ConnectionInfo(s.ID));
+		connectionItem.setOnAction(e -> { new ConnectionInfo(s.ID, this); connectionItem.setDisable(true); });
 	}
 	
 	public void setOpenFile(EventHandler<ActionEvent> value) {
@@ -71,7 +64,12 @@ public class VotoMenuBar extends MenuBar {
 		clientsItem.setDisable(false);
 	}
 	
+	public void enableConnection() {
+		connectionItem.setDisable(false);
+	}
+	
 	public void setNext(EventHandler<ActionEvent> value) {
 		nextItem.setOnAction(value);
+		nextItem.setDisable(false);
 	}
 }
