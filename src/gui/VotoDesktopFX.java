@@ -16,8 +16,8 @@ import session.Session;
 public class VotoDesktopFX extends Application {
 	
 	private Button hostButton, joinButton, setupButton;
-	private Session s = new Session("test");
-	private String IP;
+	private Session s = null;
+	protected static String IP;
 	private VotoMenuBar menu = new VotoMenuBar(s);
 	private BorderPane root;
 	
@@ -92,6 +92,7 @@ public class VotoDesktopFX extends Application {
 	 * for each picture 
 	 */
 	private void hostGUI(Stage p) {
+		s = new Session("test");
 		p.setScene(new HostScene(s, 600, 200, menu));
 		p.show();
 		

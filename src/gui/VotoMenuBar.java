@@ -3,6 +3,9 @@ package gui;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -45,17 +48,23 @@ public class VotoMenuBar extends MenuBar {
 		//newItem.setOnAction(e -> new ConsoleStage());
 		//openItem.setOnAction(e -> new ConsoleStage());
 		//saveItem.setOnAction(e -> new ConsoleStage());
-		//exitItem.setOnAction(e -> exitProgram());
+		exitItem.setOnAction(e -> exitProgram());
 		//nextItem.setOnAction(e -> new ConsoleStage());
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
 		//graphItem.setOnAction(e -> new GraphStage());
-		//connectionItem.setOnAction(e -> new ConnectionStage());
+		connectionItem.setOnAction(e -> {Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("VOTO - Connect");
+		alert.setHeaderText("Connection Information:");
+		alert.setContentText(VotoDesktopFX.IP);
+		alert.initModality(Modality.NONE);
+		alert.show();
+		});
 	}
 	
 	private void exitProgram() {
 		Platform.exit();
-		s.stop();
+		if (s != null) s.stop();
 		System.exit(0);
 	}
 	
