@@ -16,9 +16,9 @@ import session.Session;
 public class VotoDesktopFX extends Application {
 	
 	private Button hostButton, joinButton, setupButton;
-	private Session s = null;
+	private Session s = new Session("test");
 	protected static String IP;
-	private VotoMenuBar menu = new VotoMenuBar(s);
+	private VotoMenuBar menu = new VotoMenuBar(s, this);
 	private BorderPane root;
 	
 	
@@ -84,6 +84,18 @@ public class VotoDesktopFX extends Application {
 	    primaryStage.setResizable(false);
 	    primaryStage.setTitle("VOTO - " + IP);
 	    primaryStage.show();
+	    
+	  //Closes program and stops Session
+	    primaryStage.setOnCloseRequest(e -> exitProgram());
+	}
+	
+	public void exitProgram() {
+		Platform.exit();
+		try {
+			s.stop();
+		}
+		catch (IllegalArgumentException e) {}
+		System.exit(0);
 	}
 	
 	/**
@@ -92,7 +104,6 @@ public class VotoDesktopFX extends Application {
 	 * for each picture 
 	 */
 	private void hostGUI(Stage p) {
-		s = new Session("test");
 		p.setScene(new HostScene(s, 600, 200, menu));
 		p.show();
 		
@@ -103,13 +114,6 @@ public class VotoDesktopFX extends Application {
 		catch (SocketException se) {
 			se.printStackTrace();
 		}
-	
-		//Closes program and stops Session
-		p.setOnCloseRequest(e -> {
-			Platform.exit();
-			s.stop();
-			System.exit(0);
-		});
 	}
 	
 	

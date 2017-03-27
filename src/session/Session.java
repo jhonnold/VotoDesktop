@@ -15,7 +15,7 @@ import controller.Controller;
 
 public class Session {
 	
-	public final String ID;
+	public String ID;
 	private ArrayList<Client> clientList = new ArrayList<Client>();
 	
 	private Controller control = new Controller(this); 
@@ -27,6 +27,10 @@ public class Session {
 		this.ID = ID;
 	}
 	
+	
+	public void setID(String id) {
+		this.ID = id;
+	}
 	/**
 	 * Starts a Voto session
 	 * @throws SocketException

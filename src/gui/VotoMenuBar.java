@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.DialogPane;
 import javafx.stage.Modality;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -18,9 +19,11 @@ public class VotoMenuBar extends MenuBar {
 	private MenuItem nextItem;
 	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
 	private Session s;
+	private VotoDesktopFX parent;
 	
-	public VotoMenuBar(Session s) {
+	public VotoMenuBar(Session s, VotoDesktopFX p) {
 		this.s = s;
+		parent = p;
 		
 		fileMenu = new Menu("File");
 		newItem = new MenuItem("New");
@@ -48,24 +51,12 @@ public class VotoMenuBar extends MenuBar {
 		//newItem.setOnAction(e -> new ConsoleStage());
 		//openItem.setOnAction(e -> new ConsoleStage());
 		//saveItem.setOnAction(e -> new ConsoleStage());
-		exitItem.setOnAction(e -> exitProgram());
+		exitItem.setOnAction(e -> parent.exitProgram());
 		//nextItem.setOnAction(e -> new ConsoleStage());
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
 		//graphItem.setOnAction(e -> new GraphStage());
-		connectionItem.setOnAction(e -> {Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("VOTO - Connect");
-		alert.setHeaderText("Connection Information:");
-		alert.setContentText(VotoDesktopFX.IP);
-		alert.initModality(Modality.NONE);
-		alert.show();
-		});
-	}
-	
-	private void exitProgram() {
-		Platform.exit();
-		if (s != null) s.stop();
-		System.exit(0);
+		connectionItem.setOnAction(e -> new ConnectionInfo(s.ID));
 	}
 	
 	public void setOpenFile(EventHandler<ActionEvent> value) {
