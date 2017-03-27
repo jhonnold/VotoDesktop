@@ -120,9 +120,10 @@ public class VotoDesktopFX extends Application {
 	}
 	
 	private void setupGUI(Stage p) {
-		p.hide();
+		/*p.hide();
 		p.setScene(new SetupScene(600, 200));
-		p.show();
+		p.show();*/
+		new SetupStage();
 	}
 	
 	//main method
