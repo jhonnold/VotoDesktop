@@ -85,8 +85,7 @@ public class HostScene extends Scene {
 
 		// Instantiate
 		fc = new FileChooser();
-		// fc.setInitialDirectory(new File(System.getProperty("user.home") +
-		// ".voto-desktop"));
+		// fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
 		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
@@ -95,7 +94,7 @@ public class HostScene extends Scene {
 		String filePath = null;
 		String answer = null;
 		
-		if (file.getPath().endsWith(".voto")) {
+		if (file != null && file.getPath().endsWith(".voto")) {
 			try {
 				txtScan = new Scanner(file);
 				while (txtScan.hasNext()) {
