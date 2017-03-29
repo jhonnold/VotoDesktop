@@ -5,22 +5,46 @@ import java.util.HashMap;
 
 public class QuestionData {
 
-	private Question currentQuestion;
-	private HashMap<Vote, ArrayList<Client>> questionAnswerData = new HashMap<>();
+	private int ID;
+	public HashMap<Vote, ArrayList<Client>> questionAnswerData = new HashMap<>();
 	
 	/**
 	 * QuestionData constructor
 	 */
-	public QuestionData() {
-		questionAnswerData = new HashMap<>();
+	public QuestionData(Question q, int qID) {
+			
+		if (q != null) {
+			questionAnswerData = q.getAnswerSet();
+		}
+		
+		ID = qID;
 	}
 	
+	
+	@Override
+	public boolean equals(Object o) {
+		
+		if (!(o instanceof QuestionData)) {
+			return false;
+		}
+		
+		if (o == this) {
+			return true;
+		}
+		
+		QuestionData temp = (QuestionData) o;
+		
+		return temp.getID() == ID;
+		
+	}
+
 	/**
-	 * Gets the vote/client data for the current question
-	 * Will be used to create a list of question data for a session
+	 * Checks for a given ID and if there is available question data for it
+	 * 
+	 * @return - the ID we are trying to access question data for
 	 */
-	public void getQuestionVoteDate() {
-		questionAnswerData = currentQuestion.getAnswerSet();
+	public int getID() {
+		return ID;
 	}
 	
 }
