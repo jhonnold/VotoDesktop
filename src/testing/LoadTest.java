@@ -5,23 +5,24 @@ import java.util.Random;
 
 public class LoadTest {
 
-	ArrayList<Client> fakeClients;
-	int count = 8;
-
 	public static void main(String[] args) {
 
 		ArrayList<Client> fakeClients = new ArrayList<>();
-		;
-		int count = 8;
+		
+		int count = 200;
 
 		for (int i = 0; i < count; i++) {
-			fakeClients.add(new Client("192.168.1.11", getSaltString(), i));
+			fakeClients.add(new Client("141.219.152.185", getSaltString(), i));
 		}
 
-		count *= 2;
 
 		for (Client c : fakeClients) {
 			new Thread(c).start();
+			try {
+				Thread.sleep(50);
+			} catch (Exception e) {
+				
+			}
 		}
 
 	}

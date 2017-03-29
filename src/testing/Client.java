@@ -26,6 +26,7 @@ public class Client implements Runnable {
 		try {
 			SERVER = InetAddress.getByName(IP);
 			socket = new DatagramSocket();
+			socket.setSoTimeout(1000);
 			PORT = 9876;
 		} catch (UnknownHostException e) {
 			System.out.println(e.getMessage());
@@ -80,12 +81,13 @@ public class Client implements Runnable {
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
+				continue;
 			}
 			
 			MessageUtility.parseMediaPing(in.getData() , mr);
 			
 			if (mr.imgID != imageID) {
-				m = new Media(mr.imgID, mr.packetCount, mr.imgLength, index++);
+				m = new Media(mr.imgID, mr.packetCount, mr.imgLength, index);
 				
 				while (!m.isReady()) {
 					
@@ -111,13 +113,31 @@ public class Client implements Runnable {
 
 	                } catch (SocketTimeoutException e) {
 	                	System.out.println("Timeout Reached, resending...");
+	                	continue;
 
 	                } catch (IOException e) {
 	                	System.out.println("IO Error on send");
 	                }	
 				}
 				
+				imageID = mr.imgID;
+				
 			}
+			
+			try {
+				Thread.sleep(1000);
+			} catch (Exception e) {};
+			
+			mediaPing = MessageUtility.getMediaPingMessage();
+			out = new DatagramPacket(mediaPing, mediaPing.length, SERVER, PORT);
+			
+			try {
+				socket.send(out);
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+			
 			
 		}
 		
