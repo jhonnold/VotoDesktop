@@ -105,7 +105,7 @@ public class MessageUtility {
         return voteID;
     }
 
-    public static boolean parseMediaPing(byte[] msg, UDPClient.MediaResponse res){
+    public static boolean parseMediaPing(byte[] msg, Client.MediaResponse res){
 
         // Check for proper message headers
         if(msg[0] == MEDIA_REQUEST && msg[1] == MEDIA_PING ){
@@ -114,11 +114,9 @@ public class MessageUtility {
             res.imgID = msg[2];
 
             // Extract packet number
-            res.packetCount = msg[3];
+            res.packetCount = ByteBuffer.wrap(msg, 3, 4).getInt();
 
-            res.imgLength = ByteBuffer.wrap(msg, 4, 4).getInt();
-
-            System.out.println("ID: " + res.imgID + "COUNT: " + res.packetCount + "SIZE: " + res.imgLength);
+            res.imgLength = ByteBuffer.wrap(msg, 7, 4).getInt();
             return true;
         }
 
@@ -138,9 +136,8 @@ public class MessageUtility {
 
             if(media.getImgID() == imgID && media.getExpectingPacketNumber() == packetNumber){
                 int payloadLength = ByteBuffer.wrap(msg,7,4).getInt();
-                System.out.println("Payload Len = " + payloadLength);
                 byte[] payload = new byte[payloadLength];
-                System.arraycopy(msg,11,payload,0,payloadLength);
+                System.arraycopy(msg, 11, payload, 0, payloadLength);
                 media.appendData(payload);
             }
             return true;

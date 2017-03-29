@@ -18,22 +18,20 @@ public class Media {
 	private int imgSize, cursor, totalPackets, expectingPacketNumber;
 	private boolean ready = false;
 	BufferedImage img;
-
+	private int imgIndex;
 	// TODO and Question fields like correct answer
 
-	Media(byte imgID, int totalPackets, int imgLength) {
+	Media(byte imgID, int totalPackets, int imgLength, int index) {
 		this.imgID = imgID;
 		this.totalPackets = totalPackets;
 		this.imgSize = imgLength;
 		imgBuffer = new byte[imgLength];
 		expectingPacketNumber = 1;
 		cursor = 0;
+		this.imgIndex = index;
 	}
 
 	public void appendData(byte[] data) {
-
-		System.out.println("cursor " + cursor);
-
 		// Copy in the data
 		imgBuffer = append(imgBuffer, data, cursor);
 		// Increment the position cursor and the expected packet.
@@ -45,7 +43,7 @@ public class Media {
 		if (expectingPacketNumber > totalPackets) {
 			try {
 				img = ImageIO.read(new ByteArrayInputStream(imgBuffer));
-				ImageIO.write(img, "bmp", new File("snap.bmp"));
+				ImageIO.write(img, "jpg", new File("received" + imgIndex + ".jpg"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

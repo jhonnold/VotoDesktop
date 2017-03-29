@@ -20,7 +20,7 @@ public class UDPClient implements Runnable {
 			e.printStackTrace();
 		}
 		
-		media = new Media((byte)123, 406, 24883254);
+		media = new Media((byte)123, 406, 24883254, 1);
 		
 	}
 	
