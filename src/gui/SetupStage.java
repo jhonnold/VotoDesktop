@@ -50,7 +50,7 @@ public class SetupStage extends Stage{
 		dialog.setTitle("New Session");
 		dialog.setContentText("Please enter session name:");
 		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent()){
+		if (result.isPresent() && result.get().trim().length() > 0){
 			fileName = result.get();
 			try {
 				File outFile = new File(fileName+".voto");
