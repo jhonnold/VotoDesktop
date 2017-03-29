@@ -260,27 +260,32 @@ public class Session {
 	}
 
 	/**
+	 * Returns a HashMap used to build a bar chart corresponding to
+	 * votes per choice for a given question
 	 * 
 	 * @param ID
-	 * @return
+	 * 			- ID for the question we are accessing data for
+	 * @return - Each vote choice with its corresponding number of votes
 	 */
 	public HashMap<Vote, Integer> returnQuestionDataBarChart(int ID) {
 		
 		HashMap<Vote, Integer> voteData = new HashMap<>();
-
 		QuestionData qd = null;
 
+		// find the proper question based on the received ID
 		for (QuestionData temp : dataList) {
 
 			if (temp.getID() == ID) {
 				qd = temp;
 			}
 		}
+		
 		if (qd != null) {
+			
+			// for each vote option of the question, add its number of votes received
 			for (Vote v : qd.questionAnswerData.keySet()) {
 
 				voteData.put(v, qd.questionAnswerData.get(v).size());
-
 			}
 		}
 		
@@ -288,30 +293,32 @@ public class Session {
 	}
 	
 	/**
+	 * Returns a HashMap used to build a pie chart corresponding to
+	 * the percentage of votes per choice of a given question
 	 * 
 	 * @param ID
-	 * @return
+	 * 			- ID for the question we are accessing data for
+	 * @return - Each vote choice with its corresponding percentage of votes
 	 */
 	public HashMap<Vote, Double> returnQuestionDataPieChart(int ID) {
 		
-		// TODO need to implement %, rather than number of votes
-		
 		HashMap<Vote, Double> voteData = new HashMap<>();
-
+		int totalVotes = currentQuestion.getAnswerSet().size();
 		QuestionData qd = null;
 
+		// find the proper question based on the received ID
 		for (QuestionData temp : dataList) {
 
 			if (temp.getID() == ID) {
 				qd = temp;
 			}
 		}
+		
 		if (qd != null) {
 			for (Vote v : qd.questionAnswerData.keySet()) {
 
-				// need to implement with % rather than numerical vote count
-				//voteData.put(v, qd.questionAnswerData.get(v).size());
-
+				// saves number of votes/vote option as a % rather than a number
+				voteData.put(v, (double)qd.questionAnswerData.get(v).size()/totalVotes);
 			}
 		}
 		

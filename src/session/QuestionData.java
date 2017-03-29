@@ -20,6 +20,7 @@ public class QuestionData {
 		ID = qID;
 	}
 	
+	
 	@Override
 	public boolean equals(Object o) {
 		
@@ -37,6 +38,11 @@ public class QuestionData {
 		
 	}
 
+	/**
+	 * Checks for a given ID and if there is available question data for it
+	 * 
+	 * @return - the ID we are trying to access question data for
+	 */
 	public int getID() {
 		return ID;
 	}
