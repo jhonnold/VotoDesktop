@@ -12,7 +12,11 @@ import javafx.stage.*;
 import javafx.geometry.*;
 import session.Session;
 
-
+/**
+ * The Main class in the project
+ * @author Nic
+ *
+ */
 public class VotoDesktopFX extends Application {
 	
 	private Button hostButton, joinButton, setupButton;
@@ -90,6 +94,9 @@ public class VotoDesktopFX extends Application {
 	    primaryStage.setOnCloseRequest(e -> exitProgram());
 	}
 	
+	/**
+	 * Quit
+	 */
 	protected void exitProgram() {
 		Platform.exit();
 		try {
@@ -118,7 +125,7 @@ public class VotoDesktopFX extends Application {
 	}
 	
 	
-	// Join GUI
+	// Join Gui
 	private void joinGUI(Stage p) {
 		p.hide();
 		p.setScene(new VoteScene(600, 400));

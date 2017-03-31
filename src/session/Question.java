@@ -3,7 +3,12 @@ package session;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * The Question class which holds the active image data,
+ * vote list, choices, and answers
+ * @author Nick
+ *
+ */
 public class Question {
 	
 	private Vote answer;

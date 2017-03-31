@@ -11,6 +11,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+/**
+ * The output console for the project
+ * @author Jay
+ *
+ */
 public class ConsoleStage extends Stage {
 	
 	private Scene activeScene;

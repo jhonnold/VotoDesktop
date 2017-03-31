@@ -3,6 +3,12 @@ package session;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The Question class stripped into just the important data
+ * to remove usage of RAM
+ * @author Nick
+ *
+ */
 public class QuestionData {
 
 	private int ID;

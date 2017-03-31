@@ -17,13 +17,22 @@ import javafx.stage.Stage;
 import session.Client;
 import session.Session;
 
+/**
+ * The stage that displays the list of connected clients
+ * @author Jay
+ *
+ */
 public class ClientStage extends Stage{
 	
 	private Scene activeScene;
 	private final Session session;
 	private VotoMenuBar parent;
 	
-	// Subclass for the textarea which refreshes every second
+	/**
+	 * TextFlow that will be used to display the updated client list
+	 * @author Jay
+	 * Uses a 1sec timer to constantly recall the list and redraw
+	 */
 	public class ClientArea extends TextFlow implements ActionListener {
 		
 		private Timer t = new Timer(1000, this);

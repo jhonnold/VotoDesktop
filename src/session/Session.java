@@ -14,6 +14,11 @@ import javax.imageio.ImageIO;
 
 import controller.Controller;
 
+/**
+ * The session class which holds the question list, and is the "Active" class
+ * @author Jay
+ *
+ */
 public class Session {
 
 	public String ID;

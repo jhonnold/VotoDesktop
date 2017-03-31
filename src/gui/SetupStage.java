@@ -17,6 +17,11 @@ import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
+/**
+ * The stage for creating the .voto files
+ * @author Nic
+ *
+ */
 public class SetupStage extends Stage{
 	
 	private BorderPane rootSetup;
@@ -34,6 +39,9 @@ public class SetupStage extends Stage{
 	private MenuBar menuBar;
 	private MenuItem openItem, saveItem, exitItem;
 	
+	/**
+	 * Constructor for the setup stage
+	 */
 	public SetupStage() {
 		super(); 
 		
@@ -61,7 +69,8 @@ public class SetupStage extends Stage{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-
+			
+			// Our standard size
 			Scene scene = new Scene(rootSetup, 600, 200);
 			setScene(scene);
 			setTitle("Choose Picture");
@@ -89,7 +98,10 @@ public class SetupStage extends Stage{
 	      });
 	}
 	
-	private void  openFile() {
+	/**
+	 * Loads specified file through a filechooser
+	 */
+	private void openFile() {
 		
 		//Instantiate
 		fc = new FileChooser();
@@ -117,6 +129,10 @@ public class SetupStage extends Stage{
 		}
 	}
 	
+	/**
+	 * Converts image to ImageView and loads into HBox
+	 * @param filepath The image filepath
+	 */
 	private void addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
@@ -133,7 +149,9 @@ public class SetupStage extends Stage{
 		addImgToSP(iView);
 	}
 	
-	//GUI for setting answer for image
+	/**
+	 * The Answer Pane that allows you to select the correct answer
+	 */
 	private void answerPane() {
 			
 		//Instantiate new elements
@@ -178,6 +196,9 @@ public class SetupStage extends Stage{
 		}
 	}
 	
+	/**
+	 * Basic menubar for this stage
+	 */
 	private void addMenu() {
 		menuBar = new MenuBar();
 		fileMenu = new Menu("File");
@@ -196,6 +217,10 @@ public class SetupStage extends Stage{
 		exitItem.setOnAction(e -> close());
 	}
 	
+	/**
+	 * Add imageview to the Hbox
+	 * @param iViewPrev The imageview to be added
+	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
 		iViewPrev.setFitHeight(160);
@@ -203,6 +228,9 @@ public class SetupStage extends Stage{
 		picIndex++;
 	}
 	
+	/**
+	 * Saves the current session voto file
+	 */
 	private void saveFile() {
 		try {
 			output.flush();

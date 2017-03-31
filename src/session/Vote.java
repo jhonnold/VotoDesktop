@@ -1,5 +1,10 @@
 package session;
 
+/**
+ * A vote object
+ * @author Jay
+ *
+ */
 public class Vote {
 	
 	private String ID;

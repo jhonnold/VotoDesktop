@@ -3,6 +3,11 @@ package session;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * The client class which holds votes and IDs
+ * @author Jay
+ *
+ */
 public class Client {
 
 	private String ID = null;

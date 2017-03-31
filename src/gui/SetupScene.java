@@ -31,6 +31,11 @@ public class SetupScene extends Scene {
 	private MenuBar menuBar;
 	private MenuItem openItem, saveItem, exitItem;
 	
+	/**
+	 * Constructor to create the setup scene
+	 * @param width Scene width
+	 * @param height Scene height
+	 */
 	public SetupScene(double width, double height) {
 		super(rootSetup, width, height); 
 		
@@ -62,7 +67,10 @@ public class SetupScene extends Scene {
 		
 	}
 	
-	private void  openFile() {
+	/**
+	 * Loads a selected files in filechooser
+	 */
+	private void openFile() {
 		
 		//Instantiate
 		fc = new FileChooser();
@@ -88,6 +96,7 @@ public class SetupScene extends Scene {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	private void addPic(String filepath) {
 		ImageView iView = null;

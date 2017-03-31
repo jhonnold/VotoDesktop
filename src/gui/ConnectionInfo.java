@@ -5,8 +5,18 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+/**
+ * The stage that will show connection info
+ * @author Josh
+ *
+ */
 public class ConnectionInfo extends Stage {
 	
+	/**
+	 * The constructor to create the new stage
+	 * @param n The Session Name
+	 * @param parent The menubar that created this
+	 */
 	public ConnectionInfo(String n, VotoMenuBar parent) {
 		super();
 		

@@ -19,6 +19,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import session.*;
 
+/**
+ * The active session scene for voting and changing what the clients see
+ * @author Nic / Josh
+ *
+ */
 public class HostScene extends Scene {
 
 	private static BorderPane rootHost = new BorderPane();
@@ -34,6 +39,14 @@ public class HostScene extends Scene {
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
 
+	/**
+	 * The scene that will display the images and is essentially
+	 * the active scene for the program
+	 * @param se The active session for the scene
+	 * @param width The width of the scene
+	 * @param height The height of the scene
+	 * @param mb The menubar to be passed in with the scene
+	 */
 	public HostScene(Session se, double width, double height, VotoMenuBar mb) {
 		super(pane, width, height);
 		
@@ -116,7 +129,11 @@ public class HostScene extends Scene {
 			}
 		}
 	}
-
+	
+	/**
+	 * Opens picture and loads into an ImageView
+	 * @param filepath The filepath of the image to be loaded
+	 */
 	private void addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
@@ -134,13 +151,20 @@ public class HostScene extends Scene {
 
 	}
 
+	/**
+	 * Adds image to the HBox
+	 * @param iViewPrev The image to be added as ImageView
+	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
 		iViewPrev.setFitHeight(160);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
-
+	
+	/**
+	 * Moves onto the nextQuestion in the session
+	 */
 	private void nextQuestion() {
 		s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
 		questionIndex++;
