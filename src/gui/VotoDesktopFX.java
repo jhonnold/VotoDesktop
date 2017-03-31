@@ -28,7 +28,6 @@ public class VotoDesktopFX extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-	
 		primaryStage.hide();
 		primary = primaryStage;
 		

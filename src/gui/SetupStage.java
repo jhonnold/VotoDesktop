@@ -2,14 +2,17 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
@@ -18,7 +21,7 @@ public class SetupStage extends Stage{
 	
 	private BorderPane rootSetup;
 	private FileChooser fc;
-	private File file;
+	private File file, outFile;
 	private BufferedWriter output;
 	
 	private ScrollPane picPane;
@@ -53,7 +56,7 @@ public class SetupStage extends Stage{
 		if (result.isPresent() && result.get().trim().length() > 0){
 			fileName = result.get();
 			try {
-				File outFile = new File(fileName+".voto");
+				outFile = new File(fileName+".voto");
 				output = new BufferedWriter(new FileWriter(outFile));
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -64,6 +67,26 @@ public class SetupStage extends Stage{
 			setTitle("Choose Picture");
 			show();
 		}
+		
+		//Exit confirmation
+		setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	        	  Alert alert = new Alert(AlertType.CONFIRMATION);
+	        	  alert.setContentText("Do you want to exit without saving?");
+	        	  Optional<ButtonType> result = alert.showAndWait();
+	        	  if (result.get() == ButtonType.OK){
+	        		  try {
+	        			  output.close();
+	        		  } catch (IOException e) {
+	        			  e.printStackTrace();
+	        		  }
+	        		  outFile.delete();
+	        	  } else {
+	        		  we.consume();
+	        		  alert.close();
+	        	  }	  
+	          }	
+	      });
 	}
 	
 	private void  openFile() {
