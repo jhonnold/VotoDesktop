@@ -50,8 +50,8 @@ public class HostScene extends Scene {
 	public HostScene(Session se, double width, double height, VotoMenuBar mb) {
 		super(pane, width, height);
 		
-		rootHost.setPrefHeight(height);
-		rootHost.setPrefWidth(width);
+		pane.setPrefHeight(height);
+		pane.setPrefWidth(width);
 		
 		questions = new ArrayList<>();
 		this.mb = mb;
@@ -63,10 +63,10 @@ public class HostScene extends Scene {
 
 		// Instantiate new GUI elements
 		picPane = new ScrollPane();
-		picPane.setFitToHeight(true);
+		//picPane.setFitToHeight(true);
 		// picPane.setMinHeight(200);
 		pics = new HBox();
-		pics.setPrefHeight(160);
+		
 		picPane.setContent(pics);
 
 		openFile();
@@ -98,6 +98,7 @@ public class HostScene extends Scene {
 
 		// Instantiate
 		fc = new FileChooser();
+		fc.setInitialDirectory(new File("./"));
 		// fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
 		fc.getExtensionFilters().add(extFilter);
@@ -157,7 +158,7 @@ public class HostScene extends Scene {
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(160);
+		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight());
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
