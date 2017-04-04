@@ -58,7 +58,7 @@ public class VotoMenuBar extends MenuBar {
 		nextItem.setDisable(true);
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
-		//graphItem.setOnAction(e -> new GraphStage());
+		graphItem.setOnAction(e -> new GraphStage(s));
 		connectionItem.setOnAction(e -> { new ConnectionInfo(s.ID, this); connectionItem.setDisable(true); });
 	}
 	
