@@ -53,6 +53,9 @@ public class HostScene extends Scene {
 		pane.setPrefHeight(height);
 		pane.setPrefWidth(width);
 		
+		rootHost.setPrefHeight(height);
+		rootHost.setPrefWidth(width);
+		
 		questions = new ArrayList<>();
 		this.mb = mb;
 
@@ -63,6 +66,7 @@ public class HostScene extends Scene {
 
 		// Instantiate new GUI elements
 		picPane = new ScrollPane();
+		picPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		//picPane.setFitToHeight(true);
 		// picPane.setMinHeight(200);
 		pics = new HBox();

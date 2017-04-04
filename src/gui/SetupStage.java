@@ -47,14 +47,15 @@ public class SetupStage extends Stage{
 		super(); 
 		
 		pane = new Pane();
-		pane.setMinHeight(200);
-		pane.setMinWidth(600);
+		pane.setPrefHeight(200);
+		pane.setPrefWidth(600);
 		
 		rootSetup = new BorderPane();
-		rootSetup.setMinHeight(200);
-		rootSetup.setMinWidth(600);
+		rootSetup.setPrefHeight(200);
+		rootSetup.setPrefWidth(600);
 		
 		picPane = new ScrollPane();
+		picPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		//picPane.setMinHeight(120);
 		pics = new HBox();
 		picPane.setContent(pics);
