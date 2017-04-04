@@ -35,7 +35,7 @@ public class HostScene extends Scene {
 	private File file;
 	private Button next;
 	private int picIndex = 0;
-	private MenuBar mb;
+	private VotoMenuBar mb;
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
 
@@ -60,7 +60,7 @@ public class HostScene extends Scene {
 		this.mb = mb;
 
 		mb.setOpenFile(e -> openFile());
-		mb.setNext(e -> nextQuestion());
+		mb.setSession(e -> nextQuestion(), e -> stopSession());
 
 		s = se;
 
@@ -80,7 +80,7 @@ public class HostScene extends Scene {
 		
 		pane.getChildren().add(rootHost);
 		
-		Button next = new Button("Next");
+		next = new Button("Next");
 		next.setPrefHeight(25);
 		next.setPrefWidth(50);
 		next.setOnAction(e -> nextQuestion());
@@ -171,8 +171,21 @@ public class HostScene extends Scene {
 	 * Moves onto the nextQuestion in the session
 	 */
 	private void nextQuestion() {
-		s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
-		questionIndex++;
+		if (questionIndex < questions.size()) {
+			s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
+			if (++questionIndex == questions.size()) {
+				next.setText("Done");
+				mb.setNext("Done");
+			}
+		}
+		else {
+			stopSession();
+		}
+	}
+
+	private void stopSession() {
+		s.stop();
+		System.out.println("Session stopped");
 	}
 
 }
