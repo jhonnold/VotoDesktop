@@ -24,6 +24,7 @@ import javafx.stage.*;
  */
 public class SetupStage extends Stage{
 	
+	private Pane pane;
 	private BorderPane rootSetup;
 	private FileChooser fc;
 	private File file, outFile;
@@ -45,16 +46,22 @@ public class SetupStage extends Stage{
 	public SetupStage() {
 		super(); 
 		
+		pane = new Pane();
+		pane.setMinHeight(200);
+		pane.setMinWidth(600);
+		
 		rootSetup = new BorderPane();
+		rootSetup.setMinHeight(200);
+		rootSetup.setMinWidth(600);
 		
 		picPane = new ScrollPane();
-		picPane.setMinHeight(120);
+		//picPane.setMinHeight(120);
 		pics = new HBox();
 		picPane.setContent(pics);
-		//centerPic = new FlowPane();
-		rootSetup.setCenter(picPane);
 		answerPane();
-		addMenu();
+		addMenu();		//centerPic = new FlowPane();
+		rootSetup.setCenter(picPane);
+
 		
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setHeaderText(null);
@@ -70,9 +77,12 @@ public class SetupStage extends Stage{
 				e1.printStackTrace();
 			}
 			
+			pane.getChildren().add(rootSetup);
+			
 			// Our standard size
-			Scene scene = new Scene(rootSetup, 600, 200);
+			Scene scene = new Scene(pane, 600, 200);
 			setScene(scene);
+			setResizable(false);
 			setTitle("Choose Picture");
 			show();
 		}
@@ -223,7 +233,7 @@ public class SetupStage extends Stage{
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(160);
+		iViewPrev.setFitHeight(pane.getHeight() - menuBar.getHeight());
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
