@@ -266,9 +266,48 @@ public class Session {
 		return (currentQuestion != null);
 	}
 
+	/**
+	 * Returns an iterable list of the clients in the current session
+	 * 
+	 * @return - list of clients in session
+	 */
 	public Iterable<Client> getClients() {
 		return clientList;
 	}
+	
+	/**
+	 * Returns a HashMap used to build a bar chart corresponding to
+	 * votes per choice for THE CURRENT QUESTION
+	 * 
+	 * **If called with no args, this method returns the current questions data**
+	 * 
+	 * @return - Each vote choice with its corresponding number of votes
+	 */
+	public HashMap<Vote, Integer> returnQuestionData() {
+		
+		HashMap<Vote, Integer> voteData = new HashMap<>();
+		QuestionData qd = null;
+
+		// find the proper question based on the received ID
+		for (QuestionData temp : dataList) {
+
+			if (temp.getID() == currentQuestion.imageID()) {
+				qd = temp;
+			}
+		}
+		
+		if (qd != null) {
+			
+			// for each vote option of the question, add its number of votes received
+			for (Vote v : qd.questionAnswerData.keySet()) {
+
+				voteData.put(v, qd.questionAnswerData.get(v).size());
+			}
+		}
+		
+		return voteData;
+	}
+	
 	/**
 	 * Returns a HashMap used to build a bar chart corresponding to
 	 * votes per choice for a given question
@@ -277,7 +316,7 @@ public class Session {
 	 * 			- ID for the question we are accessing data for
 	 * @return - Each vote choice with its corresponding number of votes
 	 */
-	public HashMap<Vote, Integer> returnQuestionDataBarChart(int ID) {
+	public HashMap<Vote, Integer> returnQuestionData(int ID) {
 		
 		HashMap<Vote, Integer> voteData = new HashMap<>();
 		QuestionData qd = null;
