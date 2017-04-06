@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import session.*;
 
 /**
@@ -39,6 +40,7 @@ public class HostScene extends Scene {
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
 
+	
 	/**
 	 * The scene that will display the images and is essentially
 	 * the active scene for the program
@@ -59,9 +61,6 @@ public class HostScene extends Scene {
 		questions = new ArrayList<>();
 		this.mb = mb;
 
-		mb.setOpenFile(e -> openFile());
-		mb.setSession(e -> nextQuestion(), e -> stopSession());
-
 		s = se;
 
 		// Instantiate new GUI elements
@@ -72,11 +71,6 @@ public class HostScene extends Scene {
 		pics = new HBox();
 		
 		picPane.setContent(pics);
-
-		openFile();
-
-		rootHost.setTop(mb);
-		rootHost.setCenter(picPane);
 		
 		pane.getChildren().add(rootHost);
 		
@@ -89,12 +83,22 @@ public class HostScene extends Scene {
 		
 		pane.getChildren().add(next);
 		
+	}
+	
+	public void start() {
+		mb.setOpenFile(e -> openFile());
+		mb.setSession(e -> nextQuestion(), e -> stopSession());
+		
+		openFile();
+
+		rootHost.setTop(mb);
+		rootHost.setCenter(picPane);
+	
 		for (int i = 0; i < questions.size(); i+=2) {
 			addPic(questions.get(i));
 		}
-		
 	}
-
+	
 	/**
 	 * Open picture from file chooser to host pane
 	 */
@@ -177,8 +181,7 @@ public class HostScene extends Scene {
 				next.setText("Done");
 				mb.setNext("Done");
 			}
-		}
-		else {
+		} else {
 			stopSession();
 		}
 	}
@@ -186,6 +189,20 @@ public class HostScene extends Scene {
 	private void stopSession() {
 		s.stop();
 		System.out.println("Session stopped");
+		
+		mb.setNext("Next");
+		next.setText("Next");
+		
+		pics.getChildren().clear();
+		
+		picIndex = 0;
+		questionIndex = 0;
+		questions.clear();
+		
+		s.save();
+		s.reset();
+		
+		VotoDesktopFX.primary.setScene(VotoDesktopFX.launch);
 	}
 
 }

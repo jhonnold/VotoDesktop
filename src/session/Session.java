@@ -37,6 +37,19 @@ public class Session {
 	public void setID(String id) {
 		this.ID = id;
 	}
+	
+	public void save() {
+		// SAVE SESSION INFO HERE
+	}
+	
+	public void reset() {
+		imageID = 1;
+		questionList.clear();
+		dataList.clear();
+		clientList.clear();
+		currentQuestion = null;
+	}
+	
 	/**
 	 * Starts a Voto session
 	 * 
@@ -286,23 +299,13 @@ public class Session {
 	public HashMap<Vote, Integer> returnQuestionData() {
 		
 		HashMap<Vote, Integer> voteData = new HashMap<>();
-		QuestionData qd = null;
 
-		// find the proper question based on the received ID
-		for (QuestionData temp : dataList) {
-
-			if (temp.getID() == currentQuestion.imageID()) {
-				qd = temp;
+		// find the proper question based on the received 
+		if (currentQuestion != null) {			
+			for (Vote v : currentQuestion.getAnswerSet().keySet()) {
+				voteData.put(v, currentQuestion.getAnswerSet().get(v).size());
 			}
-		}
-		
-		if (qd != null) {
 			
-			// for each vote option of the question, add its number of votes received
-			for (Vote v : qd.questionAnswerData.keySet()) {
-
-				voteData.put(v, qd.questionAnswerData.get(v).size());
-			}
 		}
 		
 		return voteData;

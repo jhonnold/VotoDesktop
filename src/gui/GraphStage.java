@@ -19,7 +19,7 @@ public class GraphStage extends Stage {
 	public GraphStage(Session s) {
 		session = s;
 		
-		answerSet = session.getCurrentQuestion().getAnswerSet();
+		//answerSet = session.getCurrentQuestion().getAnswerSet();
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
@@ -28,13 +28,18 @@ public class GraphStage extends Stage {
 		yAxis.setLabel("Amount");
 
 		XYChart.Series series1 = new XYChart.Series();
-		series1.getData().add(new XYChart.Data("A", 3)); //answerSet.get("A").size()));
-		series1.getData().add(new XYChart.Data("B", 1)); //answerSet.get("B").size()));
-		series1.getData().add(new XYChart.Data("C", 3)); //answerSet.get("C").size()));
-		series1.getData().add(new XYChart.Data("D", 2)); //answerSet.get("D").size()));
-		series1.getData().add(new XYChart.Data("E", 0)); //answerSet.get("E").size()));
+		HashMap<Vote, Integer> data = session.returnQuestionData();
+		
+		for (Vote v : data.keySet()) {
+			series1.getData().add(new XYChart.Data(v.getID(), data.get(v)));
+		}
+		//series1.getData().add(new XYChart.Data("A", 3)); //answerSet.get("A").size()));
+		//series1.getData().add(new XYChart.Data("B", 1)); //answerSet.get("B").size()));
+		//series1.getData().add(new XYChart.Data("C", 3)); //answerSet.get("C").size()));
+		//series1.getData().add(new XYChart.Data("D", 2)); //answerSet.get("D").size()));
+		//series1.getData().add(new XYChart.Data("E", 0)); //answerSet.get("E").size()));
 
-		Scene scene  = new Scene(bc,800,600);
+		Scene scene  = new Scene(bc, 800, 600);
 		bc.getData().add(series1);
 		setScene(scene);
 		show();

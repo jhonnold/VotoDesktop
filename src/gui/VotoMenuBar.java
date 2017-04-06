@@ -19,15 +19,13 @@ public class VotoMenuBar extends MenuBar {
 	private MenuItem newItem, openItem, saveItem, exitItem;
 	private MenuItem nextItem, stopItem;
 	private MenuItem consoleItem, clientsItem, graphItem, connectionItem;
-	private VotoDesktopFX parent;
 	
 	/**
 	 * The universal menu bar for the program
 	 * @param s The active session
 	 * @param p The main stage 
 	 */
-	public VotoMenuBar(Session s, VotoDesktopFX p) {
-		parent = p;
+	public VotoMenuBar(Session s) {
 		
 		// File menu
 		fileMenu = new Menu("_File");
@@ -57,9 +55,9 @@ public class VotoMenuBar extends MenuBar {
 		
 		// Set menu item actions
 		newItem.setOnAction(e -> new SetupStage());
-		openItem.setOnAction(e -> { parent.hostGUI(); newItem.setDisable(true); openItem.setDisable(true); } );
+		openItem.setOnAction(e -> { VotoDesktopFX.hostGUI(); newItem.setDisable(true); openItem.setDisable(true); } );
 		//saveItem.setOnAction(e -> new ConsoleStage());
-		exitItem.setOnAction(e -> parent.exitProgram());
+		exitItem.setOnAction(e -> VotoDesktopFX.exitProgram());
 		nextItem.setDisable(true);
 		stopItem.setDisable(true);
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
