@@ -16,7 +16,7 @@ public class GraphStage extends Stage {
 	private Session session;
 	private HashMap<Vote, ArrayList<Client>> answerSet;
 
-	public GraphStage(Session s) {
+	public GraphStage(Session s, VotoMenuBar parent) {
 		session = s;
 		
 		//answerSet = session.getCurrentQuestion().getAnswerSet();
@@ -33,15 +33,17 @@ public class GraphStage extends Stage {
 		for (Vote v : data.keySet()) {
 			series1.getData().add(new XYChart.Data(v.getID(), data.get(v)));
 		}
-		//series1.getData().add(new XYChart.Data("A", 3)); //answerSet.get("A").size()));
-		//series1.getData().add(new XYChart.Data("B", 1)); //answerSet.get("B").size()));
-		//series1.getData().add(new XYChart.Data("C", 3)); //answerSet.get("C").size()));
-		//series1.getData().add(new XYChart.Data("D", 2)); //answerSet.get("D").size()));
-		//series1.getData().add(new XYChart.Data("E", 0)); //answerSet.get("E").size()));
+		series1.getData().add(new XYChart.Data("A", 3)); //answerSet.get("A").size()));
+		series1.getData().add(new XYChart.Data("B", 1)); //answerSet.get("B").size()));
+		series1.getData().add(new XYChart.Data("C", 3)); //answerSet.get("C").size()));
+		series1.getData().add(new XYChart.Data("D", 2)); //answerSet.get("D").size()));
+		series1.getData().add(new XYChart.Data("E", 0)); //answerSet.get("E").size()));
 
 		Scene scene  = new Scene(bc, 800, 600);
 		bc.getData().add(series1);
 		setScene(scene);
 		show();
+		
+		setOnCloseRequest(e -> parent.enableGraph());
 	}
 }

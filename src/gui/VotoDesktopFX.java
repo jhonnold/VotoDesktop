@@ -5,11 +5,7 @@ package gui;
 import java.net.*;
 
 import javafx.application.*;
-import javafx.scene.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
 import javafx.stage.*;
-import javafx.geometry.*;
 import session.Session;
 
 /**

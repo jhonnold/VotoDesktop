@@ -62,7 +62,7 @@ public class VotoMenuBar extends MenuBar {
 		stopItem.setDisable(true);
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
-		graphItem.setOnAction(e -> new GraphStage(s));
+		graphItem.setOnAction(e -> { new GraphStage(s, this); graphItem.setDisable(true); } );
 		connectionItem.setOnAction(e -> { new ConnectionInfo(s.ID, this); connectionItem.setDisable(true); });
 	}
 	
@@ -93,6 +93,13 @@ public class VotoMenuBar extends MenuBar {
 	 */
 	public void enableConnection() {
 		connectionItem.setDisable(false);
+	}
+	
+	/**
+	 * Re-enable the graph dropdown item
+	 */
+	public void enableGraph() {
+		graphItem.setDisable(false);
 	}
 	
 	/**
