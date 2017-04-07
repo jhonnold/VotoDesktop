@@ -132,6 +132,14 @@ public class GraphStage extends Stage {
 			
 			XYChart.Series series = new XYChart.Series();
 			
+			//---------------------------------------------
+			series.getData().add(new XYChart.Data("A", 0));
+			series.getData().add(new XYChart.Data("B", 0));
+			series.getData().add(new XYChart.Data("C", 0));
+			series.getData().add(new XYChart.Data("D", 0));
+			series.getData().add(new XYChart.Data("E", 0));
+			//---------------------------------------------
+			
 			for (Vote v : session.returnQuestionData().keySet()) {
 				
 				Integer amount = session.returnQuestionData().get(v);
@@ -147,6 +155,14 @@ public class GraphStage extends Stage {
 		public void actionPerformed(ActionEvent arg0) {
 			
 			XYChart.Series series = new XYChart.Series();
+			
+			//---------------------------------------------
+			series.getData().add(new XYChart.Data("A", 0));
+			series.getData().add(new XYChart.Data("B", 0));
+			series.getData().add(new XYChart.Data("C", 0));
+			series.getData().add(new XYChart.Data("D", 0));
+			series.getData().add(new XYChart.Data("E", 0));
+			//---------------------------------------------
 			
 			for (Vote v : session.returnQuestionData().keySet()) {
 				
@@ -175,6 +191,14 @@ public class GraphStage extends Stage {
 			
 			HashMap<Vote, Integer> data = session.returnQuestionData(imgID);
 			XYChart.Series series = new XYChart.Series();
+			
+			//---------------------------------------------
+			series.getData().add(new XYChart.Data("A", 0));
+			series.getData().add(new XYChart.Data("B", 0));
+			series.getData().add(new XYChart.Data("C", 0));
+			series.getData().add(new XYChart.Data("D", 0));
+			series.getData().add(new XYChart.Data("E", 0));
+			//---------------------------------------------
 			
 			for (Vote v : data.keySet()) {
 				series.getData().add(new XYChart.Data(v.getID(), data.get(v)));
