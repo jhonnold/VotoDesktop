@@ -99,6 +99,7 @@ public class Session {
 
 		if (currentQuestion != null) {
 			dataList.add(new QuestionData(currentQuestion, imageID - 1));
+			questionList.add(imageID - 1);
 			currentQuestion.endQuestion();
 			for (Client c : clientList) {
 				c.setLastVote(null);
@@ -289,6 +290,13 @@ public class Session {
 	}
 	
 	/**
+	 * @return - An arraylist of the imgID's of the currently completed questions
+	 */
+	public ArrayList<Integer> completedQuestionList() {
+		return questionList;
+	}
+	
+	/**
 	 * Returns a HashMap used to build a bar chart corresponding to
 	 * votes per choice for THE CURRENT QUESTION
 	 * 
@@ -338,39 +346,6 @@ public class Session {
 			for (Vote v : qd.questionAnswerData.keySet()) {
 
 				voteData.put(v, qd.questionAnswerData.get(v).size());
-			}
-		}
-		
-		return voteData;
-	}
-	
-	/**
-	 * Returns a HashMap used to build a pie chart corresponding to
-	 * the percentage of votes per choice of a given question
-	 * 
-	 * @param ID
-	 * 			- ID for the question we are accessing data for
-	 * @return - Each vote choice with its corresponding percentage of votes
-	 */
-	public HashMap<Vote, Double> returnQuestionDataPieChart(int ID) {
-		
-		HashMap<Vote, Double> voteData = new HashMap<>();
-		int totalVotes = currentQuestion.getAnswerSet().size();
-		QuestionData qd = null;
-
-		// find the proper question based on the received ID
-		for (QuestionData temp : dataList) {
-
-			if (temp.getID() == ID) {
-				qd = temp;
-			}
-		}
-		
-		if (qd != null) {
-			for (Vote v : qd.questionAnswerData.keySet()) {
-
-				// saves number of votes/vote option as a % rather than a number
-				voteData.put(v, (double)qd.questionAnswerData.get(v).size()/totalVotes);
 			}
 		}
 		

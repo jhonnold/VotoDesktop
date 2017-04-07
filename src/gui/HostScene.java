@@ -166,7 +166,7 @@ public class HostScene extends Scene {
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight());
+		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 2);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
