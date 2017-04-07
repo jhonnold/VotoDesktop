@@ -43,13 +43,11 @@ public class NetworkHandler implements Runnable, Closeable {
 	 *            - The datagram packet received from client.
 	 */
 	public void onPacketReceived(DatagramPacket inFromClient) {
-		byte[] data = inFromClient.getData();
-
 		if (Level.ALL.lt(VotoDesktopFX.outputMode))
-			System.out.println("I have received a packet containing: " + new String(data));
+			System.out.println("I have received a packet containing: " + new String(inFromClient.getData()));
 
 		try {
-			byte[] replyData = control.parseNetworkCommand(data);
+			byte[] replyData = control.parseNetworkCommand(inFromClient);
 			reply(replyData, inFromClient);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();// replyError(kwargs, e.getMessage());

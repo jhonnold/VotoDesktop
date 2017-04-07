@@ -1,5 +1,6 @@
 package controller;
 
+import java.net.DatagramPacket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 
@@ -71,7 +72,7 @@ public class Controller {
 	 *            - {'R' (1), IDlength (1), ID (x)}
 	 * @return - The returning packet as {'R' (1), IDLength (1), ID (x)}
 	 */
-	protected byte[] handshakeRequest(byte[] inFromClient) {
+	protected byte[] handshakeRequest(byte[] inFromClient, String IP) {
 		if (inFromClient.length <= 1) {
 			return null;
 		}
@@ -88,10 +89,11 @@ public class Controller {
 			System.out.println("Parsed as a handshake from: " + ID);
 		}
 
-		if (!session.addClient(ID)) {
+		if (!session.addClient(ID, IP)) {
 			if (Level.LOW.lt(VotoDesktopFX.outputMode)) {
 				System.out.println("This user has already connected!");
 			}
+			return null;
 		}
 
 		// Create the returning packet
@@ -214,8 +216,9 @@ public class Controller {
 	 *            - the byte array coming from the client.
 	 * @return - the byte array to be returned based on the initial command
 	 */
-	public byte[] parseNetworkCommand(byte[] data) {
-
+	public byte[] parseNetworkCommand(DatagramPacket inFromClient) {
+		
+		byte[] data = inFromClient.getData();
 		byte[] returnPacket = null;
 
 		char c = (char) data[0];
@@ -226,7 +229,7 @@ public class Controller {
 
 		switch (c) {
 		case 'R':
-			returnPacket = handshakeRequest(data);
+			returnPacket = handshakeRequest(data, inFromClient.getAddress().getHostAddress());
 			break;
 		case 'V':
 			returnPacket = vote(data);
