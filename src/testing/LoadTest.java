@@ -26,7 +26,7 @@ public class LoadTest {
 		}
 
 	}
-
+	
 	protected static String getSaltString() {
 
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

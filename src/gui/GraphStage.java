@@ -37,86 +37,34 @@ public class GraphStage extends Stage {
 	
 	private int cursor;
 	
-	public GraphStage(Session s, VotoMenuBar parent) {
+	public GraphStage(Session s, VotoMenuBar parent, int id) {
+		
 		session = s;
-		bp = new BorderPane();
+		final VotoBarChart<String, Number> bc = new VotoBarChart<>(new CategoryAxis(), new NumberAxis(), id);
 		
-		questionList = session.completedQuestionList();
-		cursor = questionList.size();
+		bc.setTitle("Vote Summary for Question - " + id);
 		
-		//answerSet = session.getCurrentQuestion().getAnswerSet();
-		//final BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
-		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(new CategoryAxis(), new NumberAxis());
-		bc.setTitle("Vote Summary");
-		
-		bp.setCenter(bc);
-		
-		leftButton = new Button("Previous");
-		
-		if (cursor <= 0) {
-			leftButton.setDisable(true);
-		}
-		
-		leftButton.setOnAction(e -> moveLeft());
-		
-		rightButton = new Button("Newer");
-		
-		if (cursor >= questionList.size()) {
-			rightButton.setDisable(true);
-		}
-		
-		rightButton.setOnAction(e -> moveRight());
-		
-		GridPane gp = new GridPane();
-		ColumnConstraints c = new ColumnConstraints();
-		c.setPercentWidth(33.3);
-		gp.getColumnConstraints().addAll(c, c, c);
-		
-		// Add button to each HBox centered
-		HBox b1 = new HBox();
-		b1.setAlignment(Pos.CENTER);
-		b1.getChildren().add(leftButton);
-		HBox b2 = new HBox();
-		b2.setAlignment(Pos.CENTER);
-		b2.getChildren().add(rightButton);
-		
-		// Add the HBox's to the gridpane
-		gp.add(b1, 0, 0);
-		gp.add(b2, 2, 0);
-		bp.setBottom(gp);
-		
-		Scene scene  = new Scene(bp);
+		Scene scene  = new Scene(bc);
 		setScene(scene);
 		show();
 		
 		setOnCloseRequest(e -> parent.enableGraph());
-	}
-	
-	private void moveLeft() {
-		
-		rightButton.setDisable(false);
-		bp.setCenter(new VotoBarChart(new CategoryAxis(), new NumberAxis(), questionList.get(--cursor)));
-		
-		if (cursor <= 0) {
-			leftButton.setDisable(true);
-		}
 		
 	}
 	
-	private void moveRight() {
+	public GraphStage(Session s, VotoMenuBar parent) {
+		session = s;
 		
-		leftButton.setDisable(false);
+		//answerSet = session.getCurrentQuestion().getAnswerSet();
+		//final BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
+		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(new CategoryAxis(), new NumberAxis());
+		bc.setTitle("Vote Summary for Current Question");
 		
-		cursor++;
+		Scene scene  = new Scene(bc);
+		setScene(scene);
+		show();
 		
-		if (cursor < questionList.size()) {
-			bp.setCenter(new VotoBarChart(new CategoryAxis(), new NumberAxis(), questionList.get(cursor)));
-		} else {
-			
-			bp.setCenter(new VotoLiveBarChart(new CategoryAxis(), new NumberAxis()));
-			rightButton.setDisable(true);
-		}
-		
+		setOnCloseRequest(e -> parent.enableGraph());
 	}
 	
 	private class VotoLiveBarChart<String, Number> extends BarChart<String, Number> implements ActionListener {

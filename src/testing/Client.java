@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 public class Client implements Runnable {
 	
@@ -20,6 +21,8 @@ public class Client implements Runnable {
 	private MediaResponse mr = new MediaResponse();
 	private Media m;
 	
+	private boolean voted = false;
+	private int voteNum = 1;
 	
 	public Client(String IP, String ID, int index) {
 		
@@ -88,7 +91,7 @@ public class Client implements Runnable {
 			
 			if (mr.imgID != imageID) {
 				m = new Media(mr.imgID, mr.packetCount, mr.imgLength, index);
-				
+				voted = false;
 				while (!m.isReady()) {
 					
 					try {
@@ -117,7 +120,7 @@ public class Client implements Runnable {
 
 	                } catch (IOException e) {
 	                	System.out.println("IO Error on send");
-	                }	
+	                }
 				}
 				
 				imageID = mr.imgID;
@@ -138,6 +141,23 @@ public class Client implements Runnable {
 				e.printStackTrace();
 			}
 			
+			if (!voted) {
+				byte[] voteMsg = MessageUtility.getVoteMessage(ID, Character.toString(getVoteChar()), (byte)voteNum++);
+				voted = true;
+				
+				out = new DatagramPacket(voteMsg, voteMsg.length, SERVER, PORT);
+				try {
+					socket.send(out);
+				} catch (IOException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
+				
+				try {
+					socket.receive(in);
+				} catch (Exception e) {}
+			}
+			
 			
 		}
 		
@@ -148,5 +168,12 @@ public class Client implements Runnable {
         byte imgID;
         int packetCount;
     }
+    
+	protected char getVoteChar() {
+		String votes = "ABCDE";
+		Random rnd = new Random();
+		
+		return votes.charAt(rnd.nextInt(5));
+	}
 	
 }
