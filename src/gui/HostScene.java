@@ -76,11 +76,9 @@ public class HostScene extends Scene {
 		pane.getChildren().add(rootHost);
 		
 		next = new Button("Next");
-		next.setPrefHeight(25);
-		next.setPrefWidth(50);
-		next.setOnAction(e -> nextQuestion());
-		next.setLayoutX(width - next.getPrefWidth() - 30);
-		next.setLayoutY(height - next.getPrefHeight() - 30);
+		next.setOnAction(e -> {nextQuestion(); mb.updateQuestionList();});
+		next.setLayoutX(width - 80);
+		next.setLayoutY(height - 55);
 		
 		pane.getChildren().add(next);
 		
@@ -88,7 +86,7 @@ public class HostScene extends Scene {
 	
 	public void start() {
 		mb.setOpenFile(e -> openFile());
-		mb.setSession(e -> nextQuestion(), e -> stopSession());
+		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
 		
 		openFile();
 
@@ -209,6 +207,9 @@ public class HostScene extends Scene {
 		s.reset();
 		
 		VotoDesktopFX.primary.setScene(VotoDesktopFX.launch);
+		mb.menuBarInLaunch();
+		VotoDesktopFX.launch.reinstallMenuBar(mb);
+		
 	}
 
 }

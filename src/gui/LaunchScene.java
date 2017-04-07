@@ -52,4 +52,8 @@ public class LaunchScene extends Scene {
 				container.setCenter(gp);
 		
 	}
+	
+	public static void reinstallMenuBar(VotoMenuBar mb) {
+		container.setTop(mb);
+	}
 }
