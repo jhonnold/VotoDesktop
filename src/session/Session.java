@@ -26,6 +26,7 @@ public class Session {
 
 	private Controller control = new Controller(this);
 	private Question currentQuestion;
+	
 	private ArrayList<Integer> questionList = new ArrayList<Integer>();
 	private ArrayList<QuestionData> dataList = new ArrayList<QuestionData>();
 
@@ -109,9 +110,8 @@ public class Session {
 
 		try {
 			ArrayList<byte[]> imageBytes = loadImage(filename);
-			currentQuestion = new Question(imageBytes, imageID);
+			currentQuestion = new Question(imageBytes, imageID++);
 			currentQuestion.setAnswer(answer);
-			questionList.add(imageID++);
 			return true;
 		} catch (IOException e) {
 			System.out.println("Failed to load image!");

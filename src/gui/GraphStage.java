@@ -37,9 +37,6 @@ public class GraphStage extends Stage {
 	
 	private int cursor;
 	
-	final CategoryAxis xAxis = new CategoryAxis();
-	final NumberAxis yAxis = new NumberAxis();
-	
 	public GraphStage(Session s, VotoMenuBar parent) {
 		session = s;
 		bp = new BorderPane();
@@ -49,10 +46,8 @@ public class GraphStage extends Stage {
 		
 		//answerSet = session.getCurrentQuestion().getAnswerSet();
 		//final BarChart<String,Number> bc = new BarChart<>(xAxis,yAxis);
-		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(xAxis, yAxis);
+		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(new CategoryAxis(), new NumberAxis());
 		bc.setTitle("Vote Summary");
-		xAxis.setLabel("Vote");       
-		yAxis.setLabel("Amount");
 		
 		bp.setCenter(bc);
 		
@@ -100,7 +95,7 @@ public class GraphStage extends Stage {
 	private void moveLeft() {
 		
 		rightButton.setDisable(false);
-		bp.setCenter(new VotoBarChart(xAxis, yAxis, questionList.get(--cursor)));
+		bp.setCenter(new VotoBarChart(new CategoryAxis(), new NumberAxis(), questionList.get(--cursor)));
 		
 		if (cursor <= 0) {
 			leftButton.setDisable(true);
@@ -115,10 +110,10 @@ public class GraphStage extends Stage {
 		cursor++;
 		
 		if (cursor < questionList.size()) {
-			bp.setCenter(new VotoBarChart(xAxis, yAxis, questionList.get(cursor)));
+			bp.setCenter(new VotoBarChart(new CategoryAxis(), new NumberAxis(), questionList.get(cursor)));
 		} else {
 			
-			bp.setCenter(new VotoLiveBarChart(xAxis, yAxis));
+			bp.setCenter(new VotoLiveBarChart(new CategoryAxis(), new NumberAxis()));
 			rightButton.setDisable(true);
 		}
 		
@@ -176,6 +171,7 @@ public class GraphStage extends Stage {
 		public VotoBarChart(Axis<String> xAxis, Axis<Number> yAxis, int imgID) {
 			super(xAxis, yAxis);
 			setPrefSize(800, 600);
+			setAnimated(false);
 			
 			HashMap<Vote, Integer> data = session.returnQuestionData(imgID);
 			XYChart.Series series = new XYChart.Series();
