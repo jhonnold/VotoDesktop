@@ -22,6 +22,26 @@ public class VotoDesktopFX extends Application {
 	protected static LaunchScene launch;
 	private static VotoMenuBar menu = new VotoMenuBar(s);
 	
+	public static Level outputMode = Level.MED;
+	
+	public enum Level {
+		ALL (4),
+		HIGH (3),
+		MED (2),
+		LOW (1),
+		NONE (0);
+		
+		public final int levelCode;
+		
+		Level(int level) {
+			levelCode = level;
+		}
+		
+		public boolean lt(Level l) {
+			return levelCode <= l.levelCode;
+		}
+	}
+	
 	/**
 	 * Start GUI has host or join options
 	 */
