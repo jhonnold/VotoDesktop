@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -197,7 +198,12 @@ public class HostScene extends Scene {
 		questionIndex = 0;
 		questions.clear();
 		
-		s.save();
+		try {
+			s.save();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		s.reset();
 		
 		VotoDesktopFX.primary.setScene(VotoDesktopFX.launch);

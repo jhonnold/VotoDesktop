@@ -9,6 +9,8 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 
@@ -39,8 +41,32 @@ public class Session {
 		this.ID = id;
 	}
 	
-	public void save() {
+	/**
+	 * Used to write session QuestionData to a .csv file for users to review data after
+	 * a session has been terminated 
+	 * 
+	 * @throws FileNotFoundException
+	 */
+	public void save() throws FileNotFoundException {
 		// SAVE SESSION INFO HERE
+		PrintWriter pw = new PrintWriter(new File("test.csv"));
+		StringBuilder sb = new StringBuilder();
+		
+		for (QuestionData qd : dataList) {
+			sb.append("Question " + qd.getID());
+			sb.append('\n');
+			for (Vote v : qd.questionAnswerData.keySet()) {
+				sb.append(v.getID());
+				sb.append(',');
+				sb.append(qd.questionAnswerData.get(v).size());
+				sb.append('\n');
+			}
+			sb.append('\n');
+		}
+		
+		pw.write(sb.toString());
+		pw.close();
+		
 	}
 	
 	public void reset() {
@@ -308,8 +334,8 @@ public class Session {
 		
 		HashMap<Vote, Integer> voteData = new HashMap<>();
 
-		// find the proper question based on the received 
-		if (currentQuestion != null) {			
+		// Adds number of votes per vote option for the current question to the data map
+		if (currentQuestion != null) {
 			for (Vote v : currentQuestion.getAnswerSet().keySet()) {
 				voteData.put(v, currentQuestion.getAnswerSet().get(v).size());
 			}
