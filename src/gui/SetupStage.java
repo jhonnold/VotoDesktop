@@ -84,9 +84,44 @@ public class SetupStage extends Stage{
 		
 		//Exit confirmation
 		setOnCloseRequest(new EventHandler<WindowEvent>() {
+			public void handle(WindowEvent we) {
+				ButtonType saveButton = new ButtonType("Save");
+				ButtonType exitButton = new ButtonType("Exit");
+				ButtonType cancelButton = new ButtonType("Cancel");
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setContentText("Do you want to save?");
+				alert.setHeaderText(null);
+				alert.getButtonTypes().setAll(saveButton, exitButton, cancelButton);
+				Optional<ButtonType> result = alert.showAndWait();
+				
+				//Save file
+				if (result.get() == saveButton) {
+					saveFile();
+				}
+				
+				//exit without saving
+				else if (result.get() == exitButton) {
+					try {
+	        			  output.close();
+	        		  } catch (IOException e) {
+	        			  e.printStackTrace();
+	        		  }
+	        		  outFile.delete();
+				}
+				
+				//Doesn't close or save
+				else {
+					we.consume();
+					alert.close();
+				}
+			}
+		});
+		
+		
+		/*setOnCloseRequest(new EventHandler<WindowEvent>() {
 	          public void handle(WindowEvent we) {
 	        	  Alert alert = new Alert(AlertType.CONFIRMATION);
-	        	  alert.setContentText("Do you want to exit without saving?");
+	        	  alert.setContentText("Do you want to save?");
 	        	  Optional<ButtonType> result = alert.showAndWait();
 	        	  if (result.get() == ButtonType.OK){
 	        		  try {
@@ -100,7 +135,7 @@ public class SetupStage extends Stage{
 	        		  alert.close();
 	        	  }	  
 	          }	
-	      });
+	      });*/
 	}
 	
 	/**
@@ -240,6 +275,7 @@ public class SetupStage extends Stage{
 		try {
 			output.flush();
 			output.close();
+			close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
