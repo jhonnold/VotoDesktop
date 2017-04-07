@@ -110,7 +110,6 @@ public class SetupStage extends Stage{
 		
 		//Instantiate
 		fc = new FileChooser();
-		fc.setInitialDirectory(new File("./"));
 		file = fc.showOpenDialog(null);
 		String filePath = null;
 		
