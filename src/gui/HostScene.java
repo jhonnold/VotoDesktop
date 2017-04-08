@@ -84,11 +84,10 @@ public class HostScene extends Scene {
 		
 	}
 	
-	public void start() {
+	public File start() {
 		mb.setOpenFile(e -> openFile());
 		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
-		
-		openFile();
+		File file = openFile();
 
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
@@ -96,17 +95,18 @@ public class HostScene extends Scene {
 		for (int i = 0; i < questions.size(); i+=2) {
 			addPic(questions.get(i));
 		}
+		
+		return file;
 	}
 	
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void openFile() {
+	private File openFile() {
 
 		// Instantiate
 		fc = new FileChooser();
 		fc.setInitialDirectory(new File("./"));
-		// fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
 		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
@@ -136,6 +136,7 @@ public class HostScene extends Scene {
 				e.printStackTrace();
 			}
 		}
+		return file;
 	}
 	
 	/**

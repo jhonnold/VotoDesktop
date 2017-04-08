@@ -89,16 +89,21 @@ public class VotoDesktopFX extends Application {
 	 * for each picture 
 	 */
 	protected static void hostGUI() {
-		primary.setScene(host);
-		primary.show();
-		host.start();
-		
+				
+		if (host.start() != null) {
+			primary.setScene(host);
+			primary.show();
+			
 		//Start session
 		try {
 			s.start();
 		} 
 		catch (SocketException se) {
 			se.printStackTrace();
+		}
+		}
+		else {
+			VotoDesktopFX.launch.reinstallMenuBar(menu);
 		}
 	}
 	
