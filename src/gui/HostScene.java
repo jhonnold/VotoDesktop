@@ -40,6 +40,8 @@ public class HostScene extends Scene {
 	private VotoMenuBar mb;
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
+	private ArrayList<ImageView> imageList;
+	private int imageIndex = 0;
 
 	
 	/**
@@ -81,7 +83,7 @@ public class HostScene extends Scene {
 		next.setLayoutY(height - 55);
 		
 		pane.getChildren().add(next);
-		
+		imageList = new ArrayList<>();
 	}
 	
 	public File start() {
@@ -152,11 +154,15 @@ public class HostScene extends Scene {
 			Image image = SwingFXUtils.toFXImage(bImage, null);
 			iView = new ImageView();
 			iView.setImage(image);
-
+			imageList.add(iView);
 		} catch (IOException e) {
 			System.exit(1);
 		}
 		addImgToSP(iView);
+		if (imageIndex == 0) {
+			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+			imageIndex++;
+		}
 
 	}
 
@@ -166,7 +172,7 @@ public class HostScene extends Scene {
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 30);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
@@ -177,6 +183,9 @@ public class HostScene extends Scene {
 	private void nextQuestion() {
 		if (questionIndex < questions.size()) {
 			s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
+			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+			imageList.get(imageIndex-1).setFitHeight(pane.getHeight() - mb.getHeight() - 30);
+			imageIndex++;
 			if (++questionIndex == questions.size()) {
 				next.setText("Done");
 				mb.setNext("Done");
@@ -197,7 +206,9 @@ public class HostScene extends Scene {
 		
 		picIndex = 0;
 		questionIndex = 0;
+		imageIndex = 0;
 		questions.clear();
+		imageList.clear();
 		
 		try {
 			s.save();
