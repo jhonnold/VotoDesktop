@@ -42,6 +42,7 @@ public class HostScene extends Scene {
 	private int questionIndex = 0;
 	private ArrayList<ImageView> imageList;
 	private int imageIndex = 0;
+	private double totalWidth = 0, currentSPposition = 0;
 
 	
 	/**
@@ -175,6 +176,8 @@ public class HostScene extends Scene {
 		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 30);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
+		totalWidth += iViewPrev.getBoundsInParent().getWidth();
+		System.out.println(totalWidth);
 	}
 	
 	/**
@@ -185,6 +188,15 @@ public class HostScene extends Scene {
 			s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
 			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
 			imageList.get(imageIndex-1).setFitHeight(pane.getHeight() - mb.getHeight() - 30);
+			
+			if (imageIndex+1 == imageList.size()) {
+				picPane.setHvalue(1);
+			}
+			else {
+				currentSPposition += imageList.get(imageIndex).getBoundsInParent().getWidth()/totalWidth;
+				picPane.setHvalue(currentSPposition);
+			}
+			
 			imageIndex++;
 			if (++questionIndex == questions.size()) {
 				next.setText("Done");
@@ -209,6 +221,10 @@ public class HostScene extends Scene {
 		imageIndex = 0;
 		questions.clear();
 		imageList.clear();
+		totalWidth = 0;
+		
+		picPane.setHvalue(0);
+		currentSPposition = 0;
 		
 		try {
 			s.save();

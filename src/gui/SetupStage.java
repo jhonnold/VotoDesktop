@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -54,6 +56,14 @@ public class SetupStage extends Stage{
 		
 		pics = new HBox();
 		picPane.setContent(pics);
+		
+		//Change scroll bar position
+		pics.widthProperty().addListener(new ChangeListener() {
+
+		    public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+		        picPane.setHvalue((Double)newValue );  
+		    }
+		});
 		
 		
 		answerPane();
@@ -116,26 +126,6 @@ public class SetupStage extends Stage{
 				}
 			}
 		});
-		
-		
-		/*setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	        	  Alert alert = new Alert(AlertType.CONFIRMATION);
-	        	  alert.setContentText("Do you want to save?");
-	        	  Optional<ButtonType> result = alert.showAndWait();
-	        	  if (result.get() == ButtonType.OK){
-	        		  try {
-	        			  output.close();
-	        		  } catch (IOException e) {
-	        			  e.printStackTrace();
-	        		  }
-	        		  outFile.delete();
-	        	  } else {
-	        		  we.consume();
-	        		  alert.close();
-	        	  }	  
-	          }	
-	      });*/
 	}
 	
 	/**
