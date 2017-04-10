@@ -89,6 +89,10 @@ public class HostScene extends Scene {
 		imageList = new ArrayList<>();
 	}
 	
+	/**
+	 * Opens images from file, sets session name, builds GUI
+	 * @return
+	 */
 	public File start() {
 		mb.setOpenFile(e -> openFile());
 		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
@@ -170,6 +174,7 @@ public class HostScene extends Scene {
 			iView.setImage(image);
 			imageList.add(iView);
 		} catch (IOException e) {
+			//File image error
 			e.printStackTrace();
 			reset();
 			Alert alert = new Alert(AlertType.WARNING);
@@ -178,6 +183,7 @@ public class HostScene extends Scene {
 			Optional<ButtonType> result = alert.showAndWait();
 			return false;
 		}
+		//add images to GUI
 		addImgToSP(iView);
 		if (imageIndex == 0) {
 			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
@@ -192,7 +198,7 @@ public class HostScene extends Scene {
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 30);
+		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 30); //All images smaller than current
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 		totalWidth += iViewPrev.getBoundsInParent().getWidth();
@@ -225,6 +231,7 @@ public class HostScene extends Scene {
 		}
 	}
 
+	//Ends session and resets variables
 	private void stopSession() {
 		s.stop();
 		System.out.println("Session stopped");
@@ -245,6 +252,7 @@ public class HostScene extends Scene {
 		
 	}
 	
+	//Reset variables
 	public void reset() {
 		mb.setNext("Next");
 		next.setText("Next");

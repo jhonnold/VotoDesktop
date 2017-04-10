@@ -24,7 +24,11 @@ import javafx.util.StringConverter;
 import session.Client;
 import session.Session;
 import session.Vote;
-
+/**
+ * Graphically displays vote data with live updates
+ * @author Nic/Jay
+ *
+ */
 public class GraphStage extends Stage {
 	
 	private Session session;
@@ -37,6 +41,7 @@ public class GraphStage extends Stage {
 	
 	private int cursor;
 	
+	//Create stage
 	public GraphStage(Session s, VotoMenuBar parent, int id) {
 		
 		session = s;
@@ -67,6 +72,7 @@ public class GraphStage extends Stage {
 		setOnCloseRequest(e -> parent.enableGraph());
 	}
 	
+	//Updates vote data every second
 	private class VotoLiveBarChart<String, Number> extends BarChart<String, Number> implements ActionListener {
 		
 		private Timer t = new Timer(1000, this);
@@ -99,6 +105,7 @@ public class GraphStage extends Stage {
 			
 		}
 
+		//Update graph with new data
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
