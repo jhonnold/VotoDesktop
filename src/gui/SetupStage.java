@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -231,11 +232,12 @@ public class SetupStage extends Stage{
 	 */
 	private void addMenu() {
 		menuBar = new MenuBar();
-		fileMenu = new Menu("File");
-		fileMenu = new Menu("File");
-		openItem = new MenuItem("Open");
-		saveItem = new MenuItem("Save");
-		exitItem = new MenuItem("Exit");
+		fileMenu = new Menu("_File");
+		openItem = new MenuItem("_Open");
+		openItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+O"));
+		saveItem = new MenuItem("_Save");
+		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
+		exitItem = new MenuItem("E_xit");
 		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
 		
 		menuBar.getMenus().addAll(fileMenu);

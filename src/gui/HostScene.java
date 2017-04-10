@@ -91,12 +91,18 @@ public class HostScene extends Scene {
 		mb.setOpenFile(e -> openFile());
 		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
 		File file = openFile();
+		s.setID(file.getName().substring(0, file.getName().length() - 5));
 
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
 	
 		for (int i = 0; i < questions.size(); i+=2) {
 			addPic(questions.get(i));
+		}
+		
+		if (imageList.size() <= 1) {
+			next.setText("Done");
+			mb.setNext("Done");
 		}
 		
 		return file;
@@ -177,7 +183,6 @@ public class HostScene extends Scene {
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 		totalWidth += iViewPrev.getBoundsInParent().getWidth();
-		System.out.println(totalWidth);
 	}
 	
 	/**
