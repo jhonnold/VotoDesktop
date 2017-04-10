@@ -211,6 +211,23 @@ public class HostScene extends Scene {
 		s.stop();
 		System.out.println("Session stopped");
 		
+		reset();
+		
+		try {
+			s.save();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		s.reset();
+		
+		VotoDesktopFX.primary.setScene(VotoDesktopFX.launch);
+		mb.menuBarInLaunch();
+		VotoDesktopFX.launch.reinstallMenuBar(mb);
+		
+	}
+	
+	public void reset() {
 		mb.setNext("Next");
 		next.setText("Next");
 		
@@ -225,19 +242,6 @@ public class HostScene extends Scene {
 		
 		picPane.setHvalue(0);
 		currentSPposition = 0;
-		
-		try {
-			s.save();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		s.reset();
-		
-		VotoDesktopFX.primary.setScene(VotoDesktopFX.launch);
-		mb.menuBarInLaunch();
-		VotoDesktopFX.launch.reinstallMenuBar(mb);
-		
 	}
 
 }
