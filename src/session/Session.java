@@ -53,14 +53,36 @@ public class Session {
 		StringBuilder sb = new StringBuilder();
 		
 		for (QuestionData qd : dataList) {
+			
+			// Add question ID to .csv
 			sb.append("Question " + qd.getID());
 			sb.append('\n');
 			for (Vote v : qd.questionAnswerData.keySet()) {
+				
+				// add number of votes per vote option for each given question
 				sb.append(v.getID());
 				sb.append(',');
 				sb.append(qd.questionAnswerData.get(v).size());
 				sb.append('\n');
 			}
+			sb.append('\n');
+		}
+		
+		// Access questionData for the currentQuestion (i.e. the last question before exiting a session)
+		HashMap<Vote, ArrayList<Client>> currQD = currentQuestion.getAnswerSet();
+		sb.append("Question " + currentQuestion.imageID());
+		sb.append('\n');
+		for (Vote v : currQD.keySet()) {
+			sb.append(v.getID());
+			sb.append(',');
+			sb.append(currQD.get(v).size());
+			sb.append('\n');
+		}
+		
+		// Adds list of clients who were connected during the session to the end of the .csv file
+		sb.append("\nClient List\n");
+		for (Client c : clientList) {
+			sb.append(c.getID());
 			sb.append('\n');
 		}
 		
