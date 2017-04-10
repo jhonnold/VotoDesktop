@@ -170,6 +170,8 @@ public class HostScene extends Scene {
 			iView.setImage(image);
 			imageList.add(iView);
 		} catch (IOException e) {
+			e.printStackTrace();
+			reset();
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setContentText("File Error");
 			alert.setHeaderText(null);
@@ -255,6 +257,7 @@ public class HostScene extends Scene {
 		questions.clear();
 		imageList.clear();
 		totalWidth = 0;
+		
 		
 		picPane.setHvalue(0);
 		currentSPposition = 0;
