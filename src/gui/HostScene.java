@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -40,6 +42,9 @@ public class HostScene extends Scene {
 	private VotoMenuBar mb;
 	private ArrayList<String> questions;
 	private int questionIndex = 0;
+	private ArrayList<ImageView> imageList;
+	private int imageIndex = 0;
+	private double totalWidth = 0, currentSPposition = 0;
 
 	
 	/**
@@ -81,32 +86,43 @@ public class HostScene extends Scene {
 		next.setLayoutY(height - 55);
 		
 		pane.getChildren().add(next);
-		
+		imageList = new ArrayList<>();
 	}
 	
-	public void start() {
+	public File start() {
 		mb.setOpenFile(e -> openFile());
 		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
+		File file = openFile();
 		
-		openFile();
+		if (file != null) {
+			s.setID(file.getName().substring(0, file.getName().length() - 5));
+		}
 
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
 	
 		for (int i = 0; i < questions.size(); i+=2) {
-			addPic(questions.get(i));
+			if (!addPic(questions.get(i))) {
+				return null;
+			}
 		}
+		
+		if (imageList.size() <= 1) {
+			next.setText("Done");
+			mb.setNext("Done");
+		}
+		
+		return file;
 	}
 	
 	/**
 	 * Open picture from file chooser to host pane
 	 */
-	private void openFile() {
+	private File openFile() {
 
 		// Instantiate
 		fc = new FileChooser();
 		fc.setInitialDirectory(new File("./"));
-		// fc.setInitialDirectory(new File(System.getProperty("user.home") + ".voto-desktop"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("VOTO files (*.voto)", "*.voto");
 		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
@@ -136,13 +152,14 @@ public class HostScene extends Scene {
 				e.printStackTrace();
 			}
 		}
+		return file;
 	}
 	
 	/**
 	 * Opens picture and loads into an ImageView
 	 * @param filepath The filepath of the image to be loaded
 	 */
-	private void addPic(String filepath) {
+	private boolean addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
 		try {
@@ -151,12 +168,22 @@ public class HostScene extends Scene {
 			Image image = SwingFXUtils.toFXImage(bImage, null);
 			iView = new ImageView();
 			iView.setImage(image);
-
+			imageList.add(iView);
 		} catch (IOException e) {
-			System.exit(1);
+			e.printStackTrace();
+			reset();
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("File Error");
+			alert.setHeaderText(null);
+			Optional<ButtonType> result = alert.showAndWait();
+			return false;
 		}
 		addImgToSP(iView);
-
+		if (imageIndex == 0) {
+			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+			imageIndex++;
+		}
+		return true;
 	}
 
 	/**
@@ -165,9 +192,10 @@ public class HostScene extends Scene {
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+		iViewPrev.setFitHeight(pane.getHeight() - mb.getHeight() - 30);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
+		totalWidth += iViewPrev.getBoundsInParent().getWidth();
 	}
 	
 	/**
@@ -176,6 +204,18 @@ public class HostScene extends Scene {
 	private void nextQuestion() {
 		if (questionIndex < questions.size()) {
 			s.setCurrentQuestion(questions.get(questionIndex), questions.get(++questionIndex));
+			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
+			imageList.get(imageIndex-1).setFitHeight(pane.getHeight() - mb.getHeight() - 30);
+			
+			if (imageIndex+1 == imageList.size()) {
+				picPane.setHvalue(1);
+			}
+			else {
+				currentSPposition += imageList.get(imageIndex).getBoundsInParent().getWidth()/totalWidth;
+				picPane.setHvalue(currentSPposition);
+			}
+			
+			imageIndex++;
 			if (++questionIndex == questions.size()) {
 				next.setText("Done");
 				mb.setNext("Done");
@@ -189,14 +229,7 @@ public class HostScene extends Scene {
 		s.stop();
 		System.out.println("Session stopped");
 		
-		mb.setNext("Next");
-		next.setText("Next");
-		
-		pics.getChildren().clear();
-		
-		picIndex = 0;
-		questionIndex = 0;
-		questions.clear();
+		reset();
 		
 		try {
 			s.save();
@@ -210,6 +243,24 @@ public class HostScene extends Scene {
 		mb.menuBarInLaunch();
 		VotoDesktopFX.launch.reinstallMenuBar(mb);
 		
+	}
+	
+	public void reset() {
+		mb.setNext("Next");
+		next.setText("Next");
+		
+		pics.getChildren().clear();
+		
+		picIndex = 0;
+		questionIndex = 0;
+		imageIndex = 0;
+		questions.clear();
+		imageList.clear();
+		totalWidth = 0;
+		
+		
+		picPane.setHvalue(0);
+		currentSPposition = 0;
 	}
 
 }

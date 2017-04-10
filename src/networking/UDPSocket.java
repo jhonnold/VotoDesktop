@@ -7,57 +7,59 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
+import gui.VotoDesktopFX.Level;
+
 /**
- * 
- * @author zomby
- *
- * This class is designed to open a Datagram socket on
- * a defined port and then both send and receive
+ * This class opens a Datagram socket on a defined port and then both send and
+ * receive
  */
 
 public class UDPSocket implements Runnable, Closeable {
-	
+
 	private final int PORT = 9876;
-	
+
 	private NetworkHandler listener;
 	private DatagramSocket socket;
 	private volatile boolean isListening = false;
-	
+
 	/**
-	 * Create a new datagram socket, catch the error of
-	 * something else using the port.
+	 * Creates a UDPSocket that passes received packets up to the given Network
+	 * Handler
+	 * 
+	 * @throws SocketException
+	 *             - If the socket 9876 is in use.
 	 */
 	public UDPSocket(NetworkHandler l) throws SocketException {
-		
+
 		this.listener = l;
-		
+
 		try {
 			socket = new DatagramSocket(PORT);
 		} catch (SocketException e) {
 			throw new SocketException("Could not create socket on 9876.\nIs something else using it?");
 		}
 	}
-	
+
 	/**
-	 * Start listening and in an infinite loop constantly receive
-	 * packets, sending them up to the listener.
+	 * Starts listening for packets on port 9876. When a packet is received is
+	 * passed up to the Network Handler where it is dealt with.
 	 */
 	@Override
 	public void run() {
-		
+
 		isListening = true;
-		
+
 		try {
 			socket.setSoTimeout(1000);
 		} catch (SocketException e) {
 			System.out.println("Couldn't set timeout");
 		}
-		
+
 		while (isListening) {
-			
+
 			byte[] buffer = new byte[1024];
 			DatagramPacket inFromClient = new DatagramPacket(buffer, buffer.length);
-			
+
 			try {
 				socket.receive(inFromClient);
 			} catch (SocketTimeoutException e) {
@@ -65,19 +67,22 @@ public class UDPSocket implements Runnable, Closeable {
 			} catch (IOException e) {
 				System.out.println("Socket probably closed while blocking with receive");
 			}
-			
+
 			listener.onPacketReceived(inFromClient);
 		}
 	}
-	
+
 	/**
-	 * Send DatagramPacket to client
-	 * @param outToClient - Datagram packet to be sent
+	 * Send DatagramPacket to client, will continue to send until successful (1
+	 * second timeout).
+	 * 
+	 * @param outToClient
+	 *            - DatagramPacket to be sent
 	 */
 	public void send(DatagramPacket outToClient) {
-		
+
 		boolean hasSent = false;
-		
+
 		while (!hasSent) {
 			try {
 				socket.send(outToClient);
@@ -88,13 +93,13 @@ public class UDPSocket implements Runnable, Closeable {
 			}
 			hasSent = true;
 		}
-		
+
 	}
-	
+
 	/**
-	 * Wait a second for the isListening to take affect
-	 * then close it cause the loop in run will have stopped
-	 * This is not necessary but guarantees no error
+	 * Wait a second for the isListening to take affect then close it cause the
+	 * loop in run will have stopped This is not necessary but guarantees no
+	 * error
 	 */
 	@Override
 	public void close() {
@@ -106,14 +111,14 @@ public class UDPSocket implements Runnable, Closeable {
 			System.out.println("Couldn't wait entire second!");
 		}
 	}
-	
+
 	/**
 	 * Is the socket still listening
+	 * 
 	 * @return If the socket is still listening or not
 	 */
 	public boolean isListening() {
 		return isListening;
 	}
-	
-	
+
 }

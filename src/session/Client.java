@@ -11,6 +11,8 @@ import java.util.HashMap;
 public class Client {
 
 	private String ID = null;
+	private String IP = null;
+	
 	private ArrayList<Vote> voteList = new ArrayList<Vote>();
 	
 	private Vote lastVote;
@@ -20,8 +22,9 @@ public class Client {
 	 * Client constructor
 	 * @param clientID - this client's ID
 	 */
-	public Client(String clientID) {
+	public Client(String clientID, String IP) {
 		ID = clientID;
+		this.IP = IP;
 	}
 	
 	/**
@@ -29,6 +32,8 @@ public class Client {
 	 * @return the client's ID as a string
 	 */
 	public String getID() { return ID; }
+	
+	public String getIP() { return IP; }
 	
 	/**
 	 * Returns the last vote sent by the specified client
@@ -74,7 +79,7 @@ public class Client {
 		}
 		
 		Client c = (Client) o;
-		return c.ID.equals(ID);
+		return c.IP.equals(IP);
 	}
 	
 	/**

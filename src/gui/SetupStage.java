@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -54,6 +57,14 @@ public class SetupStage extends Stage{
 		
 		pics = new HBox();
 		picPane.setContent(pics);
+		
+		//Change scroll bar position
+		pics.widthProperty().addListener(new ChangeListener() {
+
+		    public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+		        picPane.setHvalue((Double)newValue );  
+		    }
+		});
 		
 		
 		answerPane();
@@ -116,26 +127,6 @@ public class SetupStage extends Stage{
 				}
 			}
 		});
-		
-		
-		/*setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	        	  Alert alert = new Alert(AlertType.CONFIRMATION);
-	        	  alert.setContentText("Do you want to save?");
-	        	  Optional<ButtonType> result = alert.showAndWait();
-	        	  if (result.get() == ButtonType.OK){
-	        		  try {
-	        			  output.close();
-	        		  } catch (IOException e) {
-	        			  e.printStackTrace();
-	        		  }
-	        		  outFile.delete();
-	        	  } else {
-	        		  we.consume();
-	        		  alert.close();
-	        	  }	  
-	          }	
-	      });*/
 	}
 	
 	/**
@@ -241,11 +232,12 @@ public class SetupStage extends Stage{
 	 */
 	private void addMenu() {
 		menuBar = new MenuBar();
-		fileMenu = new Menu("File");
-		fileMenu = new Menu("File");
-		openItem = new MenuItem("Open");
-		saveItem = new MenuItem("Save");
-		exitItem = new MenuItem("Exit");
+		fileMenu = new Menu("_File");
+		openItem = new MenuItem("_Open");
+		openItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+O"));
+		saveItem = new MenuItem("_Save");
+		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
+		exitItem = new MenuItem("E_xit");
 		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
 		
 		menuBar.getMenus().addAll(fileMenu);

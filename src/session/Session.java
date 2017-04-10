@@ -174,13 +174,20 @@ public class Session {
 	 * @param ID
 	 *            - the new client's ID
 	 */
-	public boolean addClient(String ID) {
-		if (clientList.contains(new Client(ID))) {
-			return false;
+	public boolean addClient(String ID, String IP) {
+		for (Client c : clientList) {
+			if (!c.getID().equals(ID) && c.getIP().equals(IP)) {
+				return false;
+			} else if (c.getID().equals(ID) && c.getIP().equals(IP)) {
+				clientList.remove(c);
+				break;
+			} else if (c.getID().equals(ID) && !c.getIP().equals(IP)) {
+				return false;
+			}
 		}
 
 		System.out.println("Added new client: " + ID);
-		return clientList.add(new Client(ID));
+		return clientList.add(new Client(ID, IP));
 	}
 
 	/**

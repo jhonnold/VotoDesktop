@@ -75,7 +75,7 @@ public class VotoMenuBar extends MenuBar {
 		
 		// Set menu item actions
 		newItem.setOnAction(e -> new SetupStage());
-		openItem.setOnAction(e -> {newItem.setDisable(true); openItem.setDisable(true); VotoDesktopFX.hostGUI(); } );
+		openItem.setOnAction(e -> { VotoDesktopFX.hostGUI(); newItem.setDisable(true); openItem.setDisable(true); } );
 		//saveItem.setOnAction(e -> new ConsoleStage());
 		exitItem.setOnAction(e -> VotoDesktopFX.exitProgram());
 		nextItem.setDisable(true);
