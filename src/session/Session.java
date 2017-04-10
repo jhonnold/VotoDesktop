@@ -37,6 +37,12 @@ public class Session {
 	public Session(String ID) {
 		this.ID = ID;
 	}
+	
+	/**
+	 * Sets an ID for the session being created
+	 * 
+	 * @param id - the desired ID for the session
+	 */
 	public void setID(String id) {
 		this.ID = id;
 	}
@@ -49,7 +55,7 @@ public class Session {
 	 */
 	public void save() throws FileNotFoundException {
 		// SAVE SESSION INFO HERE
-		PrintWriter pw = new PrintWriter(new File("test.csv"));
+		PrintWriter pw = new PrintWriter(new File(this.ID + ".csv"));
 		StringBuilder sb = new StringBuilder();
 		
 		for (QuestionData qd : dataList) {
@@ -91,6 +97,9 @@ public class Session {
 		
 	}
 	
+	/**
+	 * Resets the session information
+	 */
 	public void reset() {
 		imageID = 1;
 		questionList.clear();
@@ -136,7 +145,7 @@ public class Session {
 
 	/**
 	 * Sets a new Question for the Session. Loads image via filename and sets
-	 * the correct answer to be that of the inputted string.
+	 * the correct answer to be that of the inputed string.
 	 * 
 	 * @param filename
 	 *            The image file to be loaded
