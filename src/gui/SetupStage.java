@@ -136,6 +136,8 @@ public class SetupStage extends Stage{
 		
 		//Instantiate
 		fc = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("jpg, jpeg files", "*.jpg", "*.jpeg");
+		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
 		String filePath = null;
 		
