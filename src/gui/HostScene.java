@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -91,13 +93,18 @@ public class HostScene extends Scene {
 		mb.setOpenFile(e -> openFile());
 		mb.setSession(e -> {nextQuestion(); mb.updateQuestionList();}, e -> stopSession());
 		File file = openFile();
-		s.setID(file.getName().substring(0, file.getName().length() - 5));
+		
+		if (file != null) {
+			s.setID(file.getName().substring(0, file.getName().length() - 5));
+		}
 
 		rootHost.setTop(mb);
 		rootHost.setCenter(picPane);
 	
 		for (int i = 0; i < questions.size(); i+=2) {
-			addPic(questions.get(i));
+			if (!addPic(questions.get(i))) {
+				return null;
+			}
 		}
 		
 		if (imageList.size() <= 1) {
@@ -152,7 +159,7 @@ public class HostScene extends Scene {
 	 * Opens picture and loads into an ImageView
 	 * @param filepath The filepath of the image to be loaded
 	 */
-	private void addPic(String filepath) {
+	private boolean addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
 		try {
@@ -163,14 +170,18 @@ public class HostScene extends Scene {
 			iView.setImage(image);
 			imageList.add(iView);
 		} catch (IOException e) {
-			System.exit(1);
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setContentText("File Error");
+			alert.setHeaderText(null);
+			Optional<ButtonType> result = alert.showAndWait();
+			return false;
 		}
 		addImgToSP(iView);
 		if (imageIndex == 0) {
 			imageList.get(imageIndex).setFitHeight(pane.getHeight() - mb.getHeight() - 2);
 			imageIndex++;
 		}
-
+		return true;
 	}
 
 	/**
