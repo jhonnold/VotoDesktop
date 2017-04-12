@@ -5,24 +5,25 @@ import java.net.DatagramPacket;
 import java.net.SocketException;
 
 import controller.Controller;
+import gui.VotoDesktopFX;
+import gui.VotoDesktopFX.Level;
 
 /**
- * 
- * @author zomby
- *
- * This class controls whats coming in and out of the UDPSocket
- * onPacketReceived, it passes it to the parser and finds
- * the proper command
+ * The NetworkHandler class watches a UDPSocket wrapper class that is designed
+ * to listen on port 9876. With this it replies and receives packets from
+ * clients
  */
 
 public class NetworkHandler implements Runnable, Closeable {
-	
+
 	private UDPSocket socket;
 	private Controller control;
-	
+
 	/**
-	 * Create the controller
-	 * @throws SocketException - If something is already using port 9876
+	 * Creates a NetworkHandler linked up to its parent Controller.
+	 * 
+	 * @throws SocketException
+	 *             - If something is already using port 9876
 	 */
 	public NetworkHandler(Controller control) throws SocketException {
 		try {
@@ -32,33 +33,39 @@ public class NetworkHandler implements Runnable, Closeable {
 		}
 		this.control = control;
 	}
-	
+
 	/**
-	 * Parses the DatagramPacket into a set of keyword arguments, passes them
-	 * onto a command parser
-	 * @param inFromClient - The datagram packet received from client
+	 * Retrieves the byte array from the DatagramPacket before sending it onto
+	 * the Controller parent who will parse it. It then gets the reply byte
+	 * array from the parent and replies back to the client.
+	 * 
+	 * @param inFromClient
+	 *            - The datagram packet received from client.
 	 */
 	public void onPacketReceived(DatagramPacket inFromClient) {
-		byte[] data = inFromClient.getData();
-		
+		if (Level.ALL.lt(VotoDesktopFX.outputMode))
+			System.out.println("I have received a packet containing: " + new String(inFromClient.getData()));
 
-		System.out.println("I have received a packet containing: " + new String(data));
-		try {	
-			byte[] replyData = control.parseNetworkCommand(data);
+		try {
+			byte[] replyData = control.parseNetworkCommand(inFromClient);
 			reply(replyData, inFromClient);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();//replyError(kwargs, e.getMessage());
+			e.printStackTrace();// replyError(kwargs, e.getMessage());
 		}
-		
+
 	}
-	
+
 	/**
-	 * Replies the given byte array to the location of the datagram packet
-	 * @param data - the byte array to be sent
-	 * @param in - the datagram packet to have the byte array sent too
+	 * Replies the byte array to the whoever sent the original DatagramPacket.
+	 * 
+	 * @param data
+	 *            - The byte array to be sent out.
+	 * @param in
+	 *            - The datagram packet from the client that the packet is being
+	 *            replied too.
 	 */
 	public void reply(byte[] data, DatagramPacket in) {
-			
+
 		if (data != null) {
 			DatagramPacket outToClient = new DatagramPacket(data, data.length, in.getAddress(), in.getPort());
 			socket.send(outToClient);
@@ -66,25 +73,25 @@ public class NetworkHandler implements Runnable, Closeable {
 			return;
 		}
 	}
-	
+
 	/**
-	 * Start the socket
+	 * Starts the UDPSocket wrapper class
 	 */
 	@Override
-	public void run() {	
+	public void run() {
 		Thread listening = new Thread(socket, "UDPSocket");
 		listening.start();
-		
-		System.out.println("Started listening for clients on port 9876!");
+
+		if (Level.LOW.lt(VotoDesktopFX.outputMode))
+			System.out.println("Started listening for clients on port 9876!");
 	}
-	
+
 	/**
-	 * Close the socket
+	 * Closes the UDPSocket wrapper class
 	 */
 	@Override
 	public void close() {
 		socket.close();
 	}
-	
-}
 
+}

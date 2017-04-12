@@ -21,6 +21,7 @@ public class ConsoleStage extends Stage {
 	private Scene activeScene;
 	private TextArea consoleOutput = new TextArea();
 	private VotoMenuBar parent;
+	
 	/**
 	 * Constructor that creates a 50/15 consolestage
 	 * @param parent The menubar who enabled the console

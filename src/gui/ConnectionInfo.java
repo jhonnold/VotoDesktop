@@ -21,18 +21,18 @@ public class ConnectionInfo extends Stage {
 		super();
 		
 		Label lbl = new Label("IP: " + VotoDesktopFX.IP + "\nSession: " + n);
-		lbl.setStyle("-fx-font-size: 40px;");
+		lbl.setStyle("-fx-font-size: 60px;");
 		BorderPane root = new BorderPane();
 		root.setCenter(lbl);
 
-		Scene scene = new Scene(root, 400, 200);
+		Scene scene = new Scene(root, 600, 300);
 
 		setScene(scene);
 		setTitle("VOTO - Connection Information");
 		sizeToScene();
 		setResizable(false);
 		show();
-
+		
 		// On close reenable the close buttton in the menubar
 		setOnCloseRequest(e -> parent.enableConnection());
 	}

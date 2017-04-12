@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.imageio.ImageIO;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.geometry.*;
@@ -14,6 +16,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.*;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -44,17 +47,29 @@ public class SetupStage extends Stage{
 	 */
 	public SetupStage() {
 		super(); 
-		
+
 		rootSetup = new BorderPane();
+		rootSetup.setPrefHeight(200);
+		rootSetup.setPrefWidth(600);
 		
 		picPane = new ScrollPane();
-		picPane.setMinHeight(120);
+		picPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		
 		pics = new HBox();
 		picPane.setContent(pics);
-		//centerPic = new FlowPane();
-		rootSetup.setCenter(picPane);
+		
+		//Change scroll bar position
+		pics.widthProperty().addListener(new ChangeListener() {
+
+		    public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+		        picPane.setHvalue((Double)newValue );  
+		    }
+		});
+		
+		
 		answerPane();
-		addMenu();
+		addMenu();		//centerPic = new FlowPane();
+		rootSetup.setCenter(picPane);
 		
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setHeaderText(null);
@@ -73,29 +88,45 @@ public class SetupStage extends Stage{
 			// Our standard size
 			Scene scene = new Scene(rootSetup, 600, 200);
 			setScene(scene);
+			setResizable(false);
 			setTitle("Choose Picture");
 			show();
 		}
 		
 		//Exit confirmation
 		setOnCloseRequest(new EventHandler<WindowEvent>() {
-	          public void handle(WindowEvent we) {
-	        	  Alert alert = new Alert(AlertType.CONFIRMATION);
-	        	  alert.setContentText("Do you want to exit without saving?");
-	        	  Optional<ButtonType> result = alert.showAndWait();
-	        	  if (result.get() == ButtonType.OK){
-	        		  try {
+			public void handle(WindowEvent we) {
+				ButtonType saveButton = new ButtonType("Save");
+				ButtonType exitButton = new ButtonType("Exit");
+				ButtonType cancelButton = new ButtonType("Cancel");
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setContentText("Do you want to save?");
+				alert.setHeaderText(null);
+				alert.getButtonTypes().setAll(saveButton, exitButton, cancelButton);
+				Optional<ButtonType> result = alert.showAndWait();
+				
+				//Save file
+				if (result.get() == saveButton) {
+					saveFile();
+				}
+				
+				//exit without saving
+				else if (result.get() == exitButton) {
+					try {
 	        			  output.close();
 	        		  } catch (IOException e) {
 	        			  e.printStackTrace();
 	        		  }
 	        		  outFile.delete();
-	        	  } else {
-	        		  we.consume();
-	        		  alert.close();
-	        	  }	  
-	          }	
-	      });
+				}
+				
+				//Doesn't close or save
+				else {
+					we.consume();
+					alert.close();
+				}
+			}
+		});
 	}
 	
 	/**
@@ -105,6 +136,8 @@ public class SetupStage extends Stage{
 		
 		//Instantiate
 		fc = new FileChooser();
+		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("jpg, jpeg files", "*.jpg", "*.jpeg");
+		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
 		String filePath = null;
 		
@@ -201,11 +234,12 @@ public class SetupStage extends Stage{
 	 */
 	private void addMenu() {
 		menuBar = new MenuBar();
-		fileMenu = new Menu("File");
-		fileMenu = new Menu("File");
-		openItem = new MenuItem("Open");
-		saveItem = new MenuItem("Save");
-		exitItem = new MenuItem("Exit");
+		fileMenu = new Menu("_File");
+		openItem = new MenuItem("_Open");
+		openItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+O"));
+		saveItem = new MenuItem("_Save");
+		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
+		exitItem = new MenuItem("E_xit");
 		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
 		
 		menuBar.getMenus().addAll(fileMenu);
@@ -223,7 +257,7 @@ public class SetupStage extends Stage{
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
-		iViewPrev.setFitHeight(160);
+		iViewPrev.setFitHeight(rootSetup.getHeight() - menuBar.getHeight() - 2);
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
@@ -235,6 +269,7 @@ public class SetupStage extends Stage{
 		try {
 			output.flush();
 			output.close();
+			close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
