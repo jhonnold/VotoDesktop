@@ -1,6 +1,6 @@
 # VOTO-DESKTOP
 
-#### [Created with Voto-Android](https://github.com/NicholasSchweikart/voto-android)
+#### [Created in conjunction with Voto-Android](https://github.com/NicholasSchweikart/voto-android)
 
 ## About
 Created in conjunction with Voto-Android, this project targets the classroom environment. It is designed to both replace and improve the current "Clicker" solutions for attendance and mass-voting in large lectures, today.
