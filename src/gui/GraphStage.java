@@ -9,6 +9,7 @@ import javax.swing.Timer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import session.Session;
 import session.Vote;
@@ -42,10 +43,12 @@ public class GraphStage extends Stage {
 
 		bc.setTitle("Vote Summary for Question - " + id);
 
+		getIcons().add(new Image("file:ic_launcher.png"));
+		
 		Scene scene = new Scene(bc);
 		setScene(scene);
 		show();
-
+		
 		setOnCloseRequest(e -> parent.enableGraph());
 
 	}
@@ -65,6 +68,8 @@ public class GraphStage extends Stage {
 		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(new CategoryAxis(), new NumberAxis());
 		bc.setTitle("Vote Summary for Current Question");
 
+		getIcons().add(new Image("file:ic_launcher.png"));
+		
 		Scene scene = new Scene(bc);
 		setScene(scene);
 		show();

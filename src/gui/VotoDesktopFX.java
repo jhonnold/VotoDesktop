@@ -6,6 +6,7 @@ package gui;
 import java.net.*;
 
 import javafx.application.*;
+import javafx.scene.image.Image;
 import javafx.stage.*;
 import session.Session;
 
@@ -48,7 +49,9 @@ public class VotoDesktopFX extends Application {
 		primaryStage.hide();
 
 		primary = primaryStage;
-
+		
+		primary.getIcons().add(new Image("file:ic_launcher.png"));
+		
 		// Add IP address
 		try {
 			IP = InetAddress.getLocalHost().getHostAddress();

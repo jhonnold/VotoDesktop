@@ -48,6 +48,8 @@ public class SetupStage extends Stage{
 	public SetupStage() {
 		super(); 
 
+		getIcons().add(new Image("file:ic_launcher.png"));
+		
 		rootSetup = new BorderPane();
 		rootSetup.setPrefHeight(200);
 		rootSetup.setPrefWidth(600);

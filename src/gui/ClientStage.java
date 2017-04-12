@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -91,6 +92,8 @@ public class ClientStage extends Stage{
 		session = s;
 		
 		setTitle("VOTO");
+		
+		getIcons().add(new Image("file:ic_launcher.png"));
 		
 		TextFlow clientList = new ClientArea();
 		

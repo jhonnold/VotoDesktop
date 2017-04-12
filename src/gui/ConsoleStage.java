@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -32,6 +33,8 @@ public class ConsoleStage extends Stage {
 		this.parent = parent;
 		
 		setTitle("Voto - Console");
+		
+		getIcons().add(new Image("file:ic_launcher.png"));
 		
 		consoleOutput.setPrefColumnCount(50);
 		consoleOutput.setPrefRowCount(15);

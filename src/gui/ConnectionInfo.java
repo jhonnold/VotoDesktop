@@ -2,6 +2,7 @@ package gui;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
@@ -26,7 +27,9 @@ public class ConnectionInfo extends Stage {
 		root.setCenter(lbl);
 
 		Scene scene = new Scene(root, 600, 300);
-
+		
+		getIcons().add(new Image("file:ic_launcher.png"));
+		
 		setScene(scene);
 		setTitle("VOTO - Connection Information");
 		sizeToScene();
