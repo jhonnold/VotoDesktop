@@ -28,7 +28,7 @@ public class ConnectionInfo extends Stage {
 
 		Scene scene = new Scene(root, 600, 300);
 		
-		getIcons().add(new Image("file:ic_launcher.png"));
+		getIcons().add(new Image("file:voto_icon.png"));
 		
 		setScene(scene);
 		setTitle("VOTO - Connection Information");

@@ -68,7 +68,7 @@ public class GraphStage extends Stage {
 		final VotoLiveBarChart<String, Number> bc = new VotoLiveBarChart<>(new CategoryAxis(), new NumberAxis());
 		bc.setTitle("Vote Summary for Current Question");
 
-		getIcons().add(new Image("file:ic_launcher.png"));
+		getIcons().add(new Image("file:voto_icon.png"));
 		
 		Scene scene = new Scene(bc);
 		setScene(scene);

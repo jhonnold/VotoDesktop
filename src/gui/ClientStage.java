@@ -93,7 +93,7 @@ public class ClientStage extends Stage{
 		
 		setTitle("VOTO");
 		
-		getIcons().add(new Image("file:ic_launcher.png"));
+		getIcons().add(new Image("file:voto_icon.png"));
 		
 		TextFlow clientList = new ClientArea();
 		

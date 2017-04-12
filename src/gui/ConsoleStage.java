@@ -34,7 +34,7 @@ public class ConsoleStage extends Stage {
 		
 		setTitle("Voto - Console");
 		
-		getIcons().add(new Image("file:ic_launcher.png"));
+		getIcons().add(new Image("file:voto_icon.png"));
 		
 		consoleOutput.setPrefColumnCount(50);
 		consoleOutput.setPrefRowCount(15);

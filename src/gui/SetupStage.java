@@ -48,7 +48,7 @@ public class SetupStage extends Stage{
 	public SetupStage() {
 		super(); 
 
-		getIcons().add(new Image("file:ic_launcher.png"));
+		getIcons().add(new Image("file:voto_icon.png"));
 		
 		rootSetup = new BorderPane();
 		rootSetup.setPrefHeight(200);
@@ -138,6 +138,7 @@ public class SetupStage extends Stage{
 		
 		//Instantiate
 		fc = new FileChooser();
+		fc.setInitialDirectory(new File("./"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("jpg, jpeg files", "*.jpg", "*.jpeg");
 		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);

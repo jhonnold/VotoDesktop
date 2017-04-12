@@ -50,7 +50,7 @@ public class VotoDesktopFX extends Application {
 
 		primary = primaryStage;
 		
-		primary.getIcons().add(new Image("file:ic_launcher.png"));
+		primary.getIcons().add(new Image("file:voto_icon.png"));
 		
 		// Add IP address
 		try {
