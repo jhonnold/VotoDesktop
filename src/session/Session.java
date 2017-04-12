@@ -219,8 +219,8 @@ public class Session {
 				// If the ID's equal, and the IP's equal remove old instance,
 				// add new.
 			} else if (c.getID().equals(ID) && c.getIP().equals(IP)) {
-				clientList.remove(c);
-				break;
+				c.voteNum = -100;
+				return true;
 				// If the ID's equal, but the IP's dont, reject it.
 			} else if (c.getID().equals(ID) && !c.getIP().equals(IP)) {
 				return false;
