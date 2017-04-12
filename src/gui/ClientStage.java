@@ -18,45 +18,46 @@ import session.Client;
 import session.Session;
 
 /**
- * The stage that displays the list of connected clients
+ * The stage that displays the list of connected clients.
+ * When the client is RED they haven't voted for this question.
+ * If the cleint is GREEN it will list their vote after their ID.
  * @author Jay
- *
  */
 public class ClientStage extends Stage{
 	
+	// The scene
 	private Scene activeScene;
+	// The active session to pull client list from
 	private final Session session;
+	// The menu bar from which this is made
 	private VotoMenuBar parent;
 	
 	/**
 	 * TextFlow that will be used to display the updated client list
-	 * @author Jay
-	 * Uses a 1sec timer to constantly recall the list and redraw
+	 * Uses a 1 second timer to constantly recall the list and redraw
 	 */
 	public class ClientArea extends TextFlow implements ActionListener {
 		
 		private Timer t = new Timer(1000, this);
 		
 		/**
-		 * Constructor that makes 20/6 textarea and starts timer
+		 * Constructor that makes 200/100 Textflow and starts timer
 		 */
 		public ClientArea() {
-			//setEditable(false);
-			//setPrefColumnCount(20);
-			//setPrefRowCount(6);
 			setPrefWidth(200);
 			setPrefHeight(100);
 			t.start();
 		}
 		
 		/**
-		 * When timer fires, recall client list and write out to the textarea
+		 * When timer fires, recall client list and write out to the textarea.
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
 			//this.clear();
 			
+			// Run the redraw on the Java-FX Thread
 			Platform.runLater(new Runnable() {
 				public void run() {
 					

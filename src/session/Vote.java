@@ -17,6 +17,9 @@ public class Vote {
 		this.ID = i;
 	}
 	
+	/**
+	 * @return The ID of the Vote as a string
+	 */
 	public String getID() { return ID; }
 	
 	@Override
