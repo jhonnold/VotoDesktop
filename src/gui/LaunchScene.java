@@ -1,8 +1,5 @@
 package gui;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;

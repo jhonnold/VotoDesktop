@@ -2,15 +2,11 @@ package gui;
 
 import java.io.PrintStream;
 
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * The output console for the project
@@ -21,7 +17,6 @@ public class ConsoleStage extends Stage {
 	
 	private Scene activeScene;
 	private TextArea consoleOutput = new TextArea();
-	private VotoMenuBar parent;
 	
 	/**
 	 * Constructor that creates a 50/15 consolestage
@@ -29,8 +24,6 @@ public class ConsoleStage extends Stage {
 	 */
 	public ConsoleStage(VotoMenuBar parent) {
 		super();
-		
-		this.parent = parent;
 		
 		setTitle("Voto - Console");
 		

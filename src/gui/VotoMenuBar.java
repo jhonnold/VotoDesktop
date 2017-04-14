@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
@@ -17,10 +19,11 @@ import session.Session;
  */
 public class VotoMenuBar extends MenuBar {
 	
-	private Menu fileMenu, sessionMenu, windowMenu, graphItem;
-	private MenuItem newItem, openItem, saveItem, exitItem;
+	private Menu fileMenu, sessionMenu, windowMenu, graphItem, helpMenu;
+	private MenuItem newItem, openItem, exitItem;
 	private MenuItem nextItem, stopItem;
 	private MenuItem consoleItem, clientsItem, connectionItem;
+	private MenuItem helpItem;
 	
 	private ArrayList<Integer> completedQuestion;
 	private Session session;
@@ -41,7 +44,6 @@ public class VotoMenuBar extends MenuBar {
 		newItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+N"));
 		openItem = new MenuItem("_Open");
 		openItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+O"));
-		//saveItem = new MenuItem("Save");
 		exitItem = new MenuItem("E_xit");
 		fileMenu.getItems().addAll(newItem, openItem, exitItem);
 		
@@ -67,24 +69,32 @@ public class VotoMenuBar extends MenuBar {
 			graphItem.getItems().add(temp);
 		}
 		
-		
 		connectionItem = new MenuItem("Connection _Info");
 		windowMenu.getItems().addAll(consoleItem, clientsItem, graphItem, connectionItem);
+				
+		// Help menu
+		helpMenu = new Menu("_Help");
+		helpItem = new MenuItem("_User Manual");
+		helpMenu.getItems().addAll(helpItem);
 		
-		getMenus().addAll(fileMenu, sessionMenu, windowMenu);
+		getMenus().addAll(fileMenu, sessionMenu, windowMenu, helpMenu);
 		
 		// Set menu item actions
 		newItem.setOnAction(e -> new SetupStage());
 		openItem.setOnAction(e -> { VotoDesktopFX.hostGUI(); newItem.setDisable(true); openItem.setDisable(true); } );
-		//saveItem.setOnAction(e -> new ConsoleStage());
 		exitItem.setOnAction(e -> VotoDesktopFX.exitProgram());
 		nextItem.setDisable(true);
 		stopItem.setDisable(true);
 		consoleItem.setOnAction(e -> { new ConsoleStage(this); consoleItem.setDisable(true); } );
 		clientsItem.setOnAction(e -> { new ClientStage(s, this); clientsItem.setDisable(true); } );
 		connectionItem.setOnAction(e -> { new ConnectionInfo(s.ID, this); connectionItem.setDisable(true); });
+		helpItem.setOnAction(e -> { 
+			try {
+				Desktop.getDesktop().browse(new URI("https://jhonnold.github.io/voto-user/"));
+			}catch(Exception ex){};
+		});
 	}
-	
+
 	/**
 	 * Change open to do something else
 	 * @param value The new ActionEvent

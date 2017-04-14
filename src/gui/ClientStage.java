@@ -8,9 +8,7 @@ import javax.swing.Timer;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -30,8 +28,6 @@ public class ClientStage extends Stage{
 	private Scene activeScene;
 	// The active session to pull client list from
 	private final Session session;
-	// The menu bar from which this is made
-	private VotoMenuBar parent;
 	
 	/**
 	 * TextFlow that will be used to display the updated client list
@@ -88,7 +84,6 @@ public class ClientStage extends Stage{
 	public ClientStage(Session s, VotoMenuBar parent) {
 		super();
 		
-		this.parent = parent;
 		session = s;
 		
 		setTitle("VOTO");

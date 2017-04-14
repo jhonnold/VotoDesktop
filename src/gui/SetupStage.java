@@ -2,7 +2,6 @@ package gui;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.file.Files;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
