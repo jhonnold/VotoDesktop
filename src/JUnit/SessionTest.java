@@ -36,7 +36,7 @@ public class SessionTest {
 
 		boolean error = false;
 		for (String name : nameList) {
-			if (!s.addClient(name)) {
+			if (!s.addClient(name, name)) {
 				error = true;
 				break;
 			}
@@ -53,11 +53,11 @@ public class SessionTest {
 
 		boolean error = false;
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 		}
 
 		for (String name : nameList) {
-			if (s.addClient(name)) {
+			if (s.addClient(name, name)) {
 				error = true;
 				break;
 			}
@@ -74,7 +74,7 @@ public class SessionTest {
 
 		boolean error = false;
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 		}
 
 		for (String name : nameList) {
@@ -116,7 +116,7 @@ public class SessionTest {
 		boolean error = false;
 
 		for (int i = 0; i < 30; i++) {
-			s.addClient(nameList.get(i));
+			s.addClient(nameList.get(i), nameList.get(i));
 		}
 
 		for (int i = 30; i < nameList.size(); i++) {
@@ -145,7 +145,7 @@ public class SessionTest {
 		Random rnd = new Random();
 
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 		}
 
 		s.setCurrentQuestion("testimage.jpg", "A");
@@ -194,7 +194,7 @@ public class SessionTest {
 		s.setCurrentQuestion("testimage.jpg", "A");
 
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 		}
 
 		for (String name : nameList) {
@@ -225,7 +225,7 @@ public class SessionTest {
 		HashMap<String, ArrayList<String>> votes = new HashMap<>();
 
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 			votes.put(name, new ArrayList<String>());
 		}
 
@@ -272,7 +272,7 @@ public class SessionTest {
 		int voteNum = 0;
 
 		for (String name : nameList) {
-			s.addClient(name);
+			s.addClient(name, name);
 		}
 		
 		

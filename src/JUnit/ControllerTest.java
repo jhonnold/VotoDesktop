@@ -1,5 +1,7 @@
 package JUnit;
 
+import java.net.DatagramPacket;
+
 import org.junit.*;
 
 import controller.Controller;
@@ -23,7 +25,7 @@ public class ControllerTest {
 	@org.junit.Test(timeout = 5000)
 	public void Test1() throws Throwable {
 
-		byte[] data = c.parseNetworkCommand(fakeMsg);
+		byte[] data = c.parseNetworkCommand(new DatagramPacket(fakeMsg, fakeMsg.length));
 
 		if (data[0] != 'E') {
 			org.junit.Assert.fail("Doesn't reply error to empty packet");
@@ -36,7 +38,7 @@ public class ControllerTest {
 		for (int i = 0; i < characters.length; i++) {
 			fakeMsg[0] = characters[i];
 
-			byte[] data = c.parseNetworkCommand(fakeMsg);
+			byte[] data = c.parseNetworkCommand(new DatagramPacket(fakeMsg, fakeMsg.length));
 
 			if (data[0] != 'E') {
 				org.junit.Assert.fail("Doesn't reply error to bad packet");
@@ -59,7 +61,7 @@ public class ControllerTest {
 				fakeMsg[2 + j] = characters[(int)(Math.random() * 25)];
 			}
 			
-			byte[] data = c.parseNetworkCommand(fakeMsg);
+			byte[] data = c.parseNetworkCommand(new DatagramPacket(fakeMsg, fakeMsg.length));
 			
 			if (data[0] != 'R' && data[1] != (byte) 4 && data[2] != 't' && data[3] != 'e' && data[4] != 's' && data[5] != 't') {
 				org.junit.Assert.fail("Doesn't properly add handshake");
@@ -70,7 +72,7 @@ public class ControllerTest {
 	@org.junit.Test(timeout = 5000)
 	public void Test4() throws Throwable {
 		
-		s.addClient("T");
+		s.addClient("T", "111.111.111.111");
 		s.setCurrentQuestion("testimage.jpg", "A");
 		
 		byte[] fakeMsg = new byte[1024];
@@ -82,7 +84,7 @@ public class ControllerTest {
 		fakeMsg[4] = (byte) 1;
 		fakeMsg[5] = 'A';
 		
-		byte[] data = c.parseNetworkCommand(fakeMsg);
+		byte[] data = c.parseNetworkCommand(new DatagramPacket(fakeMsg, fakeMsg.length));
 		
 		if (data == null) {
 			Assert.fail("Doesn't accept votes properly!");
