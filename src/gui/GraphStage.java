@@ -115,7 +115,9 @@ public class GraphStage extends Stage {
 
 		}
 
-		// Update graph with new data
+		/**
+		 * Update graph with new data
+		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 

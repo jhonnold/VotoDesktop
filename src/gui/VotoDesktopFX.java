@@ -18,6 +18,7 @@ import session.Session;
  */
 public class VotoDesktopFX extends Application {
 
+	//Fields
 	private static Session s = new Session("test");
 	protected static String IP;
 	protected static Stage primary;
@@ -72,7 +73,7 @@ public class VotoDesktopFX extends Application {
 	}
 
 	/**
-	 * Quit
+	 * Quit application
 	 */
 	protected static void exitProgram() {
 		Platform.exit();
@@ -106,7 +107,10 @@ public class VotoDesktopFX extends Application {
 		}
 	}
 
-	// main method
+	/**
+	 *  main method
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Application.launch(args);
 	}

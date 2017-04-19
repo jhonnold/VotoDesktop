@@ -230,7 +230,9 @@ public class HostScene extends Scene {
 		}
 	}
 
-	//Ends session and resets variables
+	/**
+	 * Ends session and resets variables
+	 */
 	private void stopSession() {
 		s.stop();
 		System.out.println("Session stopped");
@@ -251,7 +253,9 @@ public class HostScene extends Scene {
 		
 	}
 	
-	//Reset variables
+	/**
+	 * Reset variables at end of session
+	 */
 	public void reset() {
 		mb.setNext("Next");
 		next.setText("Next");
