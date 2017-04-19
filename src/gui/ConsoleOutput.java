@@ -31,10 +31,16 @@ public class ConsoleOutput extends OutputStream {
 		sb.append(title + "> ");
 	}
 
+	/**
+	 * Unused
+	 */
 	@Override
 	public void flush() {
 	}
 
+	/**
+	 * Unused
+	 */
 	@Override
 	public void close() {
 	}
