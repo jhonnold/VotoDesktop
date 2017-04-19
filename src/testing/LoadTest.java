@@ -2,7 +2,9 @@ package testing;
 
 import java.util.ArrayList;
 import java.util.Random;
-
+/**
+ * Test class
+ */
 public class LoadTest {
 
 	public static void main(String[] args) {

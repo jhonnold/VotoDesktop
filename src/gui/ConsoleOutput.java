@@ -20,7 +20,11 @@ public class ConsoleOutput extends OutputStream {
 	private final StringBuilder sb = new StringBuilder();
 	private String title;
 
-	// Get textarea pointer and title
+	/**
+	 * Get textarea pointer and title
+	 * @param out
+	 * @param title
+	 */
 	public ConsoleOutput(final TextArea out, String title) {
 		this.output = out;
 		this.title = title;

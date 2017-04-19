@@ -242,7 +242,7 @@ public class HostScene extends Scene {
 		try {
 			s.save();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		s.reset();

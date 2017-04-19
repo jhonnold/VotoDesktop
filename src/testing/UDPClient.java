@@ -2,7 +2,9 @@ package testing;
 
 import java.io.IOException;
 import java.net.*;
-
+/**
+ * Test class
+ */
 public class UDPClient implements Runnable {
 	
 	Media media;

@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 /**
  * Created by nicholasyamahamanschweikart on 3/13/17.
+ * Test class
  */
 
 public class Media {

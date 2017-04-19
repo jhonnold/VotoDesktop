@@ -9,7 +9,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Random;
-
+/**
+ * Test class
+ */
 public class Client implements Runnable {
 	
 	private DatagramSocket socket;

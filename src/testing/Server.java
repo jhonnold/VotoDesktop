@@ -3,7 +3,9 @@ package testing;
 import java.net.SocketException;
 
 import session.Session;
-
+/**
+ * Test class
+ */
 public class Server {
 	
 	public static void main(String[] args) {
