@@ -142,19 +142,29 @@ public class VotoMenuBar extends MenuBar {
 		stopItem.setDisable(false);
 	}
 	
+	
+	/**
+	 * Disable the next and stop items
+	 */
 	public void menuBarInLaunch() {
-		
 		nextItem.setDisable(true);
 		stopItem.setDisable(true);
-		
-		
-		
 	}
 	
+	
+	/**
+	 * Changes the text of the next item
+	 * @param s		New text for item
+	 */
 	public void setNext(String s) {
 		nextItem.setText(s);
 	}
 	
+	
+	/**
+	 * Updates the graph submenu with items for the current
+	 * graph and all completed questions.
+	 */
 	public void updateQuestionList() {
 		completedQuestion = session.completedQuestionList();
 		

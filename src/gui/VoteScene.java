@@ -12,12 +12,25 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 
+/**
+ * Unimplemented
+ * 
+ * Scene for joining an active session as a client to place votes.
+ * 
+ * @author Josh
+ *
+ */
 public class VoteScene extends Scene {
 
 	private GridPane joinGrid;
 	private Button[] votingButtons;
 	private static BorderPane rootJoin = new BorderPane();
 
+	/**
+	 * Creates scene that displays an image and voting buttons
+	 * @param width		width of the scene
+	 * @param height	height of the scene
+	 */
 	public VoteScene(double width, double height) {
 		super(rootJoin, width, height);
 
