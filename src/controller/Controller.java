@@ -11,6 +11,14 @@ import gui.VotoDesktopFX.Level;
 import networking.NetworkHandler;
 import session.Session;
 
+/**
+ * This is the main parser for all networking packets. It goes through each
+ * packet, figures out if its a handhsake, vote, request, or ping and then
+ * returns the proper style byte array packet to be replied
+ * 
+ * @author Jay
+ *
+ */
 public class Controller {
 
 	private NetworkHandler network;
@@ -189,7 +197,7 @@ public class Controller {
 		int cursor = 2;
 		int imageID = inFromClient[cursor++];
 		int packetNumber = ByteBuffer.wrap(inFromClient, cursor, 4).getInt();
-		
+
 		if (Level.HIGH.lt(VotoDesktopFX.outputMode))
 			System.out.println("Packet requested: " + packetNumber);
 
@@ -217,7 +225,7 @@ public class Controller {
 	 * @return - the byte array to be returned based on the initial command
 	 */
 	public byte[] parseNetworkCommand(DatagramPacket inFromClient) {
-		
+
 		byte[] data = inFromClient.getData();
 		byte[] returnPacket = null;
 

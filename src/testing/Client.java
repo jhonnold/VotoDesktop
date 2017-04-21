@@ -9,8 +9,9 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.Random;
+
 /**
- * Test class
+ * Test class that fakes android clients talking to the server
  */
 public class Client implements Runnable {
 	
@@ -50,6 +51,7 @@ public class Client implements Runnable {
 	@Override
 	public void run() {
 		
+		// Start the handshake
 		byte[] handshakeRequest = MessageUtility.getHandshakeRequestMessage(ID);
 		DatagramPacket out = new DatagramPacket(handshakeRequest, handshakeRequest.length, SERVER, PORT);
 		
@@ -70,6 +72,7 @@ public class Client implements Runnable {
 			e.printStackTrace();
 		}
 		
+		// Start the media ping process
 		byte[] mediaPing = MessageUtility.getMediaPingMessage();
 		out = new DatagramPacket(mediaPing, mediaPing.length, SERVER, PORT);
 		
@@ -81,6 +84,8 @@ public class Client implements Runnable {
 		}
 		
 		while (true) {
+			
+			// Start the receive of media pings
 			try {
 				socket.receive(in);
 			} catch (IOException e) {
@@ -91,6 +96,7 @@ public class Client implements Runnable {
 			
 			MessageUtility.parseMediaPing(in.getData() , mr);
 			
+			// If this is a new media, then start to load that
 			if (mr.imgID != imageID) {
 				m = new Media(mr.imgID, mr.packetCount, mr.imgLength, index);
 				voted = false;
@@ -129,10 +135,12 @@ public class Client implements Runnable {
 				
 			}
 			
+			// Wait 1 second between pings
 			try {
 				Thread.sleep(1000);
 			} catch (Exception e) {};
 			
+			// send out the new ping
 			mediaPing = MessageUtility.getMediaPingMessage();
 			out = new DatagramPacket(mediaPing, mediaPing.length, SERVER, PORT);
 			

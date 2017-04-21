@@ -18,7 +18,7 @@ import session.Session;
  */
 public class VotoDesktopFX extends Application {
 
-	//Fields
+	// Fields
 	private static Session s = new Session("test");
 	protected static String IP;
 	protected static Stage primary;
@@ -50,9 +50,9 @@ public class VotoDesktopFX extends Application {
 		primaryStage.hide();
 
 		primary = primaryStage;
-		
+
 		primary.getIcons().add(new Image("file:voto_icon.png"));
-		
+
 		// Add IP address
 		try {
 			IP = InetAddress.getLocalHost().getHostAddress();
@@ -91,7 +91,7 @@ public class VotoDesktopFX extends Application {
 	protected static void hostGUI() {
 
 		if (host.start() != null) {
-			
+
 			try {
 				s.start();
 			} catch (SocketException se) {
@@ -99,7 +99,7 @@ public class VotoDesktopFX extends Application {
 				host.reset();
 				return;
 			}
-			
+
 			primary.setScene(host);
 			primary.show();
 		} else {
@@ -108,7 +108,8 @@ public class VotoDesktopFX extends Application {
 	}
 
 	/**
-	 *  main method
+	 * main method
+	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {

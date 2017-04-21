@@ -12,12 +12,14 @@ public class LoadTest {
 		ArrayList<Client> fakeClients = new ArrayList<>();
 		
 		int count = 200;
-
+		
+		
+		// Make all the fake clients
 		for (int i = 0; i < count; i++) {
 			fakeClients.add(new Client("141.219.152.185", getSaltString(), i));
 		}
 
-
+		// Starts them 50ms apart
 		for (Client c : fakeClients) {
 			new Thread(c).start();
 			try {
@@ -29,6 +31,10 @@ public class LoadTest {
 
 	}
 	
+	/**
+	 * Generates a random ID string
+	 * @return A random String of size 10-30
+	 */
 	protected static String getSaltString() {
 
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";

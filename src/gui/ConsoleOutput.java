@@ -22,6 +22,7 @@ public class ConsoleOutput extends OutputStream {
 
 	/**
 	 * Get textarea pointer and title
+	 * 
 	 * @param out
 	 * @param title
 	 */

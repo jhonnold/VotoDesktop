@@ -21,71 +21,71 @@ import javafx.stage.*;
 
 /**
  * The stage for creating the .voto files
+ * 
  * @author Nic
  *
  */
-public class SetupStage extends Stage{
-	
+public class SetupStage extends Stage {
+
 	private BorderPane rootSetup;
 	private FileChooser fc;
 	private File file, outFile;
 	private BufferedWriter output;
-	
+
 	private ScrollPane picPane;
 	private HBox pics;
 	private int picIndex = 0;
 	private String fileName;
 	Button[] ansButton;
-	
+
 	private Menu fileMenu;
 	private MenuBar menuBar;
 	private MenuItem openItem, saveItem, exitItem;
-	
+
 	/**
 	 * Constructor for the setup stage
 	 */
 	public SetupStage() {
-		super(); 
+		super();
 
 		getIcons().add(new Image("file:voto_icon.png"));
-		
+
 		rootSetup = new BorderPane();
 		rootSetup.setPrefHeight(200);
 		rootSetup.setPrefWidth(600);
-		
+
 		picPane = new ScrollPane();
 		picPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		
+
 		pics = new HBox();
 		picPane.setContent(pics);
-		
-		//Change scroll bar position
+
+		// Change scroll bar position
 		pics.widthProperty().addListener(new ChangeListener() {
 
-		    public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
-		        picPane.setHvalue((Double)newValue );  
-		    }
+			public void changed(ObservableValue observable, Object oldvalue, Object newValue) {
+				picPane.setHvalue((Double) newValue);
+			}
 		});
-		
-		
+
 		answerPane();
-		addMenu();		//centerPic = new FlowPane();
+		addMenu(); // centerPic = new FlowPane();
 		rootSetup.setCenter(picPane);
-		
+
 		TextInputDialog dialog = new TextInputDialog();
 		dialog.setHeaderText(null);
 		dialog.setTitle("New Session");
 		dialog.setContentText("Please enter session name:");
 		Optional<String> result = dialog.showAndWait();
-		if (result.isPresent() && result.get().trim().length() > 0){
+		if (result.isPresent() && result.get().trim().length() > 0) {
 			fileName = result.get();
 			try {
-				outFile = new File(fileName+".voto");
+				outFile = new File(fileName + ".voto");
 				output = new BufferedWriter(new FileWriter(outFile));
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			
+
 			// Our standard size
 			Scene scene = new Scene(rootSetup, 600, 200);
 			setScene(scene);
@@ -93,8 +93,8 @@ public class SetupStage extends Stage{
 			setTitle("Choose Picture");
 			show();
 		}
-		
-		//Exit confirmation
+
+		// Exit confirmation
 		setOnCloseRequest(new EventHandler<WindowEvent>() {
 			public void handle(WindowEvent we) {
 				ButtonType saveButton = new ButtonType("Save");
@@ -105,23 +105,23 @@ public class SetupStage extends Stage{
 				alert.setHeaderText(null);
 				alert.getButtonTypes().setAll(saveButton, exitButton, cancelButton);
 				Optional<ButtonType> result = alert.showAndWait();
-				
-				//Save file
+
+				// Save file
 				if (result.get() == saveButton) {
 					saveFile();
 				}
-				
-				//exit without saving
+
+				// exit without saving
 				else if (result.get() == exitButton) {
 					try {
-	        			  output.close();
-	        		  } catch (IOException e) {
-	        			  e.printStackTrace();
-	        		  }
-	        		  outFile.delete();
+						output.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					outFile.delete();
 				}
-				
-				//Doesn't close or save
+
+				// Doesn't close or save
 				else {
 					we.consume();
 					alert.close();
@@ -129,29 +129,29 @@ public class SetupStage extends Stage{
 			}
 		});
 	}
-	
+
 	/**
 	 * Loads specified file through a filechooser
 	 */
 	private void openFile() {
-		
-		//Instantiate
+
+		// Instantiate
 		fc = new FileChooser();
 		fc.setInitialDirectory(new File("./"));
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("jpg, jpeg files", "*.jpg", "*.jpeg");
 		fc.getExtensionFilters().add(extFilter);
 		file = fc.showOpenDialog(null);
 		String filePath = null;
-		
-		try {				
-			//Load picture if one was selected
+
+		try {
+			// Load picture if one was selected
 			if (file != null) {
 				filePath = file.getAbsolutePath();
 				addPic(filePath);
 				output.write(filePath);
 				output.newLine();
-								
-				//enable buttons
+
+				// enable buttons
 				for (Button b : ansButton) {
 					b.setDisable(false);
 				}
@@ -163,16 +163,18 @@ public class SetupStage extends Stage{
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Converts image to ImageView and loads into HBox
-	 * @param filepath The image filepath
+	 * 
+	 * @param filepath
+	 *            The image filepath
 	 */
 	private void addPic(String filepath) {
 		ImageView iView = null;
 		File currentFile = new File(filepath);
 		try {
-			//Instantiate image view from picture
+			// Instantiate image view from picture
 			BufferedImage bImage = ImageIO.read(currentFile);
 			Image image = SwingFXUtils.toFXImage(bImage, null);
 			iView = new ImageView();
@@ -183,54 +185,54 @@ public class SetupStage extends Stage{
 		}
 		addImgToSP(iView);
 	}
-	
+
 	/**
 	 * The Answer Pane that allows you to select the correct answer
 	 */
 	private void answerPane() {
-			
-		//Instantiate new elements
+
+		// Instantiate new elements
 		VBox ansPane = new VBox();
 		ansPane.setPadding(new Insets(0, 7, 7, 7));
 		ansPane.getChildren().add(new Label("Set Correct Answer"));
-		//ansPane.hgap(10);
+		// ansPane.hgap(10);
 		ansPane.setAlignment(Pos.CENTER);
 		rootSetup.setLeft(ansPane);
-			
-		//Create buttons
+
+		// Create buttons
 		ansButton = new Button[5];
 		for (int index = 0; index < 5; index++) {
-			ansButton[index] = new Button(Character.toString((char)(0x0041+index)));
+			ansButton[index] = new Button(Character.toString((char) (0x0041 + index)));
 			ansButton[index].setMinSize(55, 25);
 			ansButton[index].setDisable(true);
 			ansPane.getChildren().add(ansButton[index]);
-					
-			//Add correct answer to list
+
+			// Add correct answer to list
 			ansButton[index].setOnAction(e -> {
 				Object source = e.getSource();
 				if (source instanceof Button) {
-					    Button button = (Button) source;
-					    
-					    //Set correct answer
-					    try {
-							output.write(button.getText());
-							output.newLine();
-						} catch (IOException e1) {
-							e1.printStackTrace();
-						}
-					    
-					    //disable buttons
-					    for (Button b : ansButton) {
-							b.setDisable(true);
-						}
-					    openItem.setDisable(false);
-					    saveItem.setDisable(false);
-					    setTitle("Choose Picture");
+					Button button = (Button) source;
+
+					// Set correct answer
+					try {
+						output.write(button.getText());
+						output.newLine();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+
+					// disable buttons
+					for (Button b : ansButton) {
+						b.setDisable(true);
+					}
+					openItem.setDisable(false);
+					saveItem.setDisable(false);
+					setTitle("Choose Picture");
 				}
 			});
 		}
 	}
-	
+
 	/**
 	 * Basic menubar for this stage
 	 */
@@ -243,19 +245,21 @@ public class SetupStage extends Stage{
 		saveItem.setAccelerator(KeyCombination.keyCombination("SHORTCUT+S"));
 		exitItem = new MenuItem("E_xit");
 		fileMenu.getItems().addAll(openItem, saveItem, exitItem);
-		
+
 		menuBar.getMenus().addAll(fileMenu);
 		rootSetup.setTop(menuBar);
-		
+
 		// Set menu item actions
 		openItem.setOnAction(e -> openFile());
 		saveItem.setOnAction(e -> saveFile());
 		exitItem.setOnAction(e -> close());
 	}
-	
+
 	/**
 	 * Add imageview to the Hbox
-	 * @param iViewPrev The imageview to be added
+	 * 
+	 * @param iViewPrev
+	 *            The imageview to be added
 	 */
 	private void addImgToSP(ImageView iViewPrev) {
 		iViewPrev.setPreserveRatio(true);
@@ -263,7 +267,7 @@ public class SetupStage extends Stage{
 		pics.getChildren().add(picIndex, iViewPrev);
 		picIndex++;
 	}
-	
+
 	/**
 	 * Saves the current session voto file
 	 */

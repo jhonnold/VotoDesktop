@@ -44,11 +44,11 @@ public class GraphStage extends Stage {
 		bc.setTitle("Vote Summary for Question - " + id);
 
 		getIcons().add(new Image("file:ic_launcher.png"));
-		
+
 		Scene scene = new Scene(bc);
 		setScene(scene);
 		show();
-		
+
 		setOnCloseRequest(e -> parent.enableGraph());
 
 	}
@@ -57,8 +57,10 @@ public class GraphStage extends Stage {
 	 * Constructor that doesn't take in an ID. This will poll the current
 	 * question from the given session and will update it every 1 second.
 	 * 
-	 * @param s - The Session for which to poll from.
-	 * @param parent - The VotoMenuBar parent.
+	 * @param s
+	 *            - The Session for which to poll from.
+	 * @param parent
+	 *            - The VotoMenuBar parent.
 	 */
 	public GraphStage(Session s, VotoMenuBar parent) {
 		session = s;
@@ -69,7 +71,7 @@ public class GraphStage extends Stage {
 		bc.setTitle("Vote Summary for Current Question");
 
 		getIcons().add(new Image("file:voto_icon.png"));
-		
+
 		Scene scene = new Scene(bc);
 		setScene(scene);
 		show();
@@ -80,6 +82,7 @@ public class GraphStage extends Stage {
 	/**
 	 * Class that is for the currentQuestion in the Session class. It will poll
 	 * every 1 second to update the graph in a "live" fashion.
+	 * 
 	 * @param <String>
 	 * @param <Number>
 	 */
@@ -88,7 +91,9 @@ public class GraphStage extends Stage {
 		private Timer t = new Timer(1000, this);
 
 		/**
-		 * Constructor to instantiate live chart for the currentQuestion updating every second
+		 * Constructor to instantiate live chart for the currentQuestion
+		 * updating every second
+		 * 
 		 * @param xAxis
 		 * @param yAxis
 		 */
@@ -101,7 +106,7 @@ public class GraphStage extends Stage {
 
 			XYChart.Series series = new XYChart.Series();
 
-			//initial graph state
+			// initial graph state
 			// ---------------------------------------------
 			series.getData().add(new XYChart.Data("A", 0));
 			series.getData().add(new XYChart.Data("B", 0));
@@ -110,7 +115,7 @@ public class GraphStage extends Stage {
 			series.getData().add(new XYChart.Data("E", 0));
 			// ---------------------------------------------
 
-			//Get vote data
+			// Get vote data
 			for (Vote v : session.returnQuestionData().keySet()) {
 
 				Integer amount = session.returnQuestionData().get(v);
@@ -130,7 +135,7 @@ public class GraphStage extends Stage {
 
 			XYChart.Series series = new XYChart.Series();
 
-			//initial graph state
+			// initial graph state
 			// ---------------------------------------------
 			series.getData().add(new XYChart.Data("A", 0));
 			series.getData().add(new XYChart.Data("B", 0));
@@ -139,7 +144,7 @@ public class GraphStage extends Stage {
 			series.getData().add(new XYChart.Data("E", 0));
 			// ---------------------------------------------
 
-			//Get vote data
+			// Get vote data
 			for (Vote v : session.returnQuestionData().keySet()) {
 
 				Integer amount = session.returnQuestionData().get(v);
@@ -148,7 +153,7 @@ public class GraphStage extends Stage {
 					series.getData().add(new XYChart.Data(v.getID(), amount));
 				}
 			}
-			
+
 			// Do the Java-FX calls in time with the Java-FX thread.
 			Platform.runLater(new Runnable() {
 				public void run() {
@@ -158,10 +163,11 @@ public class GraphStage extends Stage {
 
 		}
 	}
-	
+
 	/**
-	 * The non-live bar chart that simply draws once to the scene
-	 * based on the image ID that it is given.
+	 * The non-live bar chart that simply draws once to the scene based on the
+	 * image ID that it is given.
+	 * 
 	 * @param <String>
 	 * @param <Number>
 	 */
@@ -169,6 +175,7 @@ public class GraphStage extends Stage {
 
 		/**
 		 * Constructor that instantiates non-live chart and draws to scene
+		 * 
 		 * @param xAxis
 		 * @param yAxis
 		 * @param imgID
@@ -181,8 +188,7 @@ public class GraphStage extends Stage {
 			HashMap<Vote, Integer> data = session.returnQuestionData(imgID);
 			XYChart.Series series = new XYChart.Series();
 
-
-			//initial graph state
+			// initial graph state
 			// ---------------------------------------------
 			series.getData().add(new XYChart.Data("A", 0));
 			series.getData().add(new XYChart.Data("B", 0));
@@ -191,7 +197,7 @@ public class GraphStage extends Stage {
 			series.getData().add(new XYChart.Data("E", 0));
 			// ---------------------------------------------
 
-			//Get vote data
+			// Get vote data
 			for (Vote v : data.keySet()) {
 				series.getData().add(new XYChart.Data(v.getID(), data.get(v)));
 			}

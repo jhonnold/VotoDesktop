@@ -13,13 +13,14 @@ import javafx.scene.layout.RowConstraints;
  * Launch scene with buttons to host session and create a session
  */
 public class LaunchScene extends Scene {
-	
-	//Fields
+
+	// Fields
 	private static BorderPane container = new BorderPane();
 	private Button hostButton, setupButton;
-	
+
 	/**
 	 * Constructor to create LaunchScene
+	 * 
 	 * @param width
 	 * @param height
 	 * @param mb
@@ -28,14 +29,14 @@ public class LaunchScene extends Scene {
 		super(container, width, height);
 
 		container.setTop(mb);
-		
-		//Instantiate elements
+
+		// Instantiate elements
 		hostButton = new Button("Host Session");
 		hostButton.setOnAction(e -> VotoDesktopFX.hostGUI());
-		
+
 		setupButton = new Button("Setup Session");
 		setupButton.setOnAction(e -> new SetupStage());
-		
+
 		// Create 3x1 Grid pane 100% for row, 33.33% for each column
 		GridPane gp = new GridPane();
 		ColumnConstraints c = new ColumnConstraints();
@@ -44,7 +45,7 @@ public class LaunchScene extends Scene {
 		r.setPercentHeight(100);
 		gp.getColumnConstraints().addAll(c, c);
 		gp.getRowConstraints().add(r);
-				
+
 		// Add button to each HBox centered
 		HBox b1 = new HBox();
 		b1.setAlignment(Pos.CENTER);
@@ -52,16 +53,17 @@ public class LaunchScene extends Scene {
 		HBox b2 = new HBox();
 		b2.setAlignment(Pos.CENTER);
 		b2.getChildren().add(setupButton);
-				
+
 		// Add the HBox's to the gridpane
 		gp.add(b1, 0, 0);
 		gp.add(b2, 1, 0);
 		container.setCenter(gp);
-		
+
 	}
-	
+
 	/**
 	 * Add menu bar onto scene
+	 * 
 	 * @param mb
 	 */
 	public static void reinstallMenuBar(VotoMenuBar mb) {
